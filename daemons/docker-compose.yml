@@ -1,0 +1,8 @@
+version: "2"
+services:
+  rucio:
+    image: beermann/rucio-daemon
+    volumes:
+      - /opt/rucio/etc:/opt/rucio/etc
+    environment:
+      - DAEMONCMD="/usr/bin/rucio-judge-evaluator"
