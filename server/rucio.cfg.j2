@@ -38,12 +38,12 @@ port = {{ RUCIO_CFG_NONGRID_TRACE_PORT | default('61013') }}
 {%- if RUCIO_CFG_NONGRID_TRACE_PASSWORD is defined -%}password = {{ RUCIO_CFG_NONGRID_TRACE_PASSWORD }}{% endif %}
 topic = {{ RUCIO_CFG_NONGRID_TRACE_TOPIC | default('/topic/rucio.tracer') }}
 
-[permission]
-policy = {{ RUCIO_CFG_PERMISSION_POLICY | default('generic') }}
-schema = {{ RUCIO_CFG_PERMISSION_SCHEMA | default('generic') }}
-lfn2pfn_algorithm_default = {{ RUCIO_CFG_PERMISSION_LFN2PFN_ALGORITHM_DEFAULT | default('hash') }}
-support = {{ RUCIO_CFG_PERMISSION_SUPPORT | default('https://github.com/rucio/rucio/issues/') }}
-support_rucio = {{ RUCIO_CFG_PERMISSION_SUPPORT_RUCIO | default('https://github.com/rucio/rucio/issues/') }}
+[policy]
+permission = {{ RUCIO_CFG_POLICY_PERMISSION | default('generic') }}
+schema = {{ RUCIO_CFG_POLICY_SCHEMA | default('generic') }}
+lfn2pfn_algorithm_default = {{ RUCIO_CFG_POLICY_LFN2PFN_ALGORITHM_DEFAULT | default('hash') }}
+support = {{ RUCIO_CFG_POLICY_SUPPORT | default('https://github.com/rucio/rucio/issues/') }}
+support_rucio = {{ RUCIO_CFG_POLICY_SUPPORT_RUCIO | default('https://github.com/rucio/rucio/issues/') }}
 
 [webui]
 usercert = {{ RUCIO_CFG_WEBUI_USERCERT | default('/opt/rucio/etc/usercert_with_key.pem') }}

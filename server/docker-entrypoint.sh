@@ -1,5 +1,11 @@
 #!/bin/bash -e
 
+j2 /tmp/httpd.conf.j2 | sed '/^\s*$/d' > /etc/httpd/conf/httpd.conf
+
+echo "=================== /etc/httpd/conf/httpd.conf ========================"
+cat /etc/httpd/conf/httpd.conf
+echo ""
+
 if [ -f /opt/rucio/etc/rucio.cfg ]; then
     echo "rucio.cfg already mounted."
 else

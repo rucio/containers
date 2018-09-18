@@ -25,12 +25,12 @@ carbon_server = {{ RUCIO_CFG_MONITOR_CARBON_SERVER | default('localhost') }}
 carbon_port = {{ RUCIO_CFG_MONITOR_CARBON_PORT | default('8125') }}
 user_scope = {{ RUCIO_CFG_MONITOR_USER_SCOPE | default('default_docker') }}
 
-[permission]
-policy = {{ RUCIO_CFG_PERMISSION_POLICY | default('generic') }}
-schema = {{ RUCIO_CFG_PERMISSION_SCHEMA | default('generic') }}
-lfn2pfn_algorithm_default = {{ RUCIO_CFG_PERMISSION_LFN2PFN_ALGORITHM_DEFAULT | default('hash') }}
-support = {{ RUCIO_CFG_PERMISSION_SUPPORT | default('https://github.com/rucio/rucio/issues/') }}
-support_rucio = {{ RUCIO_CFG_PERMISSION_SUPPORT_RUCIO | default('https://github.com/rucio/rucio/issues/') }}
+[policy]
+permission = {{ RUCIO_CFG_POLICY_PERMISSION | default('generic') }}
+schema = {{ RUCIO_CFG_POLICY_SCHEMA | default('generic') }}
+lfn2pfn_algorithm_default = {{ RUCIO_CFG_POLICY_LFN2PFN_ALGORITHM_DEFAULT | default('hash') }}
+support = {{ RUCIO_CFG_POLICY_SUPPORT | default('https://github.com/rucio/rucio/issues/') }}
+support_rucio = {{ RUCIO_CFG_POLICY_SUPPORT_RUCIO | default('https://github.com/rucio/rucio/issues/') }}
 
 [automatix]
 {% if RUCIO_CFG_AUTOMATIX_SITES is defined %}sites = {{ RUCIO_CFG_AUTOMATIX_SITES }}{% endif %}
@@ -69,8 +69,8 @@ voname = {{ RUCIO_CFG_MESSAGING_FTS3_VONAME | default('atlas') }}
 {% if RUCIO_CFG_MESSAGING_HERMES_USERNAME is defined %}username = {{ RUCIO_CFG_MESSAGING_HERMES_USERNAME }}{% endif %}
 {% if RUCIO_CFG_MESSAGING_HERMES_PASSWORD is defined %}password = {{ RUCIO_CFG_MESSAGING_HERMES_PASSWORD }}{% endif %}
 port = {{ RUCIO_CFG_MESSAGING_HERMES_PORT | default('61023') }}
-{% if RUCIO_CFG_MESSAGING_HERMES_NONSSL_PORT is defined %}nonssl_port = {{ RUCIO_CFG_MESSAGING_NONSSL_PORT }}{% endif %}
-{% if RUCIO_CFG_MESSAGING_HERMES_USE_SSL is defined %}use_ssl = {{ RUCIO_CFG_MESSAGING_USE_SSL }}{% endif %}
+{% if RUCIO_CFG_MESSAGING_HERMES_NONSSL_PORT is defined %}nonssl_port = {{ RUCIO_CFG_MESSAGING_HERMES_NONSSL_PORT }}{% endif %}
+{% if RUCIO_CFG_MESSAGING_HERMES_USE_SSL is defined %}use_ssl = {{ RUCIO_CFG_MESSAGING_HERMES_USE_SSL }}{% endif %}
 ssl_key_file = {{ RUCIO_CFG_MESSAGING_HERMES_SSL_KEY_FILE | default('/etc/grid-security/hostkey.pem') }}
 ssl_cert_file = {{ RUCIO_CFG_MESSAGING_HERMES_SSL_CERT_FILE | default('/etc/grid-security/hostcert.pem') }}
 destination = {{ RUCIO_CFG_MESSAGING_HERMES_DESTINATION | default('/topic/rucio.events') }}

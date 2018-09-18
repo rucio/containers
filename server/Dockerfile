@@ -26,7 +26,7 @@ RUN pip install rucio[oracle,mysql,postgresql] j2cli psycopg2-binary
 
 ADD rucio.cfg.j2 /tmp/
 ADD rucio.conf.j2 /tmp/
-ADD httpd.conf /etc/httpd/conf/
+ADD httpd.conf.j2 /tmp/
 ADD docker-entrypoint.sh /
 RUN rm /etc/httpd/conf.d/welcome.conf /etc/httpd/conf.d/userdir.conf /etc/httpd/conf.d/ssl.conf
 
