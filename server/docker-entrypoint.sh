@@ -1,5 +1,11 @@
 #!/bin/bash -e
 
+j2 /tmp/00-mpm.conf.j2 > /etc/httpd/conf.modules.d/00-mpm.conf
+
+echo "=================== /etc/httpd/conf.modules.d/00-mpm.conf ========================"
+cat /etc/httpd/conf.modules.d/00-mpm.conf
+echo ""
+
 j2 /tmp/httpd.conf.j2 | sed '/^\s*$/d' > /etc/httpd/conf/httpd.conf
 
 echo "=================== /etc/httpd/conf/httpd.conf ========================"
