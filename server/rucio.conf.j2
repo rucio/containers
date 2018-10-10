@@ -99,4 +99,8 @@ CacheRoot /tmp
  WSGIScriptAlias /lifetime_exceptions    /usr/lib/python2.7/site-packages/rucio/web/rest/lifetime_exception.py
 {% endif %}
 
+{% if RUCIO_HTTPD_ENCODED_SLASHES|default('False') == 'True' %}
+ AllowEncodedSlashes on
+{% endif %}
+
 </VirtualHost>
