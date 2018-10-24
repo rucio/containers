@@ -29,6 +29,8 @@ user_scope = {{ RUCIO_CFG_MONITOR_USER_SCOPE | default('default_docker') }}
 permission = {{ RUCIO_CFG_POLICY_PERMISSION | default('generic') }}
 schema = {{ RUCIO_CFG_POLICY_SCHEMA | default('generic') }}
 lfn2pfn_algorithm_default = {{ RUCIO_CFG_POLICY_LFN2PFN_ALGORITHM_DEFAULT | default('hash') }}
+{% if RUCIO_CFG_POLICY_LFN2PFN_MODULE is defined %}lfn2pfn_module = {{ RUCIO_CFG_POLICY_LFN2PFN_MODULE }}{% endif %}
+
 support = {{ RUCIO_CFG_POLICY_SUPPORT | default('https://github.com/rucio/rucio/issues/') }}
 support_rucio = {{ RUCIO_CFG_POLICY_SUPPORT_RUCIO | default('https://github.com/rucio/rucio/issues/') }}
 
