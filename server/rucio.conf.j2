@@ -52,6 +52,9 @@ CacheRoot /tmp
 {% else %}
  SSLCACertificateFile /etc/grid-security/ca.pem
 {% endif %}
+ SSLCACertificatePath /etc/grid-security/certificates
+ SSLCARevocationPath /etc/grid-security/certificates
+ SSLCARevocationCheck chain
  SSLVerifyClient optional_no_ca
  SSLVerifyDepth 10
  SSLOptions +StdEnvVars
