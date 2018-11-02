@@ -49,6 +49,7 @@ CacheRoot /tmp
 {% if RUCIO_CA_PATH is defined %}
  SSLCACertificatePath {{ RUCIO_CA_PATH }}
  SSLCARevocationPath {{ RUCIO_CA_PATH }}
+ SSLCARevocationCheck {{ RUCIO_CA_REVOCATION_CHECK | default('chain') }}
 {% else %}
  SSLCACertificateFile /etc/grid-security/ca.pem
 {% endif %}
