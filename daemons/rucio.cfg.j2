@@ -97,6 +97,9 @@ excluded_usrdns = {{ RUCIO_CFG_TRACER_EXCLUDED_USRDNS | default('') }}
 {% if RUCIO_CFG_TRACER_KRONOS_PASSWORD is defined %}password = {{ RUCIO_CFG_TRACER_KRONOS_PASSWORD }}{% endif %}
 dataset_wait = excluded_usrdns = {{ RUCIO_CFG_TRACER_DATASET_WAIT | default('60') }}
 
+[transmogrifier]
+maxdids = {{ RUCIO_CFG_TRANSMOGRIFIER_MAXDIDS | default('100000') }}
+
 [messaging-cache]
 port = {{ RUCIO_CFG_MESSAGING_CACHE_PORT | default('61123') }}
 ssl_key_file = {{ RUCIO_CFG_MESSAGING_CACHE_SSL_KEY_FILE | default('/etc/grid-security/hostkey.pem') }}
