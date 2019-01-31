@@ -30,8 +30,7 @@ Starting the container using the environment with userpass authentication:
      -e RUCIO_CFG_USERNAME=ddmlab \
      -e RUCIO_CFG_PASSWORD=secret \
      -e RUCIO_CFG_ACCOUNT=root \
-     -it -d --name=rucio-client rucio/rucio-clients
-```
+     -it -d --name=rucio-client rucio/rucio-clients```
 
 With X509 authentication:
 
@@ -44,21 +43,18 @@ With X509 authentication:
      -e RUCIO_CFG_ACCOUNT=root \
      -v /opt/rucio/etc/usercert.pem:/opt/rucio/etc/usercert.pem \
      -v /opt/rucio/etc/userkey.pem:/opt/rucio/etc/userkey.pem \
-     -it -d --name=rucio-client rucio/rucio-clients
-```
+     -it -d --name=rucio-client rucio/rucio-clients```
 
 If you already have a rucio.cfg you can also use that:
 
 ```docker run \
      -v /tmp/rucio.cfg:/opt/rucio/etc/rucio.cfg \
-     -it -d --name=rucio-client rucio/rucio-clients
-```
+     -it -d --name=rucio-client rucio/rucio-clients```
 
 After the container is started you can attach to it and start using the rucio commands:
 
 ```docker exec -it rucio-clients /bin/bash
-   rucio ping
-```
+   rucio ping```
 
 `RUCIO_CFG` configuration parameters:
 =====================================
