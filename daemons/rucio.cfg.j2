@@ -81,7 +81,7 @@ destination = {{ RUCIO_CFG_MESSAGING_HERMES_DESTINATION | default('/topic/rucio.
 brokers = {{ RUCIO_CFG_MESSAGING_HERMES_BROKERS | default('atlas-test-mb.cern.ch') }}
 voname = {{ RUCIO_CFG_MESSAGING_HERMES_VONAME | default('atlas') }}
 email_from = {{ RUCIO_CFG_MESSAGING_HERMES_EMAIL_FROM | default('Rucio <atlas-adc-ddm-support@cern.ch>') }}
-{% if RUCIO_CFG_MESSAGING_HERMES_EMAIL_TEST is defined %}email_test = {{ RUCIO_CFG_MESSAGING_EMAIL_TEST }}{% endif %}
+{% if RUCIO_CFG_MESSAGING_HERMES_EMAIL_TEST is defined %}email_test = {{ RUCIO_CFG_MESSAGING_HERMES_EMAIL_TEST }}{% endif %}
 
 [tracer-kronos]
 brokers= {{ RUCIO_CFG_TRACER_KRONOS_BROKERS | default('atlas-test-mb.cern.ch') }}
