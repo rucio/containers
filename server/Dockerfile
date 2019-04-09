@@ -33,7 +33,6 @@ RUN rm /etc/httpd/conf.d/welcome.conf /etc/httpd/conf.d/userdir.conf /etc/httpd/
 
 VOLUME /var/log/httpd
 VOLUME /opt/rucio/etc
-VOLUME /etc/grid-security
 
 EXPOSE 80
 EXPOSE 443
