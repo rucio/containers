@@ -23,7 +23,7 @@ RUN pip install --upgrade pip setuptools
 RUN rm -rf /usr/lib/python2.7/site-packages/ipaddress*
 RUN pip install rucio_webui[oracle,mysql,postgresql] j2cli psycopg2-binary
 # only necessary temporarily until setup.py for webui is fixed
-RUN pip install cx_oracle==6.3.1 psycopg2>=2.4.2 PyMySQL
+RUN pip install cx_oracle==6.3.1 PyMySQL
 
 ADD rucio.cfg.j2 /tmp/
 ADD rucio.conf.j2 /tmp/
