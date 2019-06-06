@@ -104,4 +104,8 @@ CacheRoot /tmp
  AllowEncodedSlashes on
 {% endif %}
 
+ RewriteEngine on
+ RewriteCond %{REQUEST_METHOD} ^(TRACE|TRACK)
+ RewriteRule .* - [F]
+
 </VirtualHost>
