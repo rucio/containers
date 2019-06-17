@@ -1,6 +1,12 @@
 #!/bin/bash -e
 
-j2 /renew_fts_proxy.sh.j2 > /renew_fts_proxy.sh
+if [[ $RUCIO_VO == 'atlas' ]]
+then
+    j2 /renew_fts_proxy_atlas.sh.j2 > /renew_fts_proxy.sh
+else
+    j2 /renew_fts_proxy.sh.j2 > /renew_fts_proxy.sh
+fi
+
 chmod +x /renew_fts_proxy.sh
 
 echo "=================== /renew_fts_proxy.sh ========================"
