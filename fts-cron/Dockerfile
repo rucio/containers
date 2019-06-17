@@ -27,8 +27,10 @@ RUN pip install --upgrade pip setuptools
 RUN pip install j2cli
 
 RUN mkdir -p /opt/rucio/certs/
+RUN mkdir -p /opt/rucio/kubeconfig/
 
 ADD docker-entrypoint.sh /
 ADD renew_fts_proxy.sh.j2 /
+ADD renew_fts_proxy_atlas.sh.j2 /
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
