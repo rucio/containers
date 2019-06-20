@@ -1,25 +1,17 @@
 #!/bin/bash
 
 # We have to copy the certificates because we cannot change permissions on them as mounted secrets and voms-proxy is particular about permissions
-cp /opt/rucio/certs/long.proxy /tmp/long.proxy
+cp /opt/rucio/certs/{{ RUCIO_LONG_PROXY }} /tmp/long.proxy
 chmod 400 /tmp/long.proxy
 
 # Generate a proxy with the voms extension if requested
 voms-proxy-init --debug -valid 96:00 -cert /tmp/long.proxy -out /tmp/x509up {% if RUCIO_FTS_VOMS is defined -%}-voms {{ RUCIO_FTS_VOMS }}{%- endif %} -rfc -n
 
-# Delegate the proxy to the requested servers
-{% if RUCIO_FTS_SERVERS is defined %}
-{% set ftses = RUCIO_FTS_SERVERS.split(',') %}
-{% for fts in ftses %}
-fts-rest-delegate -v -f -H 96 --key=/tmp/x509up --cert=/tmp/x509up -s {{ fts }}
-{% endfor %}
-{% endif %}
-
 # Create the corresponding kubernetes secrets if asked
 {% if RUCIO_FTS_SECRETS is defined %}
 {% set secrets = RUCIO_FTS_SECRETS.split(',') %}
 {% for secret in secrets %}
-kubectl create secret generic  {{ secret }} --from-file=/tmp/x509up --dry-run -o yaml | kubectl {% if RUCIO_KUBECONFIG is defined -%}--kubeconfig {{ RUCIO_KUBECONFIG }}{%- endif %}  apply --validate=false  -f  -
+kubectl create secret generic  {{ secret }} --from-file=/tmp/x509up --dry-run -o yaml | kubectl apply --validate=false  -f  -
 {% endfor %}
 {% endif %}
 
