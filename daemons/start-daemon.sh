@@ -7,9 +7,11 @@ else
     j2 /tmp/rucio.cfg.j2 | sed '/^\s*$/d' > /opt/rucio/etc/rucio.cfg
 fi
 
-echo "=================== /opt/rucio/etc/rucio.cfg ============================"
-cat /opt/rucio/etc/rucio.cfg
-echo ""
+if [ ! -z "$RUCIO_PRINT_CFG" ]; then
+    echo "=================== /opt/rucio/etc/rucio.cfg ============================"
+    cat /opt/rucio/etc/rucio.cfg
+    echo ""
+fi
 
 echo "starting daemon with: $RUCIO_DAEMON $RUCIO_DAEMON_ARGS"
 echo ""
