@@ -58,9 +58,9 @@ RUN mkdir -p \
 
 COPY .pep8 .pep8
 COPY .flake8 .flake8
-COPY pylintrc /etc/pylintrc
-RUN cp -r /tmp/rucio/etc etc
-RUN cp -r /tmp/rucio/tools tools
+COPY pylintrc etc/pylintrc
+RUN cp -r /tmp/rucio/etc .
+RUN cp -r /tmp/rucio/tools .
 
 RUN pip install --upgrade pip && pip install --upgrade setuptools
 RUN rm -rf /usr/lib/python2.7/site-packages/ipaddress*
