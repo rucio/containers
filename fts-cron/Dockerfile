@@ -32,5 +32,8 @@ RUN mkdir -p /opt/rucio/kubeconfig/
 ADD docker-entrypoint.sh /
 ADD renew_fts_proxy.sh.j2 /
 ADD renew_fts_proxy_atlas.sh.j2 /
+ADD renew_fts_proxy_dteam.sh.j2 /
+
+ADD dteam* /etc/vomses/
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
