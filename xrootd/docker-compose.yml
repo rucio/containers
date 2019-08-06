@@ -1,0 +1,9 @@
+version: "2"
+services:
+  xrd:
+    hostname: xrdtest
+    image: rucio/xrootd
+    ports:
+      - "1094:1094"
+      - "1095:1095"
+      - "1096:1096"
