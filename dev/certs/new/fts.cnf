@@ -1,0 +1,11 @@
+[ req ]
+req_extensions = v3_req
+
+[ v3_req ]
+keyUsage = critical, digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment, keyAgreement, keyCertSign, cRLSign
+extendedKeyUsage = serverAuth
+subjectAltName = @alt_names
+
+[ alt_names ]
+DNS.1 = localhost
+DNS.2 = fts

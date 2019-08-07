@@ -1,0 +1,38 @@
+# CA
+openssl genrsa -aes256 -out ca.key.pem 2048
+chmod 400 ca.key.pem
+openssl req -new -x509 -subj "/CN=Rucio CA" -extensions v3_ca -days 99999 -key ca.key.pem -sha256 -out ca.pem -config rucio_ca.cnf
+echo "01" > serial
+
+
+
+
+# User certificate
+
+openssl genrsa -out ruciouser.key.pem 2048
+openssl x509 -days 99999 -CA ca.pem -CAkey ca.key.pem -CAserial serial -in ruciouser.csr -req -out ruciouser.pem
+
+
+
+
+# Host certificates == need to match hostname + localhost
+
+openssl genrsa -out rucio.key.pem 2048
+chmod 400 rucio.key.pem
+openssl req -subj "/CN=rucio" -extensions v3_req -sha256 -new -key rucio.key.pem -out rucio.csr
+openssl x509 -req -extensions v3_req -days 99999 -sha256 -in rucio.csr -CA ca.pem -CAkey ca.key.pem -CAcreateserial -out rucio.crt -extfile rucio.cnf
+cat rucio.crt ca.pem rucio.key.pem > rucio-ca-full.pem
+
+openssl genrsa -out xrd.key.pem 2048
+chmod 400 xrd.key.pem
+openssl req -subj "/CN=xrd" -extensions v3_req -sha256 -new -key xrd.key.pem -out xrd.csr
+openssl x509 -req -extensions v3_req -days 99999 -sha256 -in xrd.csr -CA ca.pem -CAkey ca.key.pem -CAcreateserial -out xrd.crt -extfile xrd.cnf                                                                                                                   
+cat xrd.crt ca.pem xrd.key.pem > xrd-ca-full.pem
+
+openssl genrsa -out fts.key.pem 2048
+chmod 400 fts.key.pem
+openssl req -subj "/CN=fts" -extensions v3_req -sha256 -new -key fts.key.pem -out fts.csr
+openssl x509 -req -extensions v3_req -days 99999 -sha256 -in fts.csr -CA ca.pem -CAkey ca.key.pem -CAcreateserial -out fts.crt -extfile fts.cnf                                                                                                                   
+cat fts.crt ca.pem fts.key.pem > fts-ca-full.pem
+
+
