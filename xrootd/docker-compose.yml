@@ -1,8 +1,9 @@
 version: "2"
 services:
   xrd:
-    hostname: xrdtest
     image: rucio/xrootd
+    container_name: xrd
+    hostname: xrd
     ports:
       - "1094:1094"
       - "1095:1095"
