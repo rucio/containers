@@ -16,8 +16,8 @@ RUN mkdir /etc/grid-security/xrd
 RUN chown xrootd:xrootd /etc/grid-security/xrd
 
 # Create storage area
-RUN mkdir /xrdrucio
-RUN chown xrootd:xrootd /xrdrucio
+RUN mkdir /rucio
+RUN chown xrootd:xrootd /rucio
 
 # Server config
 COPY xrdrucio.cfg /etc/xrootd/xrdrucio.cfg
