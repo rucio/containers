@@ -1,0 +1,12 @@
+Alias=rucio/fts
+SiteName=DOCKER
+
+AuthorizedVO=*
+
+DbType=mysql
+DbUserName=fts
+DbPassword=fts
+DbConnectString=ftsdb/fts
+
+[roles]
+Public = all:transfer;all:config;all:datamanagement
