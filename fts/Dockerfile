@@ -7,10 +7,9 @@ RUN yum install -y fts-server fts-client fts-rest fts-monitoring fts-mysql fts-m
 RUN yum clean all
 
 # Setup FTS security
-COPY certs/fts.crt /etc/grid-security/hostcert.pem
-COPY certs/fts.key.pem /etc/grid-security/hostkey.pem
-COPY certs/ca.pem /etc/grid-security/certificates/ca.pem
-RUN ln -sf /etc/grid-security/certificates/ca.pem /etc/grid-security/certificates/4380cfc7.0
+COPY certs/hostcert_fts.pem /etc/grid-security/hostcert.pem
+COPY certs/hostcert_fts.key.pem /etc/grid-security/hostkey.pem
+COPY certs/rucio_ca.pem /etc/grid-security/certificates/5fca1cb1.0
 RUN chmod 400 /etc/grid-security/hostkey.pem
 
 # Database configuration for FTS server
