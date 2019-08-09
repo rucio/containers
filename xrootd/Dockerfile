@@ -8,12 +8,11 @@ RUN yum clean all
 
 # Install the Rucio CA
 RUN mkdir -p /etc/grid-security/certificates
-ADD ca.pem /etc/grid-security/certificates/ca.pem
-RUN ln -sf /etc/grid-security/certificates/ca.pem /etc/grid-security/certificates/4380cfc7.0
+ADD rucio_ca.pem /etc/grid-security/certificates/5fca1cb1.0
 
-# Host certificate (xrdcert.pem, xrdkey.pem)  will have to be injected here:
+# Host certificate directory
 RUN mkdir /etc/grid-security/xrd
-RUN chown xrootd:xrootd /etc/grid-security/xrd
+RUN chown -R xrootd:xrootd /etc/grid-security/xrd
 
 # Create storage area
 RUN mkdir /rucio
@@ -21,7 +20,6 @@ RUN chown xrootd:xrootd /rucio
 
 # Server config
 COPY xrdrucio.cfg /etc/xrootd/xrdrucio.cfg
-EXPOSE 1094
 
 # Startup
 ADD docker-entrypoint.sh /
