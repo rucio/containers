@@ -92,8 +92,11 @@ COPY httpd.conf /etc/httpd/conf/httpd.conf
 COPY rucio.conf /etc/httpd/conf.d/rucio.conf
 COPY certs/ruciouser.pem $RUCIOHOME/etc/usercert.pem
 COPY certs/ruciouser.key.pem $RUCIOHOME/etc/userkey.pem
+RUN chmod 0400 $RUCIOHOME/etc/userkey.pem
+
 COPY certs/hostcert_rucio.pem /etc/grid-security/hostcert.pem
 COPY certs/hostcert_rucio.key.pem /etc/grid-security/hostkey.pem
+RUN chmod 0400 /etc/grid-security/hostkey.pem
 
 RUN chmod 400 /etc/grid-security/hostkey.pem &&\
     rm -rf $RUCIOHOME/tools && mkdir -p $RUCIOHOME/tools &&\
