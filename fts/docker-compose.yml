@@ -1,0 +1,22 @@
+version: "2"
+services:
+  fts:
+    image: rucio/fts
+    hostname: fts
+    ports:
+      - "8446:8446"
+      - "8449:8449"
+    links:
+      - ftsdb:ftsdb
+    depends_on:
+      - ftsdb
+  ftsdb:
+    image: mysql:5
+    hostname: ftsdb
+    environment:
+      - MYSQL_USER=fts
+      - MYSQL_PASSWORD=fts
+      - MYSQL_ROOT_PASSWORD=fts
+      - MYSQL_DATABASE=fts
+    ports:
+      - "3306:3306"
