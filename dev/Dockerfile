@@ -43,11 +43,12 @@ RUN yum install -y \
       which \
       libaio \
       memcached \
-      netcat \
+      nmap-ncat \
       gfal2-all \
       gfal2-util \
       fts-rest-cli \
-      xrootd-client
+      xrootd-client \
+      multitail
 RUN yum clean all
 
 RUN git clone https://github.com/rucio/rucio.git /tmp/rucio
@@ -88,26 +89,32 @@ COPY google-cloud-storage-test.json $RUCIOHOME/etc/google-cloud-storage-test.jso
 COPY certs/rucio_ca.pem $RUCIOHOME/etc/web/CERN-bundle.pem
 COPY certs/rucio_ca.pem /etc/grid-security/certificates/5fca1cb1.0
 
+COPY 00-mpm.conf /etc/httpd/conf.modules.d/00-mpm.conf
 COPY httpd.conf /etc/httpd/conf/httpd.conf
 COPY rucio.conf /etc/httpd/conf.d/rucio.conf
 COPY certs/ruciouser.pem $RUCIOHOME/etc/usercert.pem
 COPY certs/ruciouser.key.pem $RUCIOHOME/etc/userkey.pem
+COPY certs/ruciouser.certkey.pem $RUCIOHOME/etc/usercertkey.pem
 RUN chmod 0400 $RUCIOHOME/etc/userkey.pem
 
 COPY certs/hostcert_rucio.pem /etc/grid-security/hostcert.pem
 COPY certs/hostcert_rucio.key.pem /etc/grid-security/hostkey.pem
 RUN chmod 0400 /etc/grid-security/hostkey.pem
 
-RUN chmod 400 /etc/grid-security/hostkey.pem &&\
-    rm -rf $RUCIOHOME/tools && mkdir -p $RUCIOHOME/tools &&\
-    mkdir -p /etc/httpd &&\
-    echo "" > /etc/httpd/conf.d/ssl.conf &&\
+RUN chmod 777 /var/log/rucio/trace
+RUN rm -rf $RUCIOHOME/tools
+RUN mkdir -p $RUCIOHOME/tools
+RUN mkdir -p /etc/httpd
+RUN echo "" > /etc/httpd/conf.d/ssl.conf &&\
     echo "" > /etc/httpd/conf.d/autoindex.conf &&\
     echo "" > /etc/httpd/conf.d/userdir.conf &&\
     echo "" > /etc/httpd/conf.d/welcome.conf &&\
     echo "" > /etc/httpd/conf.d/zgridsite.conf
 
 RUN rm -r /tmp/rucio
+
+COPY logshow /usr/local/bin/logshow
+RUN chmod +x /usr/local/bin/logshow
 
 EXPOSE 443
 
