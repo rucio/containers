@@ -1,0 +1,2 @@
+#!/bin/bash
+multitail -f /var/log/rucio/httpd_access_log /var/log/httpd/error_log
