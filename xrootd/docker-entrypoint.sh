@@ -6,6 +6,8 @@ cat /etc/xrootd/xrdrucio.cfg
 echo '=========================================='
 
 echo 'Fixing ownership and permissions'
+cp /tmp/xrdcert.pem /etc/grid-security/xrd/xrdcert.pem
+cp /tmp/xrdkey.pem /etc/grid-security/xrd/xrdkey.pem
 chown -R xrootd:xrootd /etc/grid-security/xrd
 chmod 0400 /etc/grid-security/xrd/xrdkey.pem
 
