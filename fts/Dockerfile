@@ -3,7 +3,7 @@ FROM centos:7
 # Install FTS
 RUN yum install -y epel-release.noarch
 RUN yum upgrade -y
-RUN yum install -y fts-server fts-client fts-rest fts-monitoring fts-mysql fts-msg gfal2-plugin-* mysql
+RUN yum install -y fts-server fts-client fts-rest fts-monitoring fts-mysql fts-msg gfal2-plugin-* mysql multitail
 RUN yum clean all
 
 # Setup FTS security
@@ -27,6 +27,14 @@ RUN echo "" > /etc/httpd/conf.d/ssl.conf &&\
 # Entrypoint waiting script for MySQL
 COPY wait-for-it.sh /usr/local/bin/wait-for-it.sh
 RUN chmod +x /usr/local/bin/wait-for-it.sh
+
+# Shortcut for logfiles
+COPY logshow /usr/local/bin/logshow
+RUN chmod +x /usr/local/bin/logshow
+RUN touch /var/log/fts3/fts3server.log
+RUN chown -R fts3:fts3 /var/log/fts3/fts3server.log
+RUN touch /var/log/fts3rest/fts3rest.log
+RUN chown -R fts3:fts3 /var/log/fts3rest
 
 # Startup
 EXPOSE 8446 8449
