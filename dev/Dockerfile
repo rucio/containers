@@ -116,6 +116,9 @@ RUN rm -r /tmp/rucio
 COPY logshow /usr/local/bin/logshow
 RUN chmod +x /usr/local/bin/logshow
 
+COPY restartweb /usr/local/bin/restartweb
+RUN chmod +x /usr/local/bin/restartweb
+
 EXPOSE 443
 
 ENV PATH $PATH:$RUCIOHOME/bin
