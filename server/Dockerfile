@@ -22,7 +22,8 @@ RUN rpm -i /tmp/oic.rpm; \
     ldconfig
 RUN pip install --upgrade pip setuptools
 RUN rm -rf /usr/lib/python2.7/site-packages/ipaddress*
-RUN pip install rucio[oracle,mysql,postgresql] j2cli psycopg2-binary
+RUN pip install --pre rucio[oracle,mysql,postgresql]
+RUN pip install j2cli psycopg2-binary
 RUN pip install cx_oracle==6.3.1 PyMySQL
 
 ADD rucio.cfg.j2 /tmp/
