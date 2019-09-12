@@ -20,7 +20,6 @@ RUN chown xrootd:xrootd /rucio
 
 # Server config
 ADD xrdrucio.cfg /etc/xrootd/xrdrucio.cfg
-ADD xrdtpc.sh /usr/local/bin/xrdtpc.sh
 ADD xrdadler32.sh /usr/local/bin/xrdadler32.sh
 RUN chmod 0755 /usr/local/bin/xrd*
 
