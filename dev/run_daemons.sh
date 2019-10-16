@@ -6,5 +6,4 @@ do
     rucio-conveyor-poller --run-once --older-than 0
     rucio-conveyor-finisher --run-once
     rucio-hermes --run-once
-    sleep 60
 done
