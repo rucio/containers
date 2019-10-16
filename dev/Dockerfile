@@ -119,6 +119,11 @@ RUN chmod +x /usr/local/bin/logshow
 COPY restartweb /usr/local/bin/restartweb
 RUN chmod +x /usr/local/bin/restartweb
 
+COPY run_daemons.sh /tools/run_daemons.sh
+RUN chmod +x /tools/run_daemons.sh
+COPY create_monit_data.sh /tools/create_monit_data.sh
+RUN chmod +x /tools/create_monit_data.sh
+
 EXPOSE 443
 
 ENV PATH $PATH:$RUCIOHOME/bin
