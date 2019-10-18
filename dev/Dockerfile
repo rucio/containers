@@ -119,10 +119,16 @@ RUN chmod +x /usr/local/bin/logshow
 COPY restartweb /usr/local/bin/restartweb
 RUN chmod +x /usr/local/bin/restartweb
 
-COPY run_daemons.sh /tools/run_daemons.sh
-RUN chmod +x /tools/run_daemons.sh
-COPY create_monit_data.sh /tools/create_monit_data.sh
-RUN chmod +x /tools/create_monit_data.sh
+COPY run_daemons /usr/local/bin/run_daemons
+RUN chmod +x /usr/local/bin/run_daemons
+COPY create_monit_data /usr/local/bin/create_monit_data
+RUN chmod +x /usr/local/bin/create_monit_data
+
+RUN mkdir $RUCIOHOME/etc/dashboards
+COPY dashboards/* $RUCIOHOME/etc/dashboards/
+RUN chmod +x $RUCIOHOME/etc/dashboards/import_dashboards.sh
+COPY monit-entrypoint.sh /monit-entrypoint.sh
+RUN chmod +x /monit-entrypoint.sh
 
 EXPOSE 443
 

@@ -1,0 +1,687 @@
+{
+    "dashboard": {
+        "annotations": {
+            "list": [
+                {
+                    "builtIn": 1,
+                    "datasource": "-- Grafana --",
+                    "enable": true,
+                    "hide": true,
+                    "iconColor": "rgba(0, 211, 255, 1)",
+                    "name": "Annotations & Alerts",
+                    "type": "dashboard"
+                }
+            ]
+        },
+        "editable": true,
+        "gnetId": null,
+        "graphTooltip": 0,
+        "id": null,
+        "iteration": 1571324895424,
+        "links": [],
+        "panels": [
+            {
+                "aliasColors": {},
+                "bars": true,
+                "dashLength": 10,
+                "dashes": false,
+                "datasource": null,
+                "fill": 1,
+                "fillGradient": 0,
+                "gridPos": {
+                    "h": 9,
+                    "w": 12,
+                    "x": 0,
+                    "y": 0
+                },
+                "id": 2,
+                "legend": {
+                    "avg": false,
+                    "current": false,
+                    "max": false,
+                    "min": false,
+                    "show": true,
+                    "total": false,
+                    "values": false
+                },
+                "lines": false,
+                "linewidth": 1,
+                "nullPointMode": "null",
+                "options": {
+                    "dataLinks": []
+                },
+                "percentage": false,
+                "pointradius": 2,
+                "points": false,
+                "renderer": "flot",
+                "seriesOverrides": [],
+                "spaceLength": 10,
+                "stack": false,
+                "steppedLine": false,
+                "targets": [
+                    {
+                        "bucketAggs": [
+                            {
+                                "fake": true,
+                                "field": "payload.$groupby.keyword",
+                                "id": "3",
+                                "settings": {
+                                    "min_doc_count": 1,
+                                    "order": "desc",
+                                    "orderBy": "_term",
+                                    "size": "10"
+                                },
+                                "type": "terms"
+                            },
+                            {
+                                "field": "@timestamp",
+                                "id": "2",
+                                "settings": {
+                                    "interval": "$binning",
+                                    "min_doc_count": 0,
+                                    "trimEdges": 0
+                                },
+                                "type": "date_histogram"
+                            }
+                        ],
+                        "metrics": [
+                            {
+                                "field": "payload.bytes",
+                                "id": "1",
+                                "meta": {},
+                                "settings": {},
+                                "type": "sum"
+                            }
+                        ],
+                        "query": "event_type:transfer-done AND payload.activity:$activity AND payload.dst-rse:$dstrse AND payload.dst-type:$dsttype  AND payload.dst-rse:$srcrse AND payload.dst-type:$srctype AND payload.protocol:$protocol",
+                        "refId": "A",
+                        "timeField": "@timestamp"
+                    }
+                ],
+                "thresholds": [],
+                "timeFrom": null,
+                "timeRegions": [],
+                "timeShift": null,
+                "title": "Transfer Volume",
+                "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                },
+                "type": "graph",
+                "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                },
+                "yaxes": [
+                    {
+                        "format": "decbytes",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    },
+                    {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    }
+                ],
+                "yaxis": {
+                    "align": false,
+                    "alignLevel": null
+                }
+            },
+            {
+                "aliasColors": {},
+                "bars": true,
+                "dashLength": 10,
+                "dashes": false,
+                "datasource": null,
+                "fill": 1,
+                "fillGradient": 0,
+                "gridPos": {
+                    "h": 9,
+                    "w": 12,
+                    "x": 12,
+                    "y": 0
+                },
+                "id": 3,
+                "legend": {
+                    "avg": false,
+                    "current": false,
+                    "max": false,
+                    "min": false,
+                    "show": true,
+                    "total": false,
+                    "values": false
+                },
+                "lines": false,
+                "linewidth": 1,
+                "nullPointMode": "null",
+                "options": {
+                    "dataLinks": []
+                },
+                "percentage": false,
+                "pointradius": 2,
+                "points": false,
+                "renderer": "flot",
+                "seriesOverrides": [],
+                "spaceLength": 10,
+                "stack": false,
+                "steppedLine": false,
+                "targets": [
+                    {
+                        "bucketAggs": [
+                            {
+                                "fake": true,
+                                "field": "payload.$groupby.keyword",
+                                "id": "3",
+                                "settings": {
+                                    "min_doc_count": 1,
+                                    "order": "desc",
+                                    "orderBy": "_term",
+                                    "size": "10"
+                                },
+                                "type": "terms"
+                            },
+                            {
+                                "field": "@timestamp",
+                                "id": "2",
+                                "settings": {
+                                    "interval": "$binning",
+                                    "min_doc_count": 0,
+                                    "trimEdges": 0
+                                },
+                                "type": "date_histogram"
+                            }
+                        ],
+                        "metrics": [
+                            {
+                                "field": "payload.bytes",
+                                "id": "1",
+                                "meta": {},
+                                "settings": {},
+                                "type": "count"
+                            }
+                        ],
+                        "query": "event_type:transfer-done AND payload.activity:$activity AND payload.dst-rse:$dstrse AND payload.dst-type:$dsttype  AND payload.dst-rse:$srcrse AND payload.dst-type:$srctype AND payload.protocol:$protocol",
+                        "refId": "A",
+                        "timeField": "@timestamp"
+                    }
+                ],
+                "thresholds": [],
+                "timeFrom": null,
+                "timeRegions": [],
+                "timeShift": null,
+                "title": "Successful Transfers",
+                "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                },
+                "type": "graph",
+                "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                },
+                "yaxes": [
+                    {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    },
+                    {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    }
+                ],
+                "yaxis": {
+                    "align": false,
+                    "alignLevel": null
+                }
+            },
+            {
+                "aliasColors": {},
+                "bars": true,
+                "dashLength": 10,
+                "dashes": false,
+                "datasource": null,
+                "fill": 1,
+                "fillGradient": 0,
+                "gridPos": {
+                    "h": 9,
+                    "w": 12,
+                    "x": 0,
+                    "y": 9
+                },
+                "id": 4,
+                "legend": {
+                    "avg": false,
+                    "current": false,
+                    "max": false,
+                    "min": false,
+                    "show": true,
+                    "total": false,
+                    "values": false
+                },
+                "lines": false,
+                "linewidth": 1,
+                "nullPointMode": "null",
+                "options": {
+                    "dataLinks": []
+                },
+                "percentage": false,
+                "pointradius": 2,
+                "points": false,
+                "renderer": "flot",
+                "seriesOverrides": [],
+                "spaceLength": 10,
+                "stack": false,
+                "steppedLine": false,
+                "targets": [
+                    {
+                        "bucketAggs": [
+                            {
+                                "fake": true,
+                                "field": "payload.$groupby.keyword",
+                                "id": "3",
+                                "settings": {
+                                    "min_doc_count": 1,
+                                    "order": "desc",
+                                    "orderBy": "_term",
+                                    "size": "10"
+                                },
+                                "type": "terms"
+                            },
+                            {
+                                "field": "@timestamp",
+                                "id": "2",
+                                "settings": {
+                                    "interval": "$binning",
+                                    "min_doc_count": 0,
+                                    "trimEdges": 0
+                                },
+                                "type": "date_histogram"
+                            }
+                        ],
+                        "metrics": [
+                            {
+                                "field": "payload.bytes",
+                                "id": "1",
+                                "meta": {},
+                                "settings": {},
+                                "type": "count"
+                            }
+                        ],
+                        "query": "event_type:transfer-failed AND payload.activity:$activity AND payload.dst-rse:$dstrse AND payload.dst-type:$dsttype  AND payload.dst-rse:$srcrse AND payload.dst-type:$srctype AND payload.protocol:$protocol",
+                        "refId": "A",
+                        "timeField": "@timestamp"
+                    }
+                ],
+                "thresholds": [],
+                "timeFrom": null,
+                "timeRegions": [],
+                "timeShift": null,
+                "title": "Failed Transfers",
+                "tooltip": {
+                    "shared": true,
+                    "sort": 0,
+                    "value_type": "individual"
+                },
+                "type": "graph",
+                "xaxis": {
+                    "buckets": null,
+                    "mode": "time",
+                    "name": null,
+                    "show": true,
+                    "values": []
+                },
+                "yaxes": [
+                    {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    },
+                    {
+                        "format": "short",
+                        "label": null,
+                        "logBase": 1,
+                        "max": null,
+                        "min": null,
+                        "show": true
+                    }
+                ],
+                "yaxis": {
+                    "align": false,
+                    "alignLevel": null
+                }
+            }
+        ],
+        "schemaVersion": 20,
+        "style": "dark",
+        "tags": [],
+        "templating": {
+            "list": [
+                {
+                    "allValue": null,
+                    "current": {
+                        "selected": true,
+                        "text": "10m",
+                        "value": "10m"
+                    },
+                    "hide": 0,
+                    "includeAll": false,
+                    "label": "Binning",
+                    "multi": false,
+                    "name": "binning",
+                    "options": [
+                        {
+                            "selected": false,
+                            "text": "1m",
+                            "value": "1m"
+                        },
+                        {
+                            "selected": true,
+                            "text": "10m",
+                            "value": "10m"
+                        },
+                        {
+                            "selected": false,
+                            "text": "1h",
+                            "value": "1h"
+                        },
+                        {
+                            "selected": false,
+                            "text": "8h",
+                            "value": "8h"
+                        },
+                        {
+                            "selected": false,
+                            "text": "1d",
+                            "value": "1d"
+                        }
+                    ],
+                    "query": "1m, 10m, 1h, 8h, 1d",
+                    "skipUrlSync": false,
+                    "type": "custom"
+                },
+                {
+                    "allValue": null,
+                    "current": {
+                        "selected": true,
+                        "text": "dst-rse",
+                        "value": "dst-rse"
+                    },
+                    "hide": 0,
+                    "includeAll": false,
+                    "label": "Group by",
+                    "multi": false,
+                    "name": "groupby",
+                    "options": [
+                        {
+                            "selected": false,
+                            "text": "activity",
+                            "value": "activity"
+                        },
+                        {
+                            "selected": true,
+                            "text": "dst-rse",
+                            "value": "dst-rse"
+                        },
+                        {
+                            "selected": false,
+                            "text": "dst-type",
+                            "value": "dst-type"
+                        },
+                        {
+                            "selected": false,
+                            "text": "protocol",
+                            "value": "protocol"
+                        },
+                        {
+                            "selected": false,
+                            "text": "src-rse",
+                            "value": "src-rse"
+                        },
+                        {
+                            "selected": false,
+                            "text": "src-type",
+                            "value": "src-type"
+                        }
+                    ],
+                    "query": "activity, dst-rse, dst-type, protocol, src-rse, src-type",
+                    "skipUrlSync": false,
+                    "type": "custom"
+                },
+                {
+                    "allValue": null,
+                    "current": {
+                        "text": "All",
+                        "value": [
+                            "$__all"
+                        ]
+                    },
+                    "datasource": "Elasticsearch",
+                    "definition": "{\"find\": \"terms\", \"field\": \"payload.activity.keyword\"} ",
+                    "hide": 0,
+                    "includeAll": true,
+                    "label": "Activity",
+                    "multi": true,
+                    "name": "activity",
+                    "options": [],
+                    "query": "{\"find\": \"terms\", \"field\": \"payload.activity.keyword\"} ",
+                    "refresh": 1,
+                    "regex": "",
+                    "skipUrlSync": false,
+                    "sort": 0,
+                    "tagValuesQuery": "",
+                    "tags": [],
+                    "tagsQuery": "",
+                    "type": "query",
+                    "useTags": false
+                },
+                {
+                    "allValue": null,
+                    "current": {
+                        "text": "XRD1 + XRD2",
+                        "value": [
+                            "XRD1",
+                            "XRD2"
+                        ]
+                    },
+                    "datasource": "Elasticsearch",
+                    "definition": "{\"find\": \"terms\", \"field\": \"payload.dst-rse.keyword\"} ",
+                    "hide": 0,
+                    "includeAll": true,
+                    "label": "Destination RSE",
+                    "multi": true,
+                    "name": "dstrse",
+                    "options": [],
+                    "query": "{\"find\": \"terms\", \"field\": \"payload.dst-rse.keyword\"} ",
+                    "refresh": 1,
+                    "regex": "",
+                    "skipUrlSync": false,
+                    "sort": 0,
+                    "tagValuesQuery": "",
+                    "tags": [],
+                    "tagsQuery": "",
+                    "type": "query",
+                    "useTags": false
+                },
+                {
+                    "allValue": null,
+                    "current": {
+                        "text": "All",
+                        "value": [
+                            "$__all"
+                        ]
+                    },
+                    "datasource": "Elasticsearch",
+                    "definition": "{\"find\": \"terms\", \"field\": \"payload.dst-type.keyword\"} ",
+                    "hide": 0,
+                    "includeAll": true,
+                    "label": "Destination Type",
+                    "multi": true,
+                    "name": "dsttype",
+                    "options": [],
+                    "query": "{\"find\": \"terms\", \"field\": \"payload.dst-type.keyword\"} ",
+                    "refresh": 1,
+                    "regex": "",
+                    "skipUrlSync": false,
+                    "sort": 0,
+                    "tagValuesQuery": "",
+                    "tags": [],
+                    "tagsQuery": "",
+                    "type": "query",
+                    "useTags": false
+                },
+                {
+                    "allValue": null,
+                    "current": {
+                        "text": "All",
+                        "value": [
+                            "$__all"
+                        ]
+                    },
+                    "datasource": "Elasticsearch",
+                    "definition": "{\"find\": \"terms\", \"field\": \"payload.src-rse.keyword\"} ",
+                    "hide": 0,
+                    "includeAll": true,
+                    "label": "Source RSE",
+                    "multi": true,
+                    "name": "srcrse",
+                    "options": [],
+                    "query": "{\"find\": \"terms\", \"field\": \"payload.src-rse.keyword\"} ",
+                    "refresh": 1,
+                    "regex": "",
+                    "skipUrlSync": false,
+                    "sort": 0,
+                    "tagValuesQuery": "",
+                    "tags": [],
+                    "tagsQuery": "",
+                    "type": "query",
+                    "useTags": false
+                },
+                {
+                    "allValue": null,
+                    "current": {
+                        "text": "All",
+                        "value": [
+                            "$__all"
+                        ]
+                    },
+                    "datasource": "Elasticsearch",
+                    "definition": "{\"find\": \"terms\", \"field\": \"payload.src-type.keyword\"} ",
+                    "hide": 0,
+                    "includeAll": true,
+                    "label": "Source Type",
+                    "multi": true,
+                    "name": "srctype",
+                    "options": [],
+                    "query": "{\"find\": \"terms\", \"field\": \"payload.src-type.keyword\"} ",
+                    "refresh": 1,
+                    "regex": "",
+                    "skipUrlSync": false,
+                    "sort": 0,
+                    "tagValuesQuery": "",
+                    "tags": [],
+                    "tagsQuery": "",
+                    "type": "query",
+                    "useTags": false
+                },
+                {
+                    "allValue": null,
+                    "current": {
+                        "text": "All",
+                        "value": [
+                            "$__all"
+                        ]
+                    },
+                    "datasource": "Elasticsearch",
+                    "definition": "{\"find\": \"terms\", \"field\": \"payload.protocol.keyword\"} ",
+                    "hide": 0,
+                    "includeAll": true,
+                    "label": "Protocol",
+                    "multi": true,
+                    "name": "protocol",
+                    "options": [],
+                    "query": "{\"find\": \"terms\", \"field\": \"payload.protocol.keyword\"} ",
+                    "refresh": 1,
+                    "regex": "",
+                    "skipUrlSync": false,
+                    "sort": 0,
+                    "tagValuesQuery": "",
+                    "tags": [],
+                    "tagsQuery": "",
+                    "type": "query",
+                    "useTags": false
+                }
+            ]
+        },
+        "time": {
+            "from": "now-6h",
+            "to": "now"
+        },
+        "timepicker": {
+            "refresh_intervals": [
+                "5s",
+                "10s",
+                "30s",
+                "1m",
+                "5m",
+                "15m",
+                "30m",
+                "1h",
+                "2h",
+                "1d"
+            ]
+        },
+        "timezone": "",
+        "title": "Transfer Dashboard",
+        "uid": "C8EwBoTZk",
+        "version": 1
+    },
+    "meta": {
+        "canAdmin": true,
+        "canEdit": true,
+        "canSave": true,
+        "canStar": true,
+        "created": "2019-10-17T15:23:12Z",
+        "createdBy": "admin",
+        "expires": "0001-01-01T00:00:00Z",
+        "folderId": 0,
+        "folderTitle": "General",
+        "folderUrl": "",
+        "hasAcl": false,
+        "isFolder": false,
+        "provisioned": false,
+        "provisionedExternalId": "",
+        "slug": "transfer-dashboard",
+        "type": "db",
+        "updated": "2019-10-17T15:23:12Z",
+        "updatedBy": "admin",
+        "url": "/d/C8EwBoTZk/transfer-dashboard",
+        "version": 1
+    }
+}

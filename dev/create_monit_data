@@ -2,6 +2,8 @@
 
 rses=("XRD1" "XRD2" "XRD3")
 
+activities=("Express" "Functional Test" "User Subscriptions")
+
 lifetime=300
 
 count=1
@@ -19,7 +21,12 @@ do
         rm $filename
         for dstrse in ${rses[@]}; do
             if [ $srcrse = $dstrse ]; then continue; fi
-            rucio add-rule --activity 'User Subscriptions' --lifetime $lifetime --source-replica-expression $srcrse test:$filename 1 $dstrse
+            if [ $((1 + RANDOM % 10)) = 1 ]; then
+                path=$(rucio list-file-replicas test:$filename --pfns)
+                gfal-rm $path
+            fi
+            index=$(($RANDOM % 3))
+            rucio add-rule --activity "${activities[$index]}" --lifetime $lifetime --source-replica-expression $srcrse test:$filename 1 $dstrse
             sleep 10
         done
     done
