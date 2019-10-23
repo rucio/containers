@@ -32,9 +32,6 @@ RUN yum install -y \
       python \
       python-pip \
       python-devel \
-      python34 \
-      python34-pip \
-      python34-devel \
       gmp-devel \
       krb5-devel \
       git \
@@ -70,7 +67,6 @@ RUN pip install -r /tmp/rucio/tools/pip-requires
 RUN pip install -r /tmp/rucio/tools/pip-requires-test
 RUN pip install psycopg2-binary
 RUN ln -s $RUCIOHOME/lib/rucio /usr/lib/python2.7/site-packages/rucio
-RUN ln -s $RUCIOHOME/lib/rucio /usr/lib/python3.4/site-packages/rucio
 
 COPY .pep8 .pep8
 COPY .flake8 .flake8
@@ -86,7 +82,6 @@ COPY alembic.ini $RUCIOHOME/etc/alembic.ini
 COPY aliases-py27.conf $RUCIOHOME/etc/web/aliases-py27.conf
 COPY ui-aliases-py27.conf $RUCIOHOME/etc/web/ui-aliases-py27.conf
 COPY google-cloud-storage-test.json $RUCIOHOME/etc/google-cloud-storage-test.json
-COPY certs/rucio_ca.pem $RUCIOHOME/etc/web/CERN-bundle.pem
 COPY certs/rucio_ca.pem /etc/grid-security/certificates/5fca1cb1.0
 
 COPY 00-mpm.conf /etc/httpd/conf.modules.d/00-mpm.conf
