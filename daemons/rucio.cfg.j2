@@ -97,7 +97,7 @@ reconnect_attempts = {{ RUCIO_CFG_TRACER_RECONNECT_ATTEMPTS | default('100') }}
 excluded_usrdns = {{ RUCIO_CFG_TRACER_EXCLUDED_USRDNS | default('') }}
 {% if RUCIO_CFG_TRACER_KRONOS_USERNAME is defined %}username = {{ RUCIO_CFG_TRACER_KRONOS_USERNAME }}{% endif %}
 {% if RUCIO_CFG_TRACER_KRONOS_PASSWORD is defined %}password = {{ RUCIO_CFG_TRACER_KRONOS_PASSWORD }}{% endif %}
-dataset_wait = excluded_usrdns = {{ RUCIO_CFG_TRACER_DATASET_WAIT | default('60') }}
+dataset_wait = {{ RUCIO_CFG_TRACER_DATASET_WAIT | default('60') }}
 
 [transmogrifier]
 maxdids = {{ RUCIO_CFG_TRANSMOGRIFIER_MAXDIDS | default('100000') }}
