@@ -48,7 +48,7 @@ This variable is mandatory and it specifies the name of the daemon, e.g., `herme
 ===================
 Any additional command line parameter can be specified here, e.g., `--run-once`. This field is optional.
 
-`RUCIO_ENABLE_LOGFILE`
+`RUCIO_ENABLE_LOGS`
 =====================
 By default the log output of the daemon is written to stdout and stderr. If you set this variable to `True` the output will be written to `access_log` and `error_log` under `/var/log/rucio`.
 
