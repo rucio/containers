@@ -97,7 +97,7 @@ reconnect_attempts = {{ RUCIO_CFG_TRACER_RECONNECT_ATTEMPTS | default('100') }}
 excluded_usrdns = {{ RUCIO_CFG_TRACER_EXCLUDED_USRDNS | default('') }}
 {% if RUCIO_CFG_TRACER_KRONOS_USERNAME is defined %}username = {{ RUCIO_CFG_TRACER_KRONOS_USERNAME }}{% endif %}
 {% if RUCIO_CFG_TRACER_KRONOS_PASSWORD is defined %}password = {{ RUCIO_CFG_TRACER_KRONOS_PASSWORD }}{% endif %}
-dataset_wait = excluded_usrdns = {{ RUCIO_CFG_TRACER_DATASET_WAIT | default('60') }}
+dataset_wait = {{ RUCIO_CFG_TRACER_DATASET_WAIT | default('60') }}
 
 [transmogrifier]
 maxdids = {{ RUCIO_CFG_TRANSMOGRIFIER_MAXDIDS | default('100000') }}
@@ -114,3 +114,8 @@ account = {{ RUCIO_CFG_MESSAGING_CACHE_ACCOUNT | default('ddm') }}
 [credentials]
 gcs = {{ RUCIO_CFG_CREDENTIALS_GCS | default('/opt/rucio/etc/google-cloud-storage-test.json') }}
 signature_lifetime = {{ RUCIO_CFG_CREDENTIALS_SIGNATURE_LIFETIME | default('3600') }}
+
+[nagios]
+proxy = {{ RUCIO_CFG_NAGIOS_PROXY | default('/opt/proxy/x509up') }}
+fts_vo = {{ RUCIO_CFG_NAGIOS_FTS_VO | default('atlas') }}
+update_distances = {{ RUCIO_CFG_NAGIOS_UPDATE_DISTANCES | default('True') }}
