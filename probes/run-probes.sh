@@ -1,5 +1,7 @@
 #! /bin/bash
 
+mkdir -p /opt/rucio/etc/
+
 if [ -f /opt/rucio/etc/rucio.cfg ]; then
     echo "rucio.cfg already mounted."
 else
@@ -13,19 +15,14 @@ if [ ! -z "$RUCIO_PRINT_CFG" ]; then
     echo ""
 fi
 
-cd /probes/common
+cp /etc/jobber-config/dot-jobber.yaml /root/.jobber
 
-echo "Will run probes:"
-echo $PROBES
+echo "Starting Jobber"
+/usr/local/libexec/jobbermaster &
 
-# Accept probe names space separated and run each in turn
-IFS=' ' read -r -a probes <<< $PROBES
+sleep 5
 
-for probe in "${probes[@]}"
-do
-    echo
-    echo $probe
-    ./${probe}
-done
+echo
+echo "============= Jobber log file ============="
 
-sleep 60
+tail -f /var/log/jobber-runs
