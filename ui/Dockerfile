@@ -9,6 +9,8 @@
 
 FROM centos:7
 
+ARG TAG
+
 WORKDIR /tmp
 ADD oic.rpm /tmp
 
@@ -21,7 +23,7 @@ RUN rpm -i /tmp/oic.rpm; \
     ldconfig
 RUN pip install --upgrade pip setuptools
 RUN rm -rf /usr/lib/python2.7/site-packages/ipaddress*
-RUN pip install --pre rucio_webui[oracle,mysql,postgresql]
+RUN pip install --pre rucio_webui[oracle,mysql,postgresql]==$TAG
 RUN pip install j2cli psycopg2-binary
 # only necessary temporarily until setup.py for webui is fixed
 RUN pip install cx_oracle==6.3.1 PyMySQL
