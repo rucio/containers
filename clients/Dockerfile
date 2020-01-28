@@ -1,5 +1,7 @@
 FROM centos:7
 
+ARG env
+
 RUN yum install -y epel-release.noarch
 RUN yum install -y python-pip
 RUN yum install -y voms-clients-java
@@ -13,7 +15,7 @@ RUN pip install --upgrade setuptools
 RUN pip install --upgrade pip
 
 # Install Rucio
-RUN pip install rucio-clients
+RUN pip install --pre rucio-clients==$TAG
 RUN pip install jinja2 j2cli pyyaml
 
 COPY rucio.cfg.j2 /
