@@ -23,11 +23,11 @@ carbon_port = {{ RUCIO_CFG_MONITOR_CARBON_PORT | default('8125') }}
 user_scope = {{ RUCIO_CFG_MONITOR_USER_SCOPE | default('default_docker') }}
 
 [trace]
-tracedir = {{ RUCIO_CFG_TRACE_TRACEDIR | default('/var/log/rucio/trace') }}
+tracedir = {{ RUCIO_CFG_TRACE_TRACEDIR | default('/var/log/rucio') }}
 brokers = {{ RUCIO_CFG_TRACE_BROKERS | default('localhost') }}
 port = {{ RUCIO_CFG_TRACE_PORT | default('61013') }}
-{%- if RUCIO_CFG_TRACE_USERNAME is defined -%}username = {{ RUCIO_CFG_TRACE_USERNAME }}{% endif %}
-{%- if RUCIO_CFG_TRACE_PASSWORD is defined -%}password = {{ RUCIO_CFG_TRACE_PASSWORD }}{% endif %}
+{% if RUCIO_CFG_TRACE_USERNAME is defined -%}username = {{ RUCIO_CFG_TRACE_USERNAME }}{% endif %}
+{% if RUCIO_CFG_TRACE_PASSWORD is defined -%}password = {{ RUCIO_CFG_TRACE_PASSWORD }}{% endif %}
 topic = {{ RUCIO_CFG_TRACE_TOPIC | default('/topic/rucio.tracer') }}
 
 [nongrid_trace]
