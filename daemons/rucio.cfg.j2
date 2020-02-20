@@ -86,18 +86,18 @@ email_from = {{ RUCIO_CFG_MESSAGING_HERMES_EMAIL_FROM | default('Rucio <atlas-ad
 [tracer-kronos]
 brokers= {{ RUCIO_CFG_TRACER_KRONOS_BROKERS | default('atlas-test-mb.cern.ch') }}
 port= {{ RUCIO_CFG_TRACER_KRONOS_PORT | default('61013') }}
-ssl_key_file = {{ RUCIO_CFG_TRACER_SSL_KEY_FILE | default('/etc/grid-security/hostkey.pem') }}
-ssl_cert_file = {{ RUCIO_CFG_TRACER_SSL_CERT_FILE | default('/etc/grid-security/hostcert.pem') }}
-queue = {{ RUCIO_CFG_TRACER_QUEUE | default('/queue/Consumer.kronos.rucio.tracer') }}
-prefetch_size = {{ RUCIO_CFG_TRACER_PREFETCH_SIZE | default('10') }}
-chunksize = {{ RUCIO_CFG_TRACER_CHUNKSIZE | default('10') }}
-subscription_id = {{ RUCIO_CFG_TRACER_SUBSCRIPTION_ID | default('rucio-tracer-listener') }}
-use_ssl = {{ RUCIO_CFG_TRACER_USE_SSL | default('False') }}
-reconnect_attempts = {{ RUCIO_CFG_TRACER_RECONNECT_ATTEMPTS | default('100') }}
-excluded_usrdns = {{ RUCIO_CFG_TRACER_EXCLUDED_USRDNS | default('') }}
+ssl_key_file = {{ RUCIO_CFG_TRACER_KRONOS_SSL_KEY_FILE | default('/etc/grid-security/hostkey.pem') }}
+ssl_cert_file = {{ RUCIO_CFG_TRACER_KRONOS_SSL_CERT_FILE | default('/etc/grid-security/hostcert.pem') }}
+queue = {{ RUCIO_CFG_TRACER_KRONOS_QUEUE | default('/queue/Consumer.kronos.rucio.tracer') }}
+prefetch_size = {{ RUCIO_CFG_TRACER_KRONOS_PREFETCH_SIZE | default('10') }}
+chunksize = {{ RUCIO_CFG_TRACER_KRONOS_CHUNKSIZE | default('10') }}
+subscription_id = {{ RUCIO_CFG_TRACER_KRONOS_SUBSCRIPTION_ID | default('rucio-tracer-listener') }}
+use_ssl = {{ RUCIO_CFG_TRACER_KRONOS_USE_SSL | default('False') }}
+reconnect_attempts = {{ RUCIO_CFG_TRACER_KRONOS_RECONNECT_ATTEMPTS | default('100') }}
+excluded_usrdns = {{ RUCIO_CFG_TRACER_KRONOS_EXCLUDED_USRDNS | default('') }}
 {% if RUCIO_CFG_TRACER_KRONOS_USERNAME is defined %}username = {{ RUCIO_CFG_TRACER_KRONOS_USERNAME }}{% endif %}
 {% if RUCIO_CFG_TRACER_KRONOS_PASSWORD is defined %}password = {{ RUCIO_CFG_TRACER_KRONOS_PASSWORD }}{% endif %}
-dataset_wait = {{ RUCIO_CFG_TRACER_DATASET_WAIT | default('60') }}
+dataset_wait = {{ RUCIO_CFG_TRACER_KRONOS_DATASET_WAIT | default('60') }}
 
 [transmogrifier]
 maxdids = {{ RUCIO_CFG_TRANSMOGRIFIER_MAXDIDS | default('100000') }}
