@@ -8,5 +8,7 @@ DbUserName=fts
 DbPassword=fts
 DbConnectString=ftsdb/fts
 
+LogLevel=DEBUG
+
 [roles]
 Public = all:transfer;all:config;all:datamanagement
