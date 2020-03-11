@@ -1,7 +1,7 @@
 FROM centos:7
 
 # Repos needed for (VOMS and FTS) and WLCG certs
-RUN curl -o  /etc/yum.repos.d/ca.repo https://raw.githubusercontent.com/rucio/rucio/master/etc/docker/dev/ca.repo
+ADD ca.repo /etc/yum.repos.d/ca.repo
 
 RUN yum install -y epel-release.noarch http://linuxsoft.cern.ch/wlcg/centos7/x86_64/wlcg-repo-1.0.0-1.el7.noarch.rpm && \
     yum clean all && \
@@ -33,6 +33,8 @@ ADD docker-entrypoint.sh /
 ADD renew_fts_proxy.sh.j2 /
 ADD renew_fts_proxy_atlas.sh.j2 /
 ADD renew_fts_proxy_dteam.sh.j2 /
+ADD renew_fts_proxy_tutorial.sh.j2 /
+ADD rucio_ca.pem /etc/grid-security/certificates/
 
 ADD dteam* /etc/vomses/
 
