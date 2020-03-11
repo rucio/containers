@@ -1,6 +1,6 @@
 FROM centos:7
 
-ARG env
+ARG TAG
 
 RUN yum install -y epel-release.noarch
 RUN yum install -y python-pip
