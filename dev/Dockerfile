@@ -62,9 +62,9 @@ RUN mkdir -p \
 RUN pip install --upgrade pip
 RUN pip install --upgrade setuptools
 RUN rm -rf /usr/lib/python2.7/site-packages/ipaddress*
-RUN pip install -r /tmp/rucio/tools/pip-requires-client
-RUN pip install -r /tmp/rucio/tools/pip-requires
-RUN pip install -r /tmp/rucio/tools/pip-requires-test
+RUN pip install -r /tmp/rucio/etc/pip-requires-client
+RUN pip install -r /tmp/rucio/etc/pip-requires
+RUN pip install -r /tmp/rucio/etc/pip-requires-test
 RUN pip install psycopg2-binary
 RUN ln -s $RUCIOHOME/lib/rucio /usr/lib/python2.7/site-packages/rucio
 
