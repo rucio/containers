@@ -20,6 +20,10 @@ LogFormat "%h\t%t\t%{X-Rucio-Forwarded-For}i\t%T\t%D\t\"%{X-Rucio-Auth-Token}i\"
 LoadModule authn_core_module modules/mod_authn_core.so
 LoadModule cache_disk_module modules/mod_cache_disk.so
 
+WSGIRestrictEmbedded On
+WSGIDaemonProcess rucio processes=4 threads=4
+WSGIApplicationGroup rucio
+
 CacheEnable disk /
 CacheRoot /tmp
 {% if RUCIO_HOSTNAME is defined %}
@@ -79,27 +83,27 @@ CacheRoot /tmp
 {% if RUCIO_DEFINE_ALIASES|default('False') == 'True' %}
  Include /opt/rucio/etc/aliases.conf
 {% else %}
- WSGIScriptAlias /ping                   /usr/lib/python2.7/site-packages/rucio/web/rest/ping.py
- WSGIScriptAlias /accounts               /usr/lib/python2.7/site-packages/rucio/web/rest/account.py
- WSGIScriptAlias /accountlimits          /usr/lib/python2.7/site-packages/rucio/web/rest/account_limit.py
- WSGIScriptAlias /config                 /usr/lib/python2.7/site-packages/rucio/web/rest/config.py
- WSGIScriptAlias /dids                   /usr/lib/python2.7/site-packages/rucio/web/rest/did.py
- WSGIScriptAlias /export                 /usr/lib/python2.7/site-packages/rucio/web/rest/exporter.py
- WSGIScriptAlias /identities             /usr/lib/python2.7/site-packages/rucio/web/rest/identity.py
- WSGIScriptAlias /import                 /usr/lib/python2.7/site-packages/rucio/web/rest/importer.py
- WSGIScriptAlias /heartbeats             /usr/lib/python2.7/site-packages/rucio/web/rest/heartbeat.py
- WSGIScriptAlias /locks                  /usr/lib/python2.7/site-packages/rucio/web/rest/lock.py
- WSGIScriptAlias /meta                   /usr/lib/python2.7/site-packages/rucio/web/rest/meta.py
- WSGIScriptAlias /ping                   /usr/lib/python2.7/site-packages/rucio/web/rest/ping.py
- WSGIScriptAlias /redirect               /usr/lib/python2.7/site-packages/rucio/web/rest/redirect.py
- WSGIScriptAlias /replicas               /usr/lib/python2.7/site-packages/rucio/web/rest/replica.py
- WSGIScriptAlias /requests               /usr/lib/python2.7/site-packages/rucio/web/rest/request.py
- WSGIScriptAlias /rses                   /usr/lib/python2.7/site-packages/rucio/web/rest/rse.py
- WSGIScriptAlias /rules                  /usr/lib/python2.7/site-packages/rucio/web/rest/rule.py
- WSGIScriptAlias /scopes                 /usr/lib/python2.7/site-packages/rucio/web/rest/scope.py
- WSGIScriptAlias /subscriptions          /usr/lib/python2.7/site-packages/rucio/web/rest/subscription.py
- WSGIScriptAlias /objectstores           /usr/lib/python2.7/site-packages/rucio/web/rest/objectstore.py
- WSGIScriptAlias /lifetime_exceptions    /usr/lib/python2.7/site-packages/rucio/web/rest/lifetime_exception.py
+ WSGIScriptAlias /ping                   /usr/lib/python2.7/site-packages/rucio/web/rest/ping.py process-group=rucio application-group=rucio
+ WSGIScriptAlias /accounts               /usr/lib/python2.7/site-packages/rucio/web/rest/account.py process-group=rucio application-group=rucio
+ WSGIScriptAlias /accountlimits          /usr/lib/python2.7/site-packages/rucio/web/rest/account_limit.py process-group=rucio application-group=rucio
+ WSGIScriptAlias /config                 /usr/lib/python2.7/site-packages/rucio/web/rest/config.py process-group=rucio application-group=rucio
+ WSGIScriptAlias /dids                   /usr/lib/python2.7/site-packages/rucio/web/rest/did.py process-group=rucio application-group=rucio
+ WSGIScriptAlias /export                 /usr/lib/python2.7/site-packages/rucio/web/rest/exporter.py process-group=rucio application-group=rucio
+ WSGIScriptAlias /identities             /usr/lib/python2.7/site-packages/rucio/web/rest/identity.py process-group=rucio application-group=rucio
+ WSGIScriptAlias /import                 /usr/lib/python2.7/site-packages/rucio/web/rest/importer.py process-group=rucio application-group=rucio
+ WSGIScriptAlias /heartbeats             /usr/lib/python2.7/site-packages/rucio/web/rest/heartbeat.py process-group=rucio application-group=rucio
+ WSGIScriptAlias /locks                  /usr/lib/python2.7/site-packages/rucio/web/rest/lock.py process-group=rucio application-group=rucio
+ WSGIScriptAlias /meta                   /usr/lib/python2.7/site-packages/rucio/web/rest/meta.py process-group=rucio application-group=rucio
+ WSGIScriptAlias /ping                   /usr/lib/python2.7/site-packages/rucio/web/rest/ping.py process-group=rucio application-group=rucio
+ WSGIScriptAlias /redirect               /usr/lib/python2.7/site-packages/rucio/web/rest/redirect.py process-group=rucio application-group=rucio
+ WSGIScriptAlias /replicas               /usr/lib/python2.7/site-packages/rucio/web/rest/replica.py process-group=rucio application-group=rucio
+ WSGIScriptAlias /requests               /usr/lib/python2.7/site-packages/rucio/web/rest/request.py process-group=rucio application-group=rucio
+ WSGIScriptAlias /rses                   /usr/lib/python2.7/site-packages/rucio/web/rest/rse.py process-group=rucio application-group=rucio
+ WSGIScriptAlias /rules                  /usr/lib/python2.7/site-packages/rucio/web/rest/rule.py process-group=rucio application-group=rucio
+ WSGIScriptAlias /scopes                 /usr/lib/python2.7/site-packages/rucio/web/rest/scope.py process-group=rucio application-group=rucio
+ WSGIScriptAlias /subscriptions          /usr/lib/python2.7/site-packages/rucio/web/rest/subscription.py process-group=rucio application-group=rucio
+ WSGIScriptAlias /objectstores           /usr/lib/python2.7/site-packages/rucio/web/rest/objectstore.py process-group=rucio application-group=rucio
+ WSGIScriptAlias /lifetime_exceptions    /usr/lib/python2.7/site-packages/rucio/web/rest/lifetime_exception.py process-group=rucio application-group=rucio
 {% endif %}
 
 {% if RUCIO_HTTPD_ENCODED_SLASHES|default('False') == 'True' %}
