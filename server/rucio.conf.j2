@@ -21,7 +21,7 @@ LoadModule authn_core_module modules/mod_authn_core.so
 LoadModule cache_disk_module modules/mod_cache_disk.so
 
 WSGIRestrictEmbedded On
-WSGIDaemonProcess rucio processes=4 threads=4
+WSGIDaemonProcess rucio processes={{ RUCIO_WSGI_DAEMON_PROCESSES | default('4') }} threads={{ RUCIO_WSGI_DAEMON_THREADS | default('4') }}
 WSGIApplicationGroup rucio
 
 CacheEnable disk /
