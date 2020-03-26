@@ -74,11 +74,11 @@ CacheRoot /tmp
  WSGIScriptAlias /            /usr/lib/python2.7/site-packages/rucio/web/ui/main.py
 
 {% if RUCIO_PROXY is defined %}
-  ProxyPass /proxy             https://{{ RUCIO_PROXY }}
-  ProxyPassReverse /proxy      https://{{ RUCIO_PROXY }}
+  ProxyPass /proxy             {{ RUCIO_PROXY_SCHEME | default('https') }}://{{ RUCIO_PROXY }}
+  ProxyPassReverse /proxy      {{ RUCIO_PROXY_SCHEME | default('https') }}://{{ RUCIO_PROXY }}
 {% endif %}
 {% if RUCIO_AUTH_PROXY is defined %}
-  ProxyPass /authproxy             https://{{ RUCIO_AUTH_PROXY }}
-  ProxyPassReverse /authproxy      https://{{ RUCIO_AUTH_PROXY }}
+  ProxyPass /authproxy             {{ RUCIO_AUTH_PROXY_SCHEME | default('https') }}://{{ RUCIO_AUTH_PROXY }}
+  ProxyPassReverse /authproxy      {{ RUCIO_AUTH_PROXY_SCHEME | default('https') }}://{{ RUCIO_AUTH_PROXY }}
 {% endif %}
 </VirtualHost>

@@ -70,17 +70,29 @@ EnableSendfile on
 IncludeOptional conf.d/*.conf
 
 {% if RUCIO_HTTPD_MPM_MODE is defined and RUCIO_HTTPD_MPM_MODE == "prefork" -%}
-StartServers         {{ RUCIO_HTTPD_START_SERVERS | default('8') }}
-MinSpareServers      {{ RUCIO_HTTPD_MIN_SPARE_SERVERS | default('5') }}
-MaxSpareServers      {{ RUCIO_HTTPD_MAX_SPARE_SERVERS | default('20') }}
-ServerLimit          {{ RUCIO_HTTPD_SERVER_LIMIT | default('256') }}
-MaxClients           {{ RUCIO_HTTPD_MAX_CLIENTS | default('256') }}
-MaxRequestsPerChild  {{ RUCIO_HTTPD_MAX_REQUESTS_PER_CHILD | default('4000') }}
+StartServers           {{ RUCIO_HTTPD_START_SERVERS | default('8') }}
+MinSpareServers        {{ RUCIO_HTTPD_MIN_SPARE_SERVERS | default('5') }}
+MaxSpareServers        {{ RUCIO_HTTPD_MAX_SPARE_SERVERS | default('20') }}
+ServerLimit            {{ RUCIO_HTTPD_SERVER_LIMIT | default('256') }}
+MaxClients             {{ RUCIO_HTTPD_MAX_CLIENTS | default('256') }}
+MaxRequestsPerChild    {{ RUCIO_HTTPD_MAX_REQUESTS_PER_CHILD | default('4000') }}
+{% elif RUCIO_HTTPD_MPM_MODE is defined and RUCIO_HTTPD_MPM_MODE == "worker" -%}
+StartServers           {{ RUCIO_HTTPD_START_SERVERS | default('1') }}
+MaxClients             {{ RUCIO_HTTPD_MAX_CLIENTS | default('20') }}
+MinSpareThreads        {{ RUCIO_HTTPD_MIN_SPARE_THREADS | default('1') }}
+MaxSpareThreads        {{ RUCIO_HTTPD_MAX_SPARE_THREADS | default('20') }}
+ThreadsPerChild        {{ RUCIO_HTTPD_THREADS_PER_CHILD | default('5') }}
+MaxRequestsPerChild    {{ RUCIO_HTTPD_MAX_REQUESTS_PER_CHILD | default('8192') }}
 {% else %}
-StartServers         {{ RUCIO_HTTPD_START_SERVERS | default('1') }}
-MaxClients           {{ RUCIO_HTTPD_MAX_CLIENTS | default('20') }}
-MinSpareThreads      {{ RUCIO_HTTPD_MIN_SPARE_THREADS | default('1') }}
-MaxSpareThreads      {{ RUCIO_HTTPD_MAX_SPARE_THREADS | default('20') }}
-ThreadsPerChild      {{ RUCIO_HTTPD_THREADS_PER_CHILD | default('5') }}
-MaxRequestsPerChild  {{ RUCIO_HTTPD_MAX_REQUESTS_PER_CHILD | default('8192') }}
+KeepAlive              {{ RUCIO_HTTPD_KEEP_ALIVE | default('On') }}
+KeepAliveTimeout       {{ RUCIO_HTTPD_KEEP_ALIVE_TIMEOUT | default('5') }}
+MaxKeepAliveRequests   {{ RUCIO_HTTPD_MAX_KEEP_ALIVE_REQUESTS | default('128') }}
+ServerLimit            {{ RUCIO_HTTPD_SERVER_LIMIT | default('10') }}
+StartServers           {{ RUCIO_HTTPD_START_SERVERS | default('4') }}
+ThreadLimit            {{ RUCIO_HTTPD_THREADS_LIMIT | default('128') }}
+ThreadsPerChild        {{ RUCIO_HTTPD_THREADS_PER_CHILD | default('128') }}
+MinSpareThreads        {{ RUCIO_HTTPD_MIN_SPARE_THREADS | default('256') }}
+MaxSpareThreads        {{ RUCIO_HTTPD_MAX_SPARE_THREADS | default('512') }}
+MaxRequestWorkers      {{ RUCIO_HTTPD_MAX_REQUEST_WORKERS | default('1280') }}
+MaxConnectionsPerChild {{ RUCIO_HTTPD_MAX_CONNECTIONS_PER_CHILD | default('2048') }}
 {% endif %}

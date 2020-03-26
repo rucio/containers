@@ -1,5 +1,7 @@
 {% if RUCIO_HTTPD_MPM_MODE is defined and RUCIO_HTTPD_MPM_MODE == "prefork" -%}
 LoadModule mpm_prefork_module modules/mod_mpm_prefork.so
-{% else -%}
+{% elif RUCIO_HTTPD_MPM_MODE is defined and RUCIO_HTTPD_MPM_MODE == "worker" -%}
 LoadModule mpm_worker_module modules/mod_mpm_worker.so
+{% else -%}
+LoadModule mpm_event_module modules/mod_mpm_event.so
 {% endif %}
