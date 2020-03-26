@@ -24,6 +24,7 @@ pool_recycle = {{ RUCIO_CFG_DATABASE_POOL_RECYCLE | default('600') }}
 carbon_server = {{ RUCIO_CFG_MONITOR_CARBON_SERVER | default('localhost') }}
 carbon_port = {{ RUCIO_CFG_MONITOR_CARBON_PORT | default('8125') }}
 user_scope = {{ RUCIO_CFG_MONITOR_USER_SCOPE | default('default_docker') }}
+enable_metrics = {{ RUCIO_CFG_MONITOR_ENABLE_METRICS | default('False') }}
 
 [policy]
 permission = {{ RUCIO_CFG_POLICY_PERMISSION | default('generic') }}
