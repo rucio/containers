@@ -69,6 +69,17 @@ EnableSendfile on
 # Load config files in the "/etc/httpd/conf.d" directory, if any.
 IncludeOptional conf.d/*.conf
 
+{% if RUCIO_HTTPD_ENABLE_STATUS|default('False') == 'True' %}
+LoadModule status_module modules/mod_status.so
+ExtendedStatus On
+<Location /server-status>
+    SetHandler server-status
+    Order deny,allow
+    Deny from all
+    Allow from localhost
+</Location>
+{% endif %}
+
 {% if RUCIO_HTTPD_MPM_MODE is defined and RUCIO_HTTPD_MPM_MODE == "prefork" -%}
 StartServers           {{ RUCIO_HTTPD_START_SERVERS | default('8') }}
 MinSpareServers        {{ RUCIO_HTTPD_MIN_SPARE_SERVERS | default('5') }}
