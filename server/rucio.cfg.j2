@@ -46,6 +46,10 @@ support = {{ RUCIO_CFG_POLICY_SUPPORT | default('https://github.com/rucio/rucio/
 support_rucio = {{ RUCIO_CFG_POLICY_SUPPORT_RUCIO | default('https://github.com/rucio/rucio/issues/') }}
 {% if RUCIO_CFG_POLICY_LFN2PFN_MODULE is defined %}lfn2pfn_module = {{ RUCIO_CFG_POLICY_LFN2PFN_MODULE }}{% endif %}
 
+[credentials]
+gcs = {{ RUCIO_CFG_CREDENTIALS_GCS | default('/opt/rucio/etc/google-cloud-storage-test.json') }}
+signature_lifetime = {{ RUCIO_CFG_CREDENTIALS_SIGNATURE_LIFETIME | default('3600') }}
+
 [webui]
 usercert = {{ RUCIO_CFG_WEBUI_USERCERT | default('/opt/rucio/etc/usercert_with_key.pem') }}
 {% if RUCIO_CFG_WEBUI_AUTH_TYPE is defined %}auth_type = {{ RUCIO_CFG_WEBUI_AUTH_TYPE }}{% endif %}
