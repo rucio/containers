@@ -120,3 +120,7 @@ signature_lifetime = {{ RUCIO_CFG_CREDENTIALS_SIGNATURE_LIFETIME | default('3600
 proxy = {{ RUCIO_CFG_NAGIOS_PROXY | default('/opt/proxy/x509up') }}
 fts_vo = {{ RUCIO_CFG_NAGIOS_FTS_VO | default('atlas') }}
 update_distances = {{ RUCIO_CFG_NAGIOS_UPDATE_DISTANCES | default('True') }}
+
+[oidc]
+idpsecrets = {{ RUCIO_CFG_OIDC_IDPSECRETS | default('/opt/rucio/etc/idpsecrets.json') }}
+{% if RUCIO_CFG_OIDC_ADMIN_ISSUER is defined %}admin_issuer = {{ RUCIO_CFG_OIDC_ADMIN_ISSUER }}{% endif %}
