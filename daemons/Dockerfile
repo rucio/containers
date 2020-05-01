@@ -37,7 +37,9 @@ RUN yum install -y \
     gfal2-plugin-srm \
     gfal2-plugin-xrootd \
     gfal2-python \
-    xrootd-client
+    xrootd-client \
+    sendmail \
+    sendmail-cf
 
 ADD rucio.cfg.j2 /tmp/
 ADD start-daemon.sh /
