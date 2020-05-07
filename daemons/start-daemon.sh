@@ -13,6 +13,12 @@ if [ ! -z "$RUCIO_PRINT_CFG" ]; then
     echo ""
 fi
 
+if [ "$RUCIO_DAEMON" == "hermes" ]
+then
+  echo "starting sendmail for $RUCIO_DAEMON"
+  sendmail -bd
+fi
+
 echo "starting daemon with: $RUCIO_DAEMON $RUCIO_DAEMON_ARGS"
 echo ""
 
