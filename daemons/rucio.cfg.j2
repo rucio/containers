@@ -70,6 +70,10 @@ ssl_cert_file = {{ RUCIO_CFG_MESSAGING_FTS3_SSL_CERT_FILE | default('/etc/grid-s
 destination = {{ RUCIO_CFG_MESSAGING_FTS3_DESTINATION | default('/topic/transfer.fts_monitoring_queue_state') }}
 brokers = {{ RUCIO_CFG_MESSAGING_FTS3_BROKERS | default('dashb-test-mb.cern.ch') }}
 voname = {{ RUCIO_CFG_MESSAGING_FTS3_VONAME | default('atlas') }}
+{% if RUCIO_CFG_MESSAGING_FTS3_USE_SSL is defined %}use_ssl = {{ RUCIO_CFG_MESSAGING_FTS3_USE_SSL }}{% endif %}
+{% if RUCIO_CFG_MESSAGING_FTS3_NONSSL_PORT is defined %}nonssl_port = {{ RUCIO_CFG_MESSAGING_FTS3_NONSSL_PORT }}{% endif %}
+{% if RUCIO_CFG_MESSAGING_FTS3_USERNAME is defined %}username = {{ RUCIO_CFG_MESSAGING_FTS3_USERNAME }}{% endif %}
+{% if RUCIO_CFG_MESSAGING_FTS3_PASSWORD is defined %}password = {{ RUCIO_CFG_MESSAGING_FTS3_PASSWORD }}{% endif %}
 
 [messaging-hermes]
 {% if RUCIO_CFG_MESSAGING_HERMES_USERNAME is defined %}username = {{ RUCIO_CFG_MESSAGING_HERMES_USERNAME }}{% endif %}
