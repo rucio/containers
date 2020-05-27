@@ -84,6 +84,7 @@ CacheRoot /tmp
  Include /opt/rucio/etc/aliases.conf
 {% else %}
  WSGIScriptAlias /ping                   /usr/lib/python2.7/site-packages/rucio/web/rest/ping.py process-group=rucio application-group=rucio
+{% if RUCIO_SERVER_TYPE|default('api') == 'all' or RUCIO_SERVER_TYPE|default('api') == 'api' %}
  WSGIScriptAlias /accounts               /usr/lib/python2.7/site-packages/rucio/web/rest/account.py process-group=rucio application-group=rucio
  WSGIScriptAlias /accountlimits          /usr/lib/python2.7/site-packages/rucio/web/rest/account_limit.py process-group=rucio application-group=rucio
  WSGIScriptAlias /config                 /usr/lib/python2.7/site-packages/rucio/web/rest/config.py process-group=rucio application-group=rucio
@@ -102,8 +103,14 @@ CacheRoot /tmp
  WSGIScriptAlias /rules                  /usr/lib/python2.7/site-packages/rucio/web/rest/rule.py process-group=rucio application-group=rucio
  WSGIScriptAlias /scopes                 /usr/lib/python2.7/site-packages/rucio/web/rest/scope.py process-group=rucio application-group=rucio
  WSGIScriptAlias /subscriptions          /usr/lib/python2.7/site-packages/rucio/web/rest/subscription.py process-group=rucio application-group=rucio
- WSGIScriptAlias /objectstores           /usr/lib/python2.7/site-packages/rucio/web/rest/objectstore.py process-group=rucio application-group=rucio
  WSGIScriptAlias /lifetime_exceptions    /usr/lib/python2.7/site-packages/rucio/web/rest/lifetime_exception.py process-group=rucio application-group=rucio
+{% endif %}
+{% if RUCIO_SERVER_TYPE|default('api') == 'all' or RUCIO_SERVER_TYPE|default('api') == 'auth' %}
+ WSGIScriptAlias /auth                   /usr/lib/python2.7/site-packages/rucio/web/rest/authentication.py process-group=rucio application-group=rucio
+{% endif %}
+{% if RUCIO_SERVER_TYPE|default('api') == 'all' or RUCIO_SERVER_TYPE|default('api') == 'trace' %}
+ WSGIScriptAlias /traces                 /usr/lib/python2.7/site-packages/rucio/web/rest/trace.py process-group=rucio application-group=rucio
+{% endif %}
 {% endif %}
 
 {% if RUCIO_HTTPD_ENCODED_SLASHES|default('False') == 'True' %}
