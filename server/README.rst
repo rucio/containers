@@ -53,6 +53,10 @@ Environment Variables
 
 As shown in the examples above the rucio-server image can be configured using environment variables that are passed with `docker run`. Below is a list of all available variables and their behaviour:
 
+`RUCIO_SERVER_TYPE`
+==================
+It is used to configure the available endpoints and there are four values: `api`, `auth`, `trace` and `all`. The default value is `api`.
+
 `RUCIO_ENABLE_SSL`
 ==================
 By default the rucio server runs without SSL on port 80. If you want to enable SSL set this variable to `True`. If you enable SSL you will also have to provide the host certificate and key and the certificate authority file. The server will look for `hostcert.pem`, `hostkey.pem` and `ca.pem` under `/etc/grid-security` so you will have to mount them as volumes. Furthermore you will also have to expose port 443.

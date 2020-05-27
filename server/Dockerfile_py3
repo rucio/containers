@@ -17,7 +17,7 @@ ADD oic.rpm /tmp
 
 RUN yum install -y epel-release.noarch
 RUN yum upgrade -y
-RUN yum install -y python3 libaio gcc python36-devel.x86_64 openssl-devel.x86_64 mod_ssl python3-m2crypto libnsl.x86_64
+RUN yum install -y httpd python3 python3-mod_wsgi libaio gcc python36-devel.x86_64 mod_ssl openssl-devel.x86_64 python3-m2crypto libnsl.x86_64
 
 RUN rpm -i /tmp/oic.rpm; \
     echo "/usr/lib/oracle/12.2/client64/lib" >/etc/ld.so.conf.d/oracle.conf; \
@@ -28,24 +28,18 @@ RUN python3 -m pip install --pre rucio[oracle,mysql,postgresql]==$TAG
 RUN python3 -m pip install j2cli psycopg2-binary
 RUN python3 -m pip install cx_oracle==6.3.1 PyMySQL
 
-# Install dependecies
-RUN yum install -y \
-    gfal2 \
-    gfal2-plugin-file \
-    gfal2-plugin-gridftp \
-    gfal2-plugin-http \
-    gfal2-plugin-srm \
-    gfal2-plugin-xrootd \
-    xrootd-client \
-    sendmail \
-    sendmail-cf
-
 ADD rucio.cfg.j2 /tmp/
-ADD start-daemon_py3.sh /start-daemon.sh
+ADD rucio.conf.j2.py3 /tmp/rucio.conf.j2
+ADD httpd.conf.j2 /tmp/
+ADD 00-mpm.conf.j2 /tmp
+ADD docker-entrypoint.sh /
+ADD robots.txt /var/www/html
+RUN rm /etc/httpd/conf.d/welcome.conf /etc/httpd/conf.d/userdir.conf /etc/httpd/conf.d/ssl.conf
 
-RUN mkdir /var/log/rucio
-
-VOLUME /var/log/rucio
+VOLUME /var/log/httpd
 VOLUME /opt/rucio/etc
 
-ENTRYPOINT ["/start-daemon.sh"]
+EXPOSE 80
+EXPOSE 443
+
+ENTRYPOINT ["/docker-entrypoint.sh"]
