@@ -11,8 +11,8 @@ RUN yum install -y nordugrid-arc-client nordugrid-arc-plugins-gfal \
                    nordugrid-arc-plugins-xrootd
 
 # Upgrade pip & setuptools
-RUN pip install --upgrade setuptools
 RUN pip install --upgrade pip
+RUN pip install --upgrade setuptools
 
 # Install Rucio
 RUN pip install --pre rucio-clients==$TAG
