@@ -22,7 +22,8 @@ RUN yum install -y python3 libaio gcc python36-devel.x86_64 openssl-devel.x86_64
 RUN rpm -i /tmp/oic.rpm; \
     echo "/usr/lib/oracle/12.2/client64/lib" >/etc/ld.so.conf.d/oracle.conf; \
     ldconfig
-RUN python3 -m pip install --upgrade pip setuptools
+RUN python3 -m pip install --upgrade pip
+RUN python3 -m pip install --upgrade setuptools
 RUN rm -rf /usr/lib/python3.6/site-packages/ipaddress*
 RUN python3 -m pip install --pre rucio[oracle,mysql,postgresql]==$TAG
 RUN python3 -m pip install j2cli psycopg2-binary

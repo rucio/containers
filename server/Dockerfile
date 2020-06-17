@@ -22,7 +22,8 @@ RUN yum install -y httpd mod_wsgi python-pip libaio gcc python-devel.x86_64 mod_
 RUN rpm -i /tmp/oic.rpm; \
     echo "/usr/lib/oracle/12.2/client64/lib" >/etc/ld.so.conf.d/oracle.conf; \
     ldconfig
-RUN pip install --upgrade pip setuptools
+RUN pip install --upgrade pip
+RUN pip install --upgrade setuptools
 RUN rm -rf /usr/lib/python2.7/site-packages/ipaddress*
 RUN pip install --pre rucio[oracle,mysql,postgresql]==$TAG
 RUN pip install j2cli psycopg2-binary
