@@ -23,7 +23,8 @@ RUN yum -y install ca-certificates.noarch lcg-CA voms-clients-cpp fts-rest-cli \
     yum clean all && \
     rm -rf /var/cache/yum
 
-RUN pip install --upgrade pip setuptools
+RUN pip install --upgrade pip 
+RUN pip install --upgrade setuptools
 RUN pip install j2cli
 
 RUN mkdir -p /opt/rucio/certs/

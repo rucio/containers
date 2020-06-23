@@ -19,7 +19,7 @@ fts-rest-delegate --key=/tmp/x509up --cert=/tmp/x509up -s {{ fts }}
 {% if RUCIO_FTS_SECRETS is defined %}
 {% set secrets = RUCIO_FTS_SECRETS.split(',') %}
 {% for secret in secrets %}
-kubectl create secret generic  {{ secret }} --from-file=/tmp/x509up --dry-run -o yaml | kubectl apply --validate=false  -f  -
+kubectl create secret generic  {{ secret }} --from-file=/tmp/x509up --dry-run=client -o yaml | kubectl apply --validate=false  -f  -
 {% endfor %}
 {% endif %}
 
