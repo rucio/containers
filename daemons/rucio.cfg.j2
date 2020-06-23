@@ -62,6 +62,8 @@ usercert = {{ RUCIO_CFG_CONVEYOR_USERCERT | default('/opt/rucio/tools/x509up') }
 {% if RUCIO_CFG_CONVEYOR_USER_ACTIVITIES is defined %}user_activities = {{ RUCIO_CFG_CONVEYOR_USER_ACTIVITIES }}{% endif %}
 {% if RUCIO_CFG_CONVEYOR_USER_TRANSFERS is defined %}user_transfers = {{ RUCIO_CFG_CONVEYOR_USER_TRANSFERS }}{% endif %}
 {% if RUCIO_CFG_CONVEYOR_ALLOW_USER_OIDC_TOKENS is defined %}allow_user_oidc_tokens = {{ RUCIO_CFG_CONVEYOR_ALLOW_USER_OIDC_TOKENS }}{% endif %}
+{% if RUCIO_CFG_CONVEYOR_REQUEST_OIDC_SCOPE is defined %}request_oidc_scope = {{ RUCIO_CFG_CONVEYOR_REQUEST_OIDC_SCOPE }}{% endif %}
+{% if RUCIO_CFG_CONVEYOR_REQUEST_OIDC_AUDIENCE is defined %}request_oidc_audience = {{ RUCIO_CFG_CONVEYOR_REQUEST_OIDC_AUDIENCE }}{% endif %}
 
 [messaging-fts3]
 port = {{ RUCIO_CFG_MESSAGING_FTS3_PORT | default('61123') }}
