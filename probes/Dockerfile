@@ -28,11 +28,11 @@ RUN rpm -i /tmp/oic.rpm; \
 
 RUN rpm -i https://github.com/dshearer/jobber/releases/download/v1.4.0/jobber-1.4.0-1.el7.x86_64.rpm
 
-RUN pip install --upgrade pip setuptools
+RUN pip install --no-cache-dir --upgrade pip setuptools
 RUN rm -rf /usr/lib/python2.7/site-packages/ipaddress*
-RUN pip install --pre rucio[oracle,mysql,postgresql]
-RUN pip install j2cli psycopg2-binary
-RUN pip install cx_oracle==6.3.1 PyMySQL
+RUN pip install --no-cache-dir --pre rucio[oracle,mysql,postgresql]
+RUN pip install --no-cache-dir j2cli psycopg2-binary
+RUN pip install --no-cache-dir cx_oracle==6.3.1 PyMySQL
 
 WORKDIR /
 RUN git clone https://github.com/rucio/probes.git

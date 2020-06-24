@@ -15,19 +15,25 @@ ARG TAG
 WORKDIR /tmp
 ADD oic.rpm /tmp
 
-RUN yum install -y epel-release.noarch
-RUN yum upgrade -y
-RUN yum install -y python3 libaio gcc python36-devel.x86_64 openssl-devel.x86_64 mod_ssl python3-m2crypto libnsl.x86_64
+RUN yum install -y epel-release.noarch && \
+    yum clean all && \
+    rm -rf /var/cache/yum
+RUN yum upgrade -y && \
+    yum clean all && \
+    rm -rf /var/cache/yum
+RUN yum install -y python3 libaio gcc python36-devel.x86_64 openssl-devel.x86_64 mod_ssl python3-m2crypto libnsl.x86_64 && \
+    yum clean all && \
+    rm -rf /var/cache/yum
 
 RUN rpm -i /tmp/oic.rpm; \
     echo "/usr/lib/oracle/12.2/client64/lib" >/etc/ld.so.conf.d/oracle.conf; \
     ldconfig
-RUN python3 -m pip install --upgrade pip
-RUN python3 -m pip install --upgrade setuptools
+RUN python3 -m pip install --no-cache-dir  --upgrade pip
+RUN python3 -m pip install --no-cache-dir  --upgrade setuptools
 RUN rm -rf /usr/lib/python3.6/site-packages/ipaddress*
-RUN python3 -m pip install --pre rucio[oracle,mysql,postgresql]==$TAG
-RUN python3 -m pip install j2cli psycopg2-binary
-RUN python3 -m pip install cx_oracle==6.3.1 PyMySQL
+RUN python3 -m pip install --no-cache-dir  --pre rucio[oracle,mysql,postgresql]==$TAG
+RUN python3 -m pip install --no-cache-dir  j2cli psycopg2-binary
+RUN python3 -m pip install --no-cache-dir  cx_oracle==6.3.1 PyMySQL
 
 # Install dependecies
 RUN yum install -y \
@@ -39,7 +45,9 @@ RUN yum install -y \
     gfal2-plugin-xrootd \
     xrootd-client \
     sendmail \
-    sendmail-cf
+    sendmail-cf && \
+    yum clean all && \
+    rm -rf /var/cache/yum
 
 ADD rucio.cfg.j2 /tmp/
 ADD start-daemon_py3.sh /start-daemon.sh
