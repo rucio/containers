@@ -14,21 +14,27 @@ ARG TAG
 WORKDIR /tmp
 ADD oic.rpm /tmp
 
-RUN yum install -y epel-release.noarch
-RUN yum upgrade -y
-RUN yum install -y httpd mod_wsgi python-pip libaio gcc python-devel.x86_64 mod_ssl  openssl-devel.x86_64
+RUN yum install -y epel-release.noarch && \
+    yum clean all && \
+    rm -rf /var/cache/yum
+RUN yum upgrade -y && \
+    yum clean all && \
+    rm -rf /var/cache/yum
+RUN yum install -y httpd mod_wsgi python-pip libaio gcc python-devel.x86_64 mod_ssl  openssl-devel.x86_64 && \
+    yum clean all && \
+    rm -rf /var/cache/yum
 
 RUN rpm -i /tmp/oic.rpm; \
     echo "/usr/lib/oracle/12.2/client64/lib" >/etc/ld.so.conf.d/oracle.conf; \
     ldconfig
-RUN pip install --upgrade pip
-RUN pip install --upgrade setuptools
+RUN pip install --no-cache-dir --upgrade pip
+RUN pip install --no-cache-dir --upgrade setuptools
 RUN rm -rf /usr/lib/python2.7/site-packages/ipaddress*
-RUN pip install --pre rucio[oracle,mysql,postgresql]==$TAG
-RUN pip install --pre rucio_webui==$TAG
-RUN pip install j2cli psycopg2-binary
+RUN pip install --no-cache-dir --pre rucio[oracle,mysql,postgresql]==$TAG
+RUN pip install --no-cache-dir --pre rucio_webui==$TAG
+RUN pip install --no-cache-dir j2cli psycopg2-binary
 # only necessary temporarily until setup.py for webui is fixed
-RUN pip install cx_oracle==6.3.1 PyMySQL
+RUN pip install --no-cache-dir cx_oracle==6.3.1 PyMySQL
 
 ADD rucio.cfg.j2 /tmp/
 ADD rucio.conf.j2 /tmp/
