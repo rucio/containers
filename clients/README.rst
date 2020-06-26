@@ -62,6 +62,7 @@ After the container is started you can attach to it and start using the rucio co
 Environment variables can be used to set values for the auto-generated rucio.cfg. The names are derived from the actual names in the configuration file.
 All available environment variables are:
 
+* RUCIO_CFG_COMMON_MULTI_VO
 * RUCIO_CFG_RUCIO_HOST
 * RUCIO_CFG_AUTH_HOST
 * RUCIO_CFG_CA_CERT
@@ -73,6 +74,7 @@ All available environment variables are:
 * RUCIO_CFG_CLIENT_KEY
 * RUCIO_CFG_CLIENT_X509_PROXY
 * RUCIO_CFG_REQUEST_RETRIES
+* RUCIO_CFG_CLIENT_VO
 * RUCIO_CFG_POLICY_PERMISSION
 * RUCIO_CFG_POLICY_SCHEMA
 * RUCIO_CFG_POLICY_LFN2PFN_ALGORITHM_DEFAULT
