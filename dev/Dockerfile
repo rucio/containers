@@ -78,6 +78,9 @@ RUN mkdir /var/log/rucio /var/log/rucio/trace
 RUN chmod -R 777 /var/log/rucio
 
 COPY rucio.cfg $RUCIOHOME/etc/rucio.cfg
+COPY rucio.cfg $RUCIOHOME/etc/rucio_single_vo.cfg
+COPY rucio_multi_vo_tst.cfg $RUCIOHOME/etc/rucio_multi_vo_tst.cfg
+COPY rucio_multi_vo_ts2.cfg $RUCIOHOME/etc/rucio_multi_vo_ts2.cfg
 COPY alembic.ini $RUCIOHOME/etc/alembic.ini
 COPY aliases-py27.conf $RUCIOHOME/etc/web/aliases-py27.conf
 COPY ui-aliases-py27.conf $RUCIOHOME/etc/web/ui-aliases-py27.conf

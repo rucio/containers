@@ -2,6 +2,7 @@
 logdir = {{ RUCIO_CFG_COMMON_LOGDIR | default('/var/log/rucio') }}
 loglevel = {{ RUCIO_CFG_COMMON_LOGLEVEL | default('DEBUG') }}
 mailtemplatedir = {{ RUCIO_CFG_COMMON_MAILTEMPLATEDIR | default('/opt/rucio/etc/mail_templates') }}
+{% if RUCIO_CFG_COMMON_MULTI_VO is defined %}multi_vo = {{ RUCIO_CFG_COMMON_MULTI_VO }}{% endif %}
 
 [database]
 default = {{ RUCIO_CFG_DATABASE_DEFAULT | default('sqlite:////tmp/rucio.db') }}
