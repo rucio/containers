@@ -29,14 +29,15 @@ RUN pip install j2cli
 
 RUN mkdir -p /opt/rucio/certs/
 RUN mkdir -p /opt/rucio/kubeconfig/
+RUN mkdir -p -m 775 /opt/rucio/fts-delegate/
 
-ADD docker-entrypoint.sh /
-ADD renew_fts_proxy.sh.j2 /
-ADD renew_fts_proxy_atlas.sh.j2 /
-ADD renew_fts_proxy_dteam.sh.j2 /
-ADD renew_fts_proxy_tutorial.sh.j2 /
+ADD docker-entrypoint.sh /opt/rucio/fts-delegate/
+ADD renew_fts_proxy.sh.j2 /opt/rucio/fts-delegate/
+ADD renew_fts_proxy_atlas.sh.j2 /opt/rucio/fts-delegate/
+ADD renew_fts_proxy_dteam.sh.j2 /opt/rucio/fts-delegate/
+ADD renew_fts_proxy_tutorial.sh.j2 /opt/rucio/fts-delegate/
 ADD rucio_ca.pem /etc/grid-security/certificates/
 
 ADD dteam* /etc/vomses/
 
-ENTRYPOINT ["/docker-entrypoint.sh"]
+ENTRYPOINT ["/opt/rucio/fts-delegate/docker-entrypoint.sh"]

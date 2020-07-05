@@ -40,4 +40,4 @@ ADD rucio_ca.pem /etc/grid-security/certificates/
 
 ADD dteam* /etc/vomses/
 
-ENTRYPOINT ["/docker-entrypoint.sh"]
+ENTRYPOINT ["/opt/rucio/fts-delegate/docker-entrypoint.sh"]
