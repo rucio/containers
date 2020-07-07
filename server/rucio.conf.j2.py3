@@ -88,6 +88,7 @@ CacheRoot /tmp
  WSGIScriptAlias /accounts               /usr/local/lib/python3.6/site-packages/rucio/web/rest/account.py process-group=rucio application-group=rucio
  WSGIScriptAlias /accountlimits          /usr/local/lib/python3.6/site-packages/rucio/web/rest/account_limit.py process-group=rucio application-group=rucio
  WSGIScriptAlias /config                 /usr/local/lib/python3.6/site-packages/rucio/web/rest/config.py process-group=rucio application-group=rucio
+ WSGIScriptAlias /credentials            /usr/local/lib/python3.6/site-packages/rucio/web/rest/credential.py process-group=rucio application-group=rucio
  WSGIScriptAlias /dids                   /usr/local/lib/python3.6/site-packages/rucio/web/rest/did.py process-group=rucio application-group=rucio
  WSGIScriptAlias /export                 /usr/local/lib/python3.6/site-packages/rucio/web/rest/exporter.py process-group=rucio application-group=rucio
  WSGIScriptAlias /identities             /usr/local/lib/python3.6/site-packages/rucio/web/rest/identity.py process-group=rucio application-group=rucio
