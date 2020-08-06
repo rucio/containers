@@ -52,6 +52,8 @@ RUN git clone https://github.com/rucio/rucio.git /tmp/rucio
 
 ENV RUCIOHOME=/opt/rucio
 RUN mkdir -p $RUCIOHOME
+RUN mkdir -p $RUCIOHOME/etc/multi_vo/tst/etc
+RUN mkdir -p $RUCIOHOME/etc/multi_vo/ts2/etc
 WORKDIR $RUCIOHOME
 RUN mkdir -p \
       bin \
@@ -78,9 +80,8 @@ RUN mkdir /var/log/rucio /var/log/rucio/trace
 RUN chmod -R 777 /var/log/rucio
 
 COPY rucio.cfg $RUCIOHOME/etc/rucio.cfg
-COPY rucio.cfg $RUCIOHOME/etc/rucio_single_vo.cfg
-COPY rucio_multi_vo_tst.cfg $RUCIOHOME/etc/rucio_multi_vo_tst.cfg
-COPY rucio_multi_vo_ts2.cfg $RUCIOHOME/etc/rucio_multi_vo_ts2.cfg
+COPY rucio_multi_vo_tst.cfg $RUCIOHOME/etc/multi_vo/tst/etc/rucio.cfg
+COPY rucio_multi_vo_ts2.cfg $RUCIOHOME/etc/multi_vo/ts2/etc/rucio.cfg
 COPY alembic.ini $RUCIOHOME/etc/alembic.ini
 COPY aliases-py27.conf $RUCIOHOME/etc/web/aliases-py27.conf
 COPY ui-aliases-py27.conf $RUCIOHOME/etc/web/ui-aliases-py27.conf
