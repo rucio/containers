@@ -45,7 +45,8 @@ RUN yum install -y \
       gfal2-util \
       fts-rest-cli \
       xrootd-client \
-      multitail
+      multitail \
+      vim
 RUN yum clean all
 
 RUN git clone https://github.com/rucio/rucio.git /tmp/rucio
