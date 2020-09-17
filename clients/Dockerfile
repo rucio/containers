@@ -27,14 +27,16 @@ RUN pip install --no-cache-dir --upgrade pip && \
 RUN groupadd -g 1000 user && \
     useradd -ms /bin/bash -u 1000 -g 1000 user && \
     mkdir -p /opt/rucio/etc/ && \
-    chown -R user:user /opt/rucio/etc/
+    chown -R user:user /opt/rucio/etc/ && \
+    mkdir -p /opt/user && \
+    chown user:user /opt/user
 
 USER user
 WORKDIR /home/user
 
 # Add the configuration template and enable bash completion for the rucio clients
-ADD --chown=user:user rucio.cfg.j2 /home/user/rucio.cfg.j2
-ADD --chown=user:user bashrc /home/user/.bashrc
+ADD --chown=user:user rucio.cfg.j2 /opt/user/rucio.cfg.j2
+ADD init_rucio.sh /etc/profile.d/rucio_init.sh
 
 ENV PATH $PATH:/opt/rucio/bin
 
