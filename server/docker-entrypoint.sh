@@ -31,4 +31,6 @@ echo "=================== /etc/httpd/conf.d/rucio.conf ========================"
 cat /etc/httpd/conf.d/rucio.conf
 echo ""
 
+pkill httpd || :
+sleep 2
 httpd -D FOREGROUND
