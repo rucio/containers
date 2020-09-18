@@ -2,26 +2,39 @@ FROM centos:7
 
 ARG TAG
 
-RUN yum install -y epel-release.noarch
-RUN yum install -y python-pip
-RUN yum install -y voms-clients-java
-RUN yum install -y gfal2-all gfal2-util
-RUN yum install -y nordugrid-arc-client nordugrid-arc-plugins-gfal \
+RUN yum install -y epel-release.noarch && \
+    yum clean all && \
+    rm -rf /var/cache/yum
+RUN yum upgrade -y && \
+    yum clean all && \
+    rm -rf /var/cache/yum
+RUN yum install -y python-pip \
+                   voms-clients-java \
+                   gfal2-all gfal2-util \
+                   nordugrid-arc-client nordugrid-arc-plugins-gfal \
                    nordugrid-arc-plugins-globus nordugrid-arc-plugins-s3 \
-                   nordugrid-arc-plugins-xrootd
+                   nordugrid-arc-plugins-xrootd && \
+    yum clean all && \
+    rm -rf /var/cache/yum
 
-# Upgrade pip & setuptools
-RUN pip install --upgrade pip
-RUN pip install --upgrade setuptools
+# Upgrade pip & setuptools and install Rucio
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir --upgrade setuptools && \
+    pip install --no-cache-dir --pre rucio-clients==$TAG && \
+    pip install --no-cache-dir jinja2 j2cli pyyaml
 
-# Install Rucio
-RUN pip install --pre rucio-clients==$TAG
-RUN pip install jinja2 j2cli pyyaml
+# Add a separate user and change ownership of config dir to that user
+RUN groupadd -g 1000 user && \
+    useradd -ms /bin/bash -u 1000 -g 1000 user && \
+    mkdir -p /opt/rucio/etc/ && \
+    chown -R user:user /opt/rucio/etc/
 
-COPY rucio.cfg.j2 /
+USER user
+WORKDIR /home/user
 
-# To generate the configuration and enable bash completion for the rucio clients
-ADD bashrc /root/.bashrc
+# Add the configuration template and enable bash completion for the rucio clients
+ADD --chown=user:user rucio.cfg.j2 /home/user/rucio.cfg.j2
+ADD --chown=user:user bashrc /home/user/.bashrc
 
 ENV PATH $PATH:/opt/rucio/bin
 
