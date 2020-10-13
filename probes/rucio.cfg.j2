@@ -25,6 +25,9 @@ pool_recycle = {{ RUCIO_CFG_DATABASE_POOL_RECYCLE | default('600') }}
 carbon_server = {{ RUCIO_CFG_MONITOR_CARBON_SERVER | default('localhost') }}
 carbon_port = {{ RUCIO_CFG_MONITOR_CARBON_PORT | default('8125') }}
 user_scope = {{ RUCIO_CFG_MONITOR_USER_SCOPE | default('default_docker') }}
+{% if RUCIO_CFG_MONITOR_PROMETHEUS_SERVERS is defined %}prometheus_servers = {{ RUCIO_CFG_MONITOR_PROMETHEUS_SERVERS }}{% endif %}
+{% if RUCIO_CFG_MONITOR_PROMETHEUS_LABELS is defined %}prometheus_labels = {{ RUCIO_CFG_MONITOR_PROMETHEUS_LABELS }}{% endif %}
+{% if RUCIO_CFG_MONITOR_PROMETHEUS_PREFIX is defined %}prometheus_prefix = {{ RUCIO_CFG_MONITOR_PROMETHEUS_PREFIX}}{% endif %}
 
 [policy]
 permission = {{ RUCIO_CFG_POLICY_PERMISSION | default('generic') }}
