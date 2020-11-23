@@ -21,7 +21,7 @@ RUN yum install -y epel-release.noarch && \
 RUN yum upgrade -y && \
     yum clean all && \
     rm -rf /var/cache/yum
-RUN yum install -y python-pip libaio gcc python-devel.x86_64 openssl-devel.x86_64 MySQL-python && \
+RUN yum install -y python-pip libaio gcc python-devel.x86_64 openssl-devel.x86_64 MySQL-python memcached && \
     yum clean all && \
     rm -rf /var/cache/yum
 
