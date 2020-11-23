@@ -13,6 +13,8 @@ if [ ! -z "$RUCIO_PRINT_CFG" ]; then
     echo ""
 fi
 
+/usr/bin/memcached -u memcached -p 11211 -m 64 -c 1024 &
+
 if [ "$RUCIO_DAEMON" == "hermes" ]
 then
   echo "starting sendmail for $RUCIO_DAEMON"
