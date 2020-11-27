@@ -60,3 +60,6 @@ usercert = {{ RUCIO_CFG_WEBUI_USERCERT | default('/opt/rucio/etc/usercert_with_k
 idpsecrets = {{ RUCIO_CFG_OIDC_IDPSECRETS | default('/opt/rucio/etc/idpsecrets.json') }}
 {% if RUCIO_CFG_OIDC_ADMIN_ISSUER is defined %}admin_issuer = {{ RUCIO_CFG_OIDC_ADMIN_ISSUER }}{% endif %}
 {% if RUCIO_CFG_OIDC_EXPECTED_AUDIENCE is defined %}expected_audience = {{ RUCIO_CFG_OIDC_EXPECTED_AUDIENCE }}{% endif %}
+
+[rules]
+{% if RUCIO_CFG_RULES_USE_NEW_RULE_ALGORITHM is defined %}use_new_rule_algorithm = {{ RUCIO_CFG_RULES_USE_NEW_RULE_ALGORITHM }}{% endif %}
