@@ -26,3 +26,4 @@ schema = {{ RUCIO_CFG_POLICY_SCHEMA | default('generic') }}
 lfn2pfn_algorithm_default = {{ RUCIO_CFG_POLICY_LFN2PFN_ALGORITHM_DEFAULT | default('hash') }}
 support = {{ RUCIO_CFG_POLICY_SUPPORT | default('https://github.com/rucio/rucio/issues/') }}
 support_rucio = {{ RUCIO_CFG_POLICY_SUPPORT_RUCIO | default('https://github.com/rucio/rucio/issues/') }}
+{% if RUCIO_CFG_POLICY_PACKAGE is defined %}package = {{ RUCIO_CFG_POLICY_PACKAGE }}{% endif %}
