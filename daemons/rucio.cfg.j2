@@ -139,9 +139,6 @@ account = {{ RUCIO_CFG_MESSAGING_CACHE_ACCOUNT | default('ddm') }}
 gcs = {{ RUCIO_CFG_CREDENTIALS_GCS | default('/opt/rucio/etc/google-cloud-storage-test.json') }}
 signature_lifetime = {{ RUCIO_CFG_CREDENTIALS_SIGNATURE_LIFETIME | default('3600') }}
 
-[rules]
-{% if RUCIO_CFG_RULES_USE_NEW_RULE_ALGORITHM is defined %}use_new_rule_algorithm = {{ RUCIO_CFG_RULES_USE_NEW_RULE_ALGORITHM }}{% endif %}
-
 [nagios]
 proxy = {{ RUCIO_CFG_NAGIOS_PROXY | default('/opt/proxy/x509up') }}
 fts_vo = {{ RUCIO_CFG_NAGIOS_FTS_VO | default('atlas') }}
