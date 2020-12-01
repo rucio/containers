@@ -37,6 +37,7 @@ WORKDIR /home/user
 # Add the configuration template and enable bash completion for the rucio clients
 ADD --chown=user:user rucio.cfg.j2 /opt/user/rucio.cfg.j2
 ADD init_rucio.sh /etc/profile.d/rucio_init.sh
+ADD j2cfg.py /tmp/
 
 ENV PATH $PATH:/opt/rucio/bin
 
