@@ -1,6 +1,10 @@
 [accounts]
 special_accounts = {{ RUCIO_CFG_ACCOUNTS_SPECIAL_ACCOUNTS | default('panda, tier0') }}
 
+[core]
+{% if RUCIO_CFG_CORE_GEOIP_LICENCE_KEY is defined %}geoip_licence_key = {{ RUCIO_CFG_CORE_GEOIP_LICENCE_KEY }}{% endif -%}
+default_mail_from = {{ RUCIO_CFG_CORE_DEFAULT_MAIL_FROM | default('spamspamspam@cern.ch') }}
+
 [client]
 rucio_host = {{ RUCIO_CFG_CLIENT_RUCIO_HOST | default('localhost') }}
 auth_host = {{ RUCIO_CFG_CLIENT_AUTH_HOST | default('localhost') }}
@@ -13,27 +17,25 @@ client_cert = {{ RUCIO_CFG_CLIENT_CLIENT_CERT | default('') }}
 client_key = {{ RUCIO_CFG_CLIENT_CLIENT_KEY | default('') }}
 client_x509_proxy = {{ RUCIO_CFG_CLIENT_CLIENT_X509_PROXY | default('') }}
 request_retries = {{ RUCIO_CFG_CLIENT_REQUEST_RETRIES | default('3') }}
-{% if RUCIO_CFG_CLIENT_CLIENT_VO is defined %}vo = {{ RUCIO_CFG_CLIENT_CLIENT_VO }}{% endif %}
+{%- if RUCIO_CFG_CLIENT_CLIENT_VO is defined %}vo = {{ RUCIO_CFG_CLIENT_CLIENT_VO }}{% endif %}
 
 [common]
 logdir = {{ RUCIO_CFG_COMMON_LOGDIR | default('/var/log/rucio') }}
 loglevel = {{ RUCIO_CFG_COMMON_LOGLEVEL | default('DEBUG') }}
 mailtemplatedir = {{ RUCIO_CFG_COMMON_MAILTEMPLATEDIR | default('/opt/rucio/etc/mail_templates') }}
-{% if RUCIO_CFG_COMMON_MULTI_VO is defined %}multi_vo = {{ RUCIO_CFG_COMMON_MULTI_VO }}{% endif %}
+{%- if RUCIO_CFG_COMMON_MULTI_VO is defined %}multi_vo = {{ RUCIO_CFG_COMMON_MULTI_VO }}{% endif %}
 
 [database]
 default = {{ RUCIO_CFG_DATABASE_DEFAULT | default('sqlite:////tmp/rucio.db') }}
-{% if RUCIO_CFG_DATABASE_SCHEMA is defined %}
-schema = {{ RUCIO_CFG_DATABASE_SCHEMA }}
-{%- endif %}
+{% if RUCIO_CFG_DATABASE_SCHEMA is defined %}schema = {{ RUCIO_CFG_DATABASE_SCHEMA }}{% endif -%}
 pool_reset_on_return = {{ RUCIO_CFG_DATABASE_POOL_RESET_ON_RETURN | default('rollback') }}
 echo = {{ RUCIO_CFG_DATABASE_ECHO | default('0') }}
 pool_recycle = {{ RUCIO_CFG_DATABASE_POOL_RECYCLE | default('600') }}
-{% if RUCIO_CFG_DATABASE_POOL_SIZE is defined %}pool_size = {{ RUCIO_CFG_DATABASE_POOL_SIZE }}{% endif %}
-{% if RUCIO_CFG_DATABASE_POOL_TIMEOUT is defined %}pool_timeout = {{ RUCIO_CFG_DATABASE_POOL_TIMEOUT }}{% endif %}
-{% if RUCIO_CFG_DATABASE_MAX_OVERFLOW is defined %}max_overflow = {{ RUCIO_CFG_DATABASE_MAX_OVERFLOW }}{% endif %}
-{% if RUCIO_CFG_DATABASE_POWUSERACCOUNT is defined %}powuseraccount = {{ RUCIO_CFG_DATABASE_POWUSERACCOUNT }}{% endif %}
-{% if RUCIO_CFG_DATABASE_POWUSERPASSWORD is defined %}powuserpassword = {{ RUCIO_CFG_DATABASE_POWUSERPASSWORD }}{% endif %}
+{%- if RUCIO_CFG_DATABASE_POOL_SIZE is defined %}pool_size = {{ RUCIO_CFG_DATABASE_POOL_SIZE }}{% endif %}
+{%- if RUCIO_CFG_DATABASE_POOL_TIMEOUT is defined %}pool_timeout = {{ RUCIO_CFG_DATABASE_POOL_TIMEOUT }}{% endif %}
+{%- if RUCIO_CFG_DATABASE_MAX_OVERFLOW is defined %}max_overflow = {{ RUCIO_CFG_DATABASE_MAX_OVERFLOW }}{% endif %}
+{%- if RUCIO_CFG_DATABASE_POWUSERACCOUNT is defined %}powuseraccount = {{ RUCIO_CFG_DATABASE_POWUSERACCOUNT }}{% endif %}
+{%- if RUCIO_CFG_DATABASE_POWUSERPASSWORD is defined %}powuserpassword = {{ RUCIO_CFG_DATABASE_POWUSERPASSWORD }}{% endif %}
 
 [monitor]
 carbon_server = {{ RUCIO_CFG_MONITOR_CARBON_SERVER | default('localhost') }}
@@ -45,17 +47,16 @@ enable_metrics = {{ RUCIO_CFG_MONITOR_ENABLE_METRICS | default('False') }}
 permission = {{ RUCIO_CFG_POLICY_PERMISSION | default('generic') }}
 schema = {{ RUCIO_CFG_POLICY_SCHEMA | default('generic') }}
 lfn2pfn_algorithm_default = {{ RUCIO_CFG_POLICY_LFN2PFN_ALGORITHM_DEFAULT | default('hash') }}
-{% if RUCIO_CFG_POLICY_LFN2PFN_MODULE is defined %}lfn2pfn_module = {{ RUCIO_CFG_POLICY_LFN2PFN_MODULE }}{% endif %}
-{% if RUCIO_CFG_POLICY_PACKAGE is defined %}package = {{ RUCIO_CFG_POLICY_PACKAGE }}{% endif %}
-
+{% if RUCIO_CFG_POLICY_LFN2PFN_MODULE is defined %}lfn2pfn_module = {{ RUCIO_CFG_POLICY_LFN2PFN_MODULE }}{% endif -%}
+{% if RUCIO_CFG_POLICY_PACKAGE is defined %}package = {{ RUCIO_CFG_POLICY_PACKAGE }}{% endif -%}
 support = {{ RUCIO_CFG_POLICY_SUPPORT | default('https://github.com/rucio/rucio/issues/') }}
 support_rucio = {{ RUCIO_CFG_POLICY_SUPPORT_RUCIO | default('https://github.com/rucio/rucio/issues/') }}
 
 [automatix]
-{% if RUCIO_CFG_AUTOMATIX_SITES is defined %}sites = {{ RUCIO_CFG_AUTOMATIX_SITES }}{% endif %}
-{% if RUCIO_CFG_AUTOMATIX_SLEEP_TIME is defined %}sleep_time = {{ RUCIO_CFG_AUTOMATIX_SLEEP_TIME }}{% endif %}
-{% if RUCIO_CFG_AUTOMATIX_DATASET_LIFETIME is defined %}dataset_lifetime = {{ RUCIO_CFG_AUTOMATIX_DATASET_LIFETIME }}{% endif %}
-{% if RUCIO_CFG_AUTOMATIX_SET_METADATA is defined %}set_metadata = {{ RUCIO_CFG_AUTOMATIX_SET_METADATA }}{% endif %}
+{%- if RUCIO_CFG_AUTOMATIX_SITES is defined %}sites = {{ RUCIO_CFG_AUTOMATIX_SITES }}{% endif %}
+{%- if RUCIO_CFG_AUTOMATIX_SLEEP_TIME is defined %}sleep_time = {{ RUCIO_CFG_AUTOMATIX_SLEEP_TIME }}{% endif %}
+{%- if RUCIO_CFG_AUTOMATIX_DATASET_LIFETIME is defined %}dataset_lifetime = {{ RUCIO_CFG_AUTOMATIX_DATASET_LIFETIME }}{% endif %}
+{%- if RUCIO_CFG_AUTOMATIX_SET_METADATA is defined %}set_metadata = {{ RUCIO_CFG_AUTOMATIX_SET_METADATA }}{% endif %}
 
 [auditor]
 results = {{ RUCIO_CFG_AUDITOR_RESULTS | default('/opt/rucio/auditor/results/') }}
@@ -67,19 +68,19 @@ transfertool = {{ RUCIO_CFG_CONVEYOR_TRANSFERTOOL | default('fts3') }}
 ftshosts = {{ RUCIO_CFG_CONVEYOR_FTSHOSTS | default('https://fts3-pilot.cern.ch:8446, https://fts3-pilot.cern.ch:8446') }}
 cacert = {{ RUCIO_CFG_CONVEYOR_CACERT | default('/opt/rucio/etc/web/ca.crt') }}
 usercert = {{ RUCIO_CFG_CONVEYOR_USERCERT | default('/opt/rucio/tools/x509up') }}
-{% if RUCIO_CFG_CONVEYOR_CACHE_TIME is defined %}cache_time = {{ RUCIO_CFG_CONVEYOR_CACHE_TIME }}{% endif %}
-{% if RUCIO_CFG_CONVEYOR_USE_DETERMINISTIC_ID is defined %}use_deterministic_id = {{ RUCIO_CFG_CONVEYOR_USE_DETERMINISTIC_ID }}{% endif %}
-{% if RUCIO_CFG_CONVEYOR_POLL_TIMEOUT is defined %}poll_timeout = {{ RUCIO_CFG_CONVEYOR_POLL_TIMEOUT }}{% endif %}
-{% if RUCIO_CFG_CONVEYOR_SUBMIT_TIMEOUT is defined %}submit_timeout = {{ RUCIO_CFG_CONVEYOR_SUBMIT_TIMEOUT }}{% endif %}
-{% if RUCIO_CFG_CONVEYOR_BRING_ONLINE is defined %}bring_online = {{ RUCIO_CFG_CONVEYOR_BRING_ONLINE }}{% endif %}
-{% if RUCIO_CFG_CONVEYOR_QUEUE_MODE is defined %}queue_mode = {{ RUCIO_CFG_CONVEYOR_QUEUE_MODE }}{% endif %}
-{% if RUCIO_CFG_CONVEYOR_USING_MEMCACHE is defined %}using_memcache = {{ RUCIO_CFG_CONVEYOR_USING_MEMCACHE }}{% endif %}
-{% if RUCIO_CFG_CONVEYOR_FTSMONHOSTS is defined %}ftsmonhosts = {{ RUCIO_CFG_CONVEYOR_FTSMONHOSTS }}{% endif %}
-{% if RUCIO_CFG_CONVEYOR_USER_ACTIVITIES is defined %}user_activities = {{ RUCIO_CFG_CONVEYOR_USER_ACTIVITIES }}{% endif %}
-{% if RUCIO_CFG_CONVEYOR_USER_TRANSFERS is defined %}user_transfers = {{ RUCIO_CFG_CONVEYOR_USER_TRANSFERS }}{% endif %}
-{% if RUCIO_CFG_CONVEYOR_ALLOW_USER_OIDC_TOKENS is defined %}allow_user_oidc_tokens = {{ RUCIO_CFG_CONVEYOR_ALLOW_USER_OIDC_TOKENS }}{% endif %}
-{% if RUCIO_CFG_CONVEYOR_REQUEST_OIDC_SCOPE is defined %}request_oidc_scope = {{ RUCIO_CFG_CONVEYOR_REQUEST_OIDC_SCOPE }}{% endif %}
-{% if RUCIO_CFG_CONVEYOR_REQUEST_OIDC_AUDIENCE is defined %}request_oidc_audience = {{ RUCIO_CFG_CONVEYOR_REQUEST_OIDC_AUDIENCE }}{% endif %}
+{%- if RUCIO_CFG_CONVEYOR_CACHE_TIME is defined %}cache_time = {{ RUCIO_CFG_CONVEYOR_CACHE_TIME }}{% endif %}
+{%- if RUCIO_CFG_CONVEYOR_USE_DETERMINISTIC_ID is defined %}use_deterministic_id = {{ RUCIO_CFG_CONVEYOR_USE_DETERMINISTIC_ID }}{% endif %}
+{%- if RUCIO_CFG_CONVEYOR_POLL_TIMEOUT is defined %}poll_timeout = {{ RUCIO_CFG_CONVEYOR_POLL_TIMEOUT }}{% endif %}
+{%- if RUCIO_CFG_CONVEYOR_SUBMIT_TIMEOUT is defined %}submit_timeout = {{ RUCIO_CFG_CONVEYOR_SUBMIT_TIMEOUT }}{% endif %}
+{%- if RUCIO_CFG_CONVEYOR_BRING_ONLINE is defined %}bring_online = {{ RUCIO_CFG_CONVEYOR_BRING_ONLINE }}{% endif %}
+{%- if RUCIO_CFG_CONVEYOR_QUEUE_MODE is defined %}queue_mode = {{ RUCIO_CFG_CONVEYOR_QUEUE_MODE }}{% endif %}
+{%- if RUCIO_CFG_CONVEYOR_USING_MEMCACHE is defined %}using_memcache = {{ RUCIO_CFG_CONVEYOR_USING_MEMCACHE }}{% endif %}
+{%- if RUCIO_CFG_CONVEYOR_FTSMONHOSTS is defined %}ftsmonhosts = {{ RUCIO_CFG_CONVEYOR_FTSMONHOSTS }}{% endif %}
+{%- if RUCIO_CFG_CONVEYOR_USER_ACTIVITIES is defined %}user_activities = {{ RUCIO_CFG_CONVEYOR_USER_ACTIVITIES }}{% endif %}
+{%- if RUCIO_CFG_CONVEYOR_USER_TRANSFERS is defined %}user_transfers = {{ RUCIO_CFG_CONVEYOR_USER_TRANSFERS }}{% endif %}
+{%- if RUCIO_CFG_CONVEYOR_ALLOW_USER_OIDC_TOKENS is defined %}allow_user_oidc_tokens = {{ RUCIO_CFG_CONVEYOR_ALLOW_USER_OIDC_TOKENS }}{% endif %}
+{%- if RUCIO_CFG_CONVEYOR_REQUEST_OIDC_SCOPE is defined %}request_oidc_scope = {{ RUCIO_CFG_CONVEYOR_REQUEST_OIDC_SCOPE }}{% endif %}
+{%- if RUCIO_CFG_CONVEYOR_REQUEST_OIDC_AUDIENCE is defined %}request_oidc_audience = {{ RUCIO_CFG_CONVEYOR_REQUEST_OIDC_AUDIENCE }}{% endif %}
 
 [messaging-fts3]
 port = {{ RUCIO_CFG_MESSAGING_FTS3_PORT | default('61123') }}
@@ -88,25 +89,25 @@ ssl_cert_file = {{ RUCIO_CFG_MESSAGING_FTS3_SSL_CERT_FILE | default('/etc/grid-s
 destination = {{ RUCIO_CFG_MESSAGING_FTS3_DESTINATION | default('/topic/transfer.fts_monitoring_queue_state') }}
 brokers = {{ RUCIO_CFG_MESSAGING_FTS3_BROKERS | default('dashb-test-mb.cern.ch') }}
 voname = {{ RUCIO_CFG_MESSAGING_FTS3_VONAME | default('atlas') }}
-{% if RUCIO_CFG_MESSAGING_FTS3_USE_SSL is defined %}use_ssl = {{ RUCIO_CFG_MESSAGING_FTS3_USE_SSL }}{% endif %}
-{% if RUCIO_CFG_MESSAGING_FTS3_NONSSL_PORT is defined %}nonssl_port = {{ RUCIO_CFG_MESSAGING_FTS3_NONSSL_PORT }}{% endif %}
-{% if RUCIO_CFG_MESSAGING_FTS3_USERNAME is defined %}username = {{ RUCIO_CFG_MESSAGING_FTS3_USERNAME }}{% endif %}
-{% if RUCIO_CFG_MESSAGING_FTS3_PASSWORD is defined %}password = {{ RUCIO_CFG_MESSAGING_FTS3_PASSWORD }}{% endif %}
+{%- if RUCIO_CFG_MESSAGING_FTS3_USE_SSL is defined %}use_ssl = {{ RUCIO_CFG_MESSAGING_FTS3_USE_SSL }}{% endif %}
+{%- if RUCIO_CFG_MESSAGING_FTS3_NONSSL_PORT is defined %}nonssl_port = {{ RUCIO_CFG_MESSAGING_FTS3_NONSSL_PORT }}{% endif %}
+{%- if RUCIO_CFG_MESSAGING_FTS3_USERNAME is defined %}username = {{ RUCIO_CFG_MESSAGING_FTS3_USERNAME }}{% endif %}
+{%- if RUCIO_CFG_MESSAGING_FTS3_PASSWORD is defined %}password = {{ RUCIO_CFG_MESSAGING_FTS3_PASSWORD }}{% endif %}
 
 [messaging-hermes]
-{% if RUCIO_CFG_MESSAGING_HERMES_USERNAME is defined %}username = {{ RUCIO_CFG_MESSAGING_HERMES_USERNAME }}{% endif %}
-{% if RUCIO_CFG_MESSAGING_HERMES_PASSWORD is defined %}password = {{ RUCIO_CFG_MESSAGING_HERMES_PASSWORD }}{% endif %}
+{% if RUCIO_CFG_MESSAGING_HERMES_USERNAME is defined %}username = {{ RUCIO_CFG_MESSAGING_HERMES_USERNAME }}{% endif -%}
+{% if RUCIO_CFG_MESSAGING_HERMES_PASSWORD is defined %}password = {{ RUCIO_CFG_MESSAGING_HERMES_PASSWORD }}{% endif -%}
 port = {{ RUCIO_CFG_MESSAGING_HERMES_PORT | default('61023') }}
-{% if RUCIO_CFG_MESSAGING_HERMES_NONSSL_PORT is defined %}nonssl_port = {{ RUCIO_CFG_MESSAGING_HERMES_NONSSL_PORT }}{% endif %}
-{% if RUCIO_CFG_MESSAGING_HERMES_USE_SSL is defined %}use_ssl = {{ RUCIO_CFG_MESSAGING_HERMES_USE_SSL }}{% endif %}
+{% if RUCIO_CFG_MESSAGING_HERMES_NONSSL_PORT is defined %}nonssl_port = {{ RUCIO_CFG_MESSAGING_HERMES_NONSSL_PORT }}{% endif -%}
+{% if RUCIO_CFG_MESSAGING_HERMES_USE_SSL is defined %}use_ssl = {{ RUCIO_CFG_MESSAGING_HERMES_USE_SSL }}{% endif -%}
 ssl_key_file = {{ RUCIO_CFG_MESSAGING_HERMES_SSL_KEY_FILE | default('/etc/grid-security/hostkey.pem') }}
 ssl_cert_file = {{ RUCIO_CFG_MESSAGING_HERMES_SSL_CERT_FILE | default('/etc/grid-security/hostcert.pem') }}
 destination = {{ RUCIO_CFG_MESSAGING_HERMES_DESTINATION | default('/topic/rucio.events') }}
 brokers = {{ RUCIO_CFG_MESSAGING_HERMES_BROKERS | default('atlas-test-mb.cern.ch') }}
-{% if RUCIO_CFG_MESSAGING_HERMES_BROKER_VIRTUAL_HOST is defined %}broker_virtual_host = {{ RUCIO_CFG_MESSAGING_HERMES_BROKER_VIRTUAL_HOST }}{% endif %}
+{% if RUCIO_CFG_MESSAGING_HERMES_BROKER_VIRTUAL_HOST is defined %}broker_virtual_host = {{ RUCIO_CFG_MESSAGING_HERMES_BROKER_VIRTUAL_HOST }}{% endif -%}
 voname = {{ RUCIO_CFG_MESSAGING_HERMES_VONAME | default('atlas') }}
 email_from = {{ RUCIO_CFG_MESSAGING_HERMES_EMAIL_FROM | default('Rucio <atlas-adc-ddm-support@cern.ch>') }}
-{% if RUCIO_CFG_MESSAGING_HERMES_EMAIL_TEST is defined %}email_test = {{ RUCIO_CFG_MESSAGING_HERMES_EMAIL_TEST }}{% endif %}
+{%- if RUCIO_CFG_MESSAGING_HERMES_EMAIL_TEST is defined %}email_test = {{ RUCIO_CFG_MESSAGING_HERMES_EMAIL_TEST }}{% endif %}
 
 [tracer-kronos]
 brokers= {{ RUCIO_CFG_TRACER_KRONOS_BROKERS | default('atlas-test-mb.cern.ch') }}
@@ -120,8 +121,8 @@ subscription_id = {{ RUCIO_CFG_TRACER_KRONOS_SUBSCRIPTION_ID | default('rucio-tr
 use_ssl = {{ RUCIO_CFG_TRACER_KRONOS_USE_SSL | default('False') }}
 reconnect_attempts = {{ RUCIO_CFG_TRACER_KRONOS_RECONNECT_ATTEMPTS | default('100') }}
 excluded_usrdns = {{ RUCIO_CFG_TRACER_KRONOS_EXCLUDED_USRDNS | default('') }}
-{% if RUCIO_CFG_TRACER_KRONOS_USERNAME is defined %}username = {{ RUCIO_CFG_TRACER_KRONOS_USERNAME }}{% endif %}
-{% if RUCIO_CFG_TRACER_KRONOS_PASSWORD is defined %}password = {{ RUCIO_CFG_TRACER_KRONOS_PASSWORD }}{% endif %}
+{% if RUCIO_CFG_TRACER_KRONOS_USERNAME is defined %}username = {{ RUCIO_CFG_TRACER_KRONOS_USERNAME }}{% endif -%}
+{% if RUCIO_CFG_TRACER_KRONOS_PASSWORD is defined %}password = {{ RUCIO_CFG_TRACER_KRONOS_PASSWORD }}{% endif -%}
 dataset_wait = {{ RUCIO_CFG_TRACER_KRONOS_DATASET_WAIT | default('60') }}
 
 [transmogrifier]
@@ -147,5 +148,5 @@ update_distances = {{ RUCIO_CFG_NAGIOS_UPDATE_DISTANCES | default('True') }}
 
 [oidc]
 idpsecrets = {{ RUCIO_CFG_OIDC_IDPSECRETS | default('/opt/rucio/etc/idpsecrets.json') }}
-{% if RUCIO_CFG_OIDC_ADMIN_ISSUER is defined %}admin_issuer = {{ RUCIO_CFG_OIDC_ADMIN_ISSUER }}{% endif %}
-{% if RUCIO_CFG_OIDC_EXPECTED_AUDIENCE is defined %}expected_audience = {{ RUCIO_CFG_OIDC_EXPECTED_AUDIENCE }}{% endif %}
+{%- if RUCIO_CFG_OIDC_ADMIN_ISSUER is defined %}admin_issuer = {{ RUCIO_CFG_OIDC_ADMIN_ISSUER }}{% endif %}
+{%- if RUCIO_CFG_OIDC_EXPECTED_AUDIENCE is defined %}expected_audience = {{ RUCIO_CFG_OIDC_EXPECTED_AUDIENCE }}{% endif %}
