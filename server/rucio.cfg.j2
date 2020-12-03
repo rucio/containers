@@ -5,7 +5,7 @@ mailtemplatedir = {{ RUCIO_CFG_COMMON_MAILTEMPLATEDIR | default('/opt/rucio/etc/
 {% if RUCIO_CFG_COMMON_MULTI_VO is defined %}multi_vo = {{ RUCIO_CFG_COMMON_MULTI_VO }}{% endif %}
 
 [core]
-{% if RUCIO_CFG_CORE_GEOIP_LICENCE_KEY is defined %}geoip_licence_key = {{ RUCIO_CFG_CORE_GEOIP_LICENCE_KEY }}{% endif %
+{% if RUCIO_CFG_CORE_GEOIP_LICENCE_KEY is defined %}geoip_licence_key = {{ RUCIO_CFG_CORE_GEOIP_LICENCE_KEY }}{% endif %}
 default_mail_from = {{ RUCIO_CFG_CORE_DEFAULT_MAIL_FROM | default('spamspamspam@cern.ch') }}
 
 [database]
@@ -29,16 +29,16 @@ user_scope = {{ RUCIO_CFG_MONITOR_USER_SCOPE | default('default_docker') }}
 tracedir = {{ RUCIO_CFG_TRACE_TRACEDIR | default('/var/log/rucio') }}
 brokers = {{ RUCIO_CFG_TRACE_BROKERS | default('localhost') }}
 port = {{ RUCIO_CFG_TRACE_PORT | default('61013') }}
-{% if RUCIO_CFG_TRACE_USERNAME is defined %username = {{ RUCIO_CFG_TRACE_USERNAME }}{% endif %
-{% if RUCIO_CFG_TRACE_PASSWORD is defined %password = {{ RUCIO_CFG_TRACE_PASSWORD }}{% endif %
+{% if RUCIO_CFG_TRACE_USERNAME is defined %}username = {{ RUCIO_CFG_TRACE_USERNAME }}{% endif %}
+{% if RUCIO_CFG_TRACE_PASSWORD is defined %}password = {{ RUCIO_CFG_TRACE_PASSWORD }}{% endif %}
 topic = {{ RUCIO_CFG_TRACE_TOPIC | default('/topic/rucio.tracer') }}
 
 [nongrid_trace]
 tracedir = {{ RUCIO_CFG_NONGRID_TRACE_TRACEDIR | default('/var/log/rucio/trace') }}
 brokers = {{ RUCIO_CFG_NONGRID_TRACE_BROKERS | default('localhost') }}
 port = {{ RUCIO_CFG_NONGRID_TRACE_PORT | default('61013') }}
-{% if RUCIO_CFG_NONGRID_TRACE_USERNAME is defined %}username = {{ RUCIO_CFG_NONGRID_TRACE_USERNAME }}{% endif %
-{% if RUCIO_CFG_NONGRID_TRACE_PASSWORD is defined %}password = {{ RUCIO_CFG_NONGRID_TRACE_PASSWORD }}{% endif %
+{% if RUCIO_CFG_NONGRID_TRACE_USERNAME is defined %}username = {{ RUCIO_CFG_NONGRID_TRACE_USERNAME }}{% endif %}
+{% if RUCIO_CFG_NONGRID_TRACE_PASSWORD is defined %}password = {{ RUCIO_CFG_NONGRID_TRACE_PASSWORD }}{% endif %}
 topic = {{ RUCIO_CFG_NONGRID_TRACE_TOPIC | default('/topic/rucio.tracer') }}
 
 [policy]
