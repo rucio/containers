@@ -51,7 +51,6 @@ RUN yum install -y \
     rm -rf /var/cache/yum
 
 ADD rucio.cfg.j2 /tmp/
-ADD j2cfg.py /tmp/
 ADD start-daemon.sh /
 
 RUN mkdir /var/log/rucio
