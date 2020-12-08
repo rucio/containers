@@ -1,10 +1,6 @@
 [accounts]
 special_accounts = {{ RUCIO_CFG_ACCOUNTS_SPECIAL_ACCOUNTS | default('panda, tier0') }}
 
-[core]
-{% if RUCIO_CFG_CORE_GEOIP_LICENCE_KEY is defined %}geoip_licence_key = {{ RUCIO_CFG_CORE_GEOIP_LICENCE_KEY }}{% endif %}
-default_mail_from = {{ RUCIO_CFG_CORE_DEFAULT_MAIL_FROM | default('spamspamspam@cern.ch') }}
-
 [client]
 rucio_host = {{ RUCIO_CFG_CLIENT_RUCIO_HOST | default('localhost') }}
 auth_host = {{ RUCIO_CFG_CLIENT_AUTH_HOST | default('localhost') }}
@@ -27,7 +23,9 @@ mailtemplatedir = {{ RUCIO_CFG_COMMON_MAILTEMPLATEDIR | default('/opt/rucio/etc/
 
 [database]
 default = {{ RUCIO_CFG_DATABASE_DEFAULT | default('sqlite:////tmp/rucio.db') }}
-{% if RUCIO_CFG_DATABASE_SCHEMA is defined %}schema = {{ RUCIO_CFG_DATABASE_SCHEMA }}{% endif %}
+{% if RUCIO_CFG_DATABASE_SCHEMA is defined %}
+schema = {{ RUCIO_CFG_DATABASE_SCHEMA }}
+{%- endif %}
 pool_reset_on_return = {{ RUCIO_CFG_DATABASE_POOL_RESET_ON_RETURN | default('rollback') }}
 echo = {{ RUCIO_CFG_DATABASE_ECHO | default('0') }}
 pool_recycle = {{ RUCIO_CFG_DATABASE_POOL_RECYCLE | default('600') }}
@@ -49,6 +47,7 @@ schema = {{ RUCIO_CFG_POLICY_SCHEMA | default('generic') }}
 lfn2pfn_algorithm_default = {{ RUCIO_CFG_POLICY_LFN2PFN_ALGORITHM_DEFAULT | default('hash') }}
 {% if RUCIO_CFG_POLICY_LFN2PFN_MODULE is defined %}lfn2pfn_module = {{ RUCIO_CFG_POLICY_LFN2PFN_MODULE }}{% endif %}
 {% if RUCIO_CFG_POLICY_PACKAGE is defined %}package = {{ RUCIO_CFG_POLICY_PACKAGE }}{% endif %}
+
 support = {{ RUCIO_CFG_POLICY_SUPPORT | default('https://github.com/rucio/rucio/issues/') }}
 support_rucio = {{ RUCIO_CFG_POLICY_SUPPORT_RUCIO | default('https://github.com/rucio/rucio/issues/') }}
 
