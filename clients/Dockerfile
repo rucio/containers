@@ -11,6 +11,7 @@ RUN yum upgrade -y && \
 RUN yum install -y python-pip \
                    voms-clients-java \
                    gfal2-all gfal2-util \
+                   xrootd-client \
                    nordugrid-arc-client nordugrid-arc-plugins-gfal \
                    nordugrid-arc-plugins-globus nordugrid-arc-plugins-s3 \
                    nordugrid-arc-plugins-xrootd && \
