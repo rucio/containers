@@ -74,9 +74,9 @@ CacheRoot /tmp
  ErrorLog /dev/stderr
 {% endif %}
 
- Alias /media                 /usr/lib/python2.7/site-packages/rucio/web/ui/media
- Alias /static                /usr/lib/python2.7/site-packages/rucio/web/ui/static
- WSGIScriptAlias /            /usr/lib/python2.7/site-packages/rucio/web/ui/main.py
+ Alias /media                 /usr/local/lib/python3.6/site-packages/rucio/web/ui/media
+ Alias /static                /usr/local/lib/python3.6/site-packages/rucio/web/ui/static
+ WSGIScriptAlias /            /usr/local/lib/python3.6/site-packages/rucio/web/ui/main.py
 
 {% if RUCIO_PROXY is defined %}
   ProxyPass /proxy             {{ RUCIO_PROXY_SCHEME | default('https') }}://{{ RUCIO_PROXY }}
