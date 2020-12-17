@@ -11,19 +11,18 @@ RUN yum install -y epel-release.noarch && \
 RUN yum upgrade -y && \
     yum clean all && \
     rm -rf /var/cache/yum
-RUN yum -y install https://repo.ius.io/ius-release-el7.rpm &&\
-    yum install -y python36u-pip libaio gcc python36-devel.x86_64 openssl-devel.x86_64 mod_ssl python36-m2crypto libnsl.x86_64 && \
+RUN yum install -y python-pip libaio gcc python-devel.x86_64 openssl-devel.x86_64 MySQL-python memcached && \
     yum clean all && \
     rm -rf /var/cache/yum
 
 RUN rpm -i /tmp/oic.rpm; \
     echo "/usr/lib/oracle/12.2/client64/lib" >/etc/ld.so.conf.d/oracle.conf; \
     ldconfig
-RUN python3 -m pip install --no-cache-dir --upgrade pip
-RUN python3 -m pip install --no-cache-dir --upgrade setuptools
-RUN rm -rf /usr/lib/python3.6/site-packages/ipaddress*
-RUN python3 -m pip install --pre rucio[oracle,mysql,postgresql]==$TAG
-RUN python3 -m pip install jinja2 j2cli pyyaml
+RUN pip install --no-cache-dir --upgrade pip
+RUN pip install --no-cache-dir --upgrade setuptools
+RUN rm -rf /usr/lib/python2.7/site-packages/ipaddress*
+RUN pip install --no-cache-dir --pre rucio[oracle,mysql,postgresql]==$TAG
+RUN pip install jinja2 j2cli pyyaml
 
 RUN mkdir -p /opt/rucio/etc
 

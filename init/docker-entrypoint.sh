@@ -19,4 +19,4 @@ alembic init /opt/rucio/lib/rucio/db/sqla/migrate_repo/
 
 alembic -c /opt/rucio/etc/alembic.ini upgrade head
 
-python3 /tmp/bootstrap.py
+python /tmp/bootstrap.py
