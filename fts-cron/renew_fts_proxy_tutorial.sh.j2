@@ -1,9 +1,0 @@
-#! /bin/bash
-
-# Delegate the proxy to the requested servers
-{% if RUCIO_FTS_SERVERS is defined %}
-{% set ftses = RUCIO_FTS_SERVERS.split(',') %}
-{% for fts in ftses %}
-fts-rest-delegate -v -f -H 9999 --key=/opt/rucio/keys/userkey.pem --cert=/opt/rucio/certs/usercert.pem -s {{ fts }}
-{% endfor %}
-{% endif %}

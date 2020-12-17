@@ -1,2 +1,0 @@
-#!/bin/bash
-multitail -f /var/log/fts3/fts3server.log /var/log/fts3rest/fts3rest.log
