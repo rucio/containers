@@ -6,13 +6,14 @@
 #
 # Authors:
 # - Cedric Serfon, <cedric.serfon@cern.ch>, 2017
-# - Thomas Beermann, <thomas.beermann@cern.ch>, 2018-2020
+# - Thomas Beermann, <thomas.beermann@cern.ch>, 2018
 
 FROM centos:7
 
 ARG TAG
 
 WORKDIR /tmp
+ADD oic.rpm /tmp
 
 RUN yum install -y epel-release.noarch && \
     yum clean all && \
@@ -20,19 +21,19 @@ RUN yum install -y epel-release.noarch && \
 RUN yum upgrade -y && \
     yum clean all && \
     rm -rf /var/cache/yum
-RUN yum -y install https://repo.ius.io/ius-release-el7.rpm &&\
-    yum install -y httpd python36u-pip python36-mod_wsgi libaio gcc python36-devel.x86_64 mod_ssl openssl-devel.x86_64 python36-m2crypto libnsl.x86_64 && \
+RUN yum install -y httpd mod_wsgi python-pip libaio gcc python-devel.x86_64 mod_ssl openssl-devel.x86_64 MySQL-python && \
     yum clean all && \
     rm -rf /var/cache/yum
 
-RUN rpm -i https://download.oracle.com/otn_software/linux/instantclient/211000/oracle-instantclient-basiclite-21.1.0.0.0-1.x86_64.rpm; \
-    echo "/usr/lib/oracle/21/client64/lib" >/etc/ld.so.conf.d/oracle.conf; \
+RUN rpm -i /tmp/oic.rpm; \
+    echo "/usr/lib/oracle/12.2/client64/lib" >/etc/ld.so.conf.d/oracle.conf; \
     ldconfig
-RUN python3 -m pip install --no-cache-dir --upgrade pip
-RUN python3 -m pip install --no-cache-dir --upgrade setuptools
-RUN rm -rf /usr/lib/python3.6/site-packages/ipaddress*
-RUN python3 -m pip install --no-cache-dir --pre rucio[oracle,mysql,postgresql]==$TAG
-RUN python3 -m pip install --no-cache-dir j2cli
+RUN pip install --no-cache-dir  --upgrade pip
+RUN pip install  --no-cache-dir --upgrade setuptools
+RUN rm -rf /usr/lib/python2.7/site-packages/ipaddress*
+RUN pip install --no-cache-dir  --pre rucio[oracle,mysql,postgresql]==$TAG
+RUN pip install --no-cache-dir  j2cli psycopg2-binary
+RUN pip install --no-cache-dir  cx_oracle==6.3.1 PyMySQL
 
 ADD rucio.cfg.j2 /tmp/
 ADD rucio.conf.j2 /tmp/

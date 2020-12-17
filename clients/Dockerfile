@@ -8,8 +8,10 @@ RUN yum install -y epel-release.noarch && \
 RUN yum upgrade -y && \
     yum clean all && \
     rm -rf /var/cache/yum
-RUN yum -y install https://repo.ius.io/ius-release-el7.rpm && \
-    yum install -y python36u-pip voms-clients-java gfal2-all gfal2-util gfal2-python3 xrootd-client\
+RUN yum install -y python-pip \
+                   voms-clients-java \
+                   gfal2-all gfal2-util \
+                   xrootd-client \
                    nordugrid-arc-client nordugrid-arc-plugins-gfal \
                    nordugrid-arc-plugins-globus nordugrid-arc-plugins-s3 \
                    nordugrid-arc-plugins-xrootd && \
@@ -17,11 +19,10 @@ RUN yum -y install https://repo.ius.io/ius-release-el7.rpm && \
     rm -rf /var/cache/yum
 
 # Upgrade pip & setuptools and install Rucio
-RUN python3.6 -m pip install --no-cache-dir --upgrade pip && \
-    python3.6 -m pip install  --no-cache-dir --upgrade setuptools && \
-    python3.6 -m pip install --no-cache-dir --pre rucio-clients==$TAG && \
-    python3.6 -m pip install --no-cache-dir jinja2 j2cli pyyaml
-
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir --upgrade setuptools && \
+    pip install --no-cache-dir --pre rucio-clients==$TAG && \
+    pip install --no-cache-dir jinja2 j2cli pyyaml
 
 # Add a separate user and change ownership of config dir to that user
 RUN groupadd -g 1000 user && \
