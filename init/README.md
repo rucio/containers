@@ -1,22 +1,19 @@
-Rucio - Scientific Data Management
-==================================
-(Init Container)
-----------------
+# Rucio - Scientific Data Management
+
+## (Init Container)
 
 Rucio is a software framework that provides functionality to organize, manage, and access large volumes of scientific data using customisable policies. The data can be spread across globally distributed locations and across heterogeneous data centers, uniting different storage and network technologies as a single federated entity. Rucio offers advanced features such as distributed data recovery or adaptive replication, and is highly scalable, modular, and extensible. Rucio has been originally developed to meet the requirements of the high-energy physics experiment ATLAS, and is continuously extended to support LHC experiments and other diverse scientific communities.
 
-Documentation
--------------
+## Documentation
 
-General information and latest documentation about Rucio can be found at [readthedocs](<https://rucio.readthedocs.io>).
+General information and latest documentation about Rucio can be found at [readthedocs](https://rucio.readthedocs.io) or on our [webpage](https://rucio.cern.ch).
 
-Developers
-----------
+## Developers
 
 For information on how to contribute to Rucio, please refer and follow our [CONTRIBUTING](<https://github.com/rucio/rucio/blob/master/CONTRIBUTING.rst>) guidelines.
 
-Getting Started
----------------
+## Getting Started
+
 This image provides the tools needed to bootstrap the database. It creates the necessary tables and adds a root account with the configured identities. To initialize a MySQL DB running at `mysql.db` with a root account with userpass authentication you could use something like this:
 
     docker run --rm \
@@ -25,8 +22,7 @@ This image provides the tools needed to bootstrap the database. It creates the n
       -e RUCIO_CFG_BOOTSTRAP_USERPASS_PWD="secret" \
       rucio/rucio-init
 
-RUCIO_CFG configuration parameters:
--------------------------------------
+## RUCIO_CFG configuration parameters:
 
 Environment variables can be used to set values for the auto-generated rucio.cfg. The names are derived from the actual names in the configuration file prefixed by `RUCIO_CFG`, e.g., the `default` value in the `database` section becomes `RUCIO_CFG_DATABASE_DEFAULT`.
 The available environment variables are:
@@ -47,8 +43,7 @@ The available environment variables are:
 * `RUCIO_CFG_DATABASE_SCHEMA`
 * `RUCIO_CFG_GSS_BOOTSTRAP_EMAIL`
 
-Getting Support
-----------------
+## Getting Support
 
 If you are looking for support, please contact our mailing list rucio-users@googlegroups.com
 or join us on our [slack support](<https://rucio.slack.com/messages/#support>) channel.
