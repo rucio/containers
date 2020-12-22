@@ -30,6 +30,6 @@ RUN mkdir -p /opt/rucio/etc
 COPY rucio.cfg.j2 /tmp
 COPY alembic.ini.j2 /tmp
 COPY bootstrap.py /tmp
-COPY docker-entrypoint.sh /
+COPY docker-entrypoint_py3.sh /docker-entrypoint.sh
 
 CMD ["/docker-entrypoint.sh"]
