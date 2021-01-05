@@ -83,6 +83,9 @@ CacheRoot /tmp
 {% if RUCIO_DEFINE_ALIASES|default('False') == 'True' %}
  Include /opt/rucio/etc/aliases.conf
 {% else %}
+{% if RUCIO_SERVER_TYPE|default('api') == 'flask' %}
+ WSGIScriptAlias /                       /usr/local/lib/python3.6/site-packages/rucio/web/rest/flaskapi/v1/main.py process-group=rucio application-group=rucio
+{% else %}
  WSGIScriptAlias /ping                   /usr/local/lib/python3.6/site-packages/rucio/web/rest/ping.py process-group=rucio application-group=rucio
 {% if RUCIO_SERVER_TYPE|default('api') == 'all' or RUCIO_SERVER_TYPE|default('api') == 'api' %}
  WSGIScriptAlias /accounts               /usr/local/lib/python3.6/site-packages/rucio/web/rest/account.py process-group=rucio application-group=rucio
@@ -111,6 +114,7 @@ CacheRoot /tmp
 {% endif %}
 {% if RUCIO_SERVER_TYPE|default('api') == 'all' or RUCIO_SERVER_TYPE|default('api') == 'trace' %}
  WSGIScriptAlias /traces                 /usr/local/lib/python3.6/site-packages/rucio/web/rest/trace.py process-group=rucio application-group=rucio
+{% endif %}
 {% endif %}
 {% endif %}
 
