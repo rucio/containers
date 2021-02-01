@@ -21,6 +21,16 @@ then
   sendmail -bd
 fi
 
+if [ -d "/patch" ]
+then
+    echo "Patches found. Trying to apply them"
+    for patchfile in /patch/*
+    do
+        echo "Apply patch ${patchfile}"
+        patch -p3 -d /usr/local/lib/python3.6/site-packages/rucio < $patchfile
+    done
+fi
+
 echo "starting daemon with: $RUCIO_DAEMON $RUCIO_DAEMON_ARGS"
 echo ""
 
