@@ -31,6 +31,16 @@ echo "=================== /etc/httpd/conf.d/rucio.conf ========================"
 cat /etc/httpd/conf.d/rucio.conf
 echo ""
 
+if [ -d "/patch" ]
+then
+    echo "Patches found. Trying to apply them"
+    for patchfile in /patch/*
+    do
+        echo "Apply patch ${patchfile}"
+        patch -p3 -d /usr/local/lib/python3.6/site-packages/rucio < $patchfile
+    done
+fi
+
 pkill httpd || :
 sleep 2
 httpd -D FOREGROUND
