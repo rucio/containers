@@ -41,6 +41,8 @@ ADD 00-mpm.conf.j2 /tmp
 ADD docker-entrypoint.sh /
 ADD robots.txt /var/www/html
 RUN rm /etc/httpd/conf.d/welcome.conf /etc/httpd/conf.d/userdir.conf /etc/httpd/conf.d/ssl.conf
+RUN mkdir -p /var/log/rucio/trace && chown apache:apache /var/log/rucio/trace
+RUN mkdir -p /var/log/rucio/nongrid_trace && chown apache:apache /var/log/rucio/nongrid_trace
 
 VOLUME /var/log/httpd
 VOLUME /opt/rucio/etc
