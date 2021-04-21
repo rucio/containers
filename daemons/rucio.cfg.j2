@@ -109,6 +109,10 @@ voname = {{ RUCIO_CFG_MESSAGING_HERMES_VONAME | default('atlas') }}
 email_from = {{ RUCIO_CFG_MESSAGING_HERMES_EMAIL_FROM | default('Rucio <atlas-adc-ddm-support@cern.ch>') }}
 {% if RUCIO_CFG_MESSAGING_HERMES_EMAIL_TEST is defined %}email_test = {{ RUCIO_CFG_MESSAGING_HERMES_EMAIL_TEST }}{% endif %}
 
+[hermes]
+{% if RUCIO_CFG_MESSAGING_HERMES2_ELASTIC_ENDPOINT is defined %}elastic_endpoint = {{ RUCIO_CFG_MESSAGING_HERMES2_ELASTIC_ENDPOINT }}{% endif %}
+{% if RUCIO_CFG_MESSAGING_HERMES2_INFLUXDB_ENDPOINT is defined %}influxdb_endpoint = {{ RUCIO_CFG_MESSAGING_HERMES2_INFLUXDB_ENDPOINT }}{% endif %}
+
 [tracer-kronos]
 brokers= {{ RUCIO_CFG_TRACER_KRONOS_BROKERS | default('atlas-test-mb.cern.ch') }}
 port= {{ RUCIO_CFG_TRACER_KRONOS_PORT | default('61013') }}
