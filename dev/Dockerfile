@@ -18,12 +18,13 @@
 # - Cedric Serfon <cedric.serfon@cern.ch>, 2017
 # - Frank Berghaus <frank.berghaus@cern.ch>, 2017-2018
 # - Mario Lassnig <mario.lassnig@cern.ch>, 2019
+# - Mayank Sharma <mayank.sharma@cern.ch>, 2021
 
 FROM centos:7
 
 RUN yum -y install epel-release && \
     yum -y install https://repo.ius.io/ius-release-el7.rpm && \
-    yum -y install gcc httpd mod_ssl mod_auth_kerb python36u-pip python36-devel python36-mod_wsgi python36-m2crypto gmp-devel krb5-devel git openssl-devel gridsite which libaio memcached nmap-ncat gfal2-all gfal2-util gfal2-python3 fts-rest-cli xrootd-client multitail vim && \
+    yum -y install gcc httpd mod_ssl mod_auth_kerb python-setuptools python-pip python36u-pip python36-devel python36-mod_wsgi python36-m2crypto gmp-devel krb5-devel git openssl-devel gridsite which libaio memcached nmap-ncat gfal2-all gfal2-util gfal2-python3 fts-rest-cli xrootd-client multitail vim && \
     yum clean all && \
     rm -rf /var/cache/yum
 
@@ -48,6 +49,9 @@ RUN python3 -m pip install --upgrade pip && \
     python3 -m pip install -r /tmp/rucio/etc/pip-requires-test && \
     python3 -m pip install psycopg2-binary && \
     ln -s $RUCIOHOME/lib/rucio /usr/local/lib/python3.6/site-packages/rucio
+
+#additional configuration for fts-rest-cli
+RUN pip2 install requests 
 
 COPY .pep8 .pep8
 COPY .flake8 .flake8
