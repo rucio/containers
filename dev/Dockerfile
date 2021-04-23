@@ -60,7 +60,6 @@ RUN cp -r /tmp/rucio/etc . && \
 COPY rucio.cfg alembic.ini google-cloud-storage-test.json $RUCIOHOME/etc/
 COPY rucio_multi_vo_tst.cfg $RUCIOHOME/etc/multi_vo/tst/etc/rucio.cfg
 COPY rucio_multi_vo_ts2.cfg $RUCIOHOME/etc/multi_vo/ts2/etc/rucio.cfg
-COPY aliases-py27.conf ui-aliases-py27.conf $RUCIOHOME/etc/web/
 COPY certs/rucio_ca.pem /etc/grid-security/certificates/5fca1cb1.0
 
 COPY 00-mpm.conf /etc/httpd/conf.modules.d/00-mpm.conf
