@@ -11,7 +11,7 @@ voms-proxy-init2 -valid 24:00 -cert /tmp/long.proxy -key /tmp/long.proxy -out /t
 {% if RUCIO_FTS_SERVERS is defined %}
 {% set ftses = RUCIO_FTS_SERVERS.split(',') %}
 {% for fts in ftses %}
-fts-rest-delegate --key=/tmp/x509up --cert=/tmp/x509up -s {{ fts }}
+fts-rest-delegate --hours=24 --force --key=/tmp/x509up --cert=/tmp/x509up -s {{ fts }}
 {% endfor %}
 {% endif %}
 
