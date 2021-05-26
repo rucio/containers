@@ -74,3 +74,6 @@ idpsecrets = {{ RUCIO_CFG_OIDC_IDPSECRETS | default('/opt/rucio/etc/idpsecrets.j
 
 [api]
 {% if RUCIO_CFG_API_ENDPOINTS is defined %}endpoints = {{ RUCIO_CFG_API_ENDPOINTS }}{% endif %}
+
+[conveyor]
+{% if RUCIO_CFG_CONVEYOR_USE_PREPARER is defined %}use_preparer = {{ RUCIO_CFG_CONVEYOR_USE_PREPARER }}{% endif %}

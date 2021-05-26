@@ -81,6 +81,10 @@ usercert = {{ RUCIO_CFG_CONVEYOR_USERCERT | default('/opt/rucio/tools/x509up') }
 {% if RUCIO_CFG_CONVEYOR_REQUEST_OIDC_SCOPE is defined %}request_oidc_scope = {{ RUCIO_CFG_CONVEYOR_REQUEST_OIDC_SCOPE }}{% endif %}
 {% if RUCIO_CFG_CONVEYOR_REQUEST_OIDC_AUDIENCE is defined %}request_oidc_audience = {{ RUCIO_CFG_CONVEYOR_REQUEST_OIDC_AUDIENCE }}{% endif %}
 {% if RUCIO_CFG_CONVEYOR_WEBDAV_TRANSFER_MODE is defined %}webdav_transfer_mode = {{ RUCIO_CFG_CONVEYOR_WEBDAV_TRANSFER_MODE }}{% endif %}
+{% if RUCIO_CFG_CONVEYOR_USE_PREPARER is defined %}use_preparer = {{ RUCIO_CFG_CONVEYOR_USE_PREPARER }}{% endif %}
+{% if RUCIO_CFG_CONVEYOR_GLOBUS_AUTH_APP is defined %}globus_auth_app = {{ RUCIO_CFG_CONVEYOR_GLOBUS_AUTH_APP }}{% endif %}
+{% if RUCIO_CFG_CONVEYOR_TRANSFERTYPE is defined %}transfertype = {{ RUCIO_CFG_CONVEYOR_TRANSFERTYPE }}{% endif %}
+{% if RUCIO_CFG_CONVEYOR_FILTER_TRANSFERTOOL is defined %}filter_transfertool = {{ RUCIO_CFG_CONVEYOR_FILTER_TRANSFERTOOL }}{% endif %}
 
 [messaging-fts3]
 port = {{ RUCIO_CFG_MESSAGING_FTS3_PORT | default('61123') }}
