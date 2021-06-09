@@ -24,11 +24,16 @@ FROM centos:7
 
 RUN yum -y install epel-release && \
     yum -y install https://repo.ius.io/ius-release-el7.rpm && \
-    yum -y install gcc httpd mod_ssl mod_auth_kerb python-setuptools python-pip python36u-pip python36-devel python36-mod_wsgi python36-m2crypto gmp-devel krb5-devel git openssl-devel gridsite which libaio memcached nmap-ncat gfal2-all gfal2-util gfal2-python3 fts-rest-cli xrootd-client multitail vim && \
+    yum -y install gcc httpd mod_ssl mod_auth_kerb python-setuptools python-pip python36u-pip python36-devel \
+            python36-mod_wsgi python36-m2crypto gmp-devel krb5-devel git openssl-devel gridsite which libaio memcached \
+            nmap-ncat gfal2-all gfal2-util gfal2-python3 fts-rest-cli xrootd-client multitail vim libxml2-devel \
+            xmlsec1-devel xmlsec1-openssl-devel libtool-ltdl-devel && \
     yum clean all && \
     rm -rf /var/cache/yum
 
-RUN git clone https://github.com/rucio/rucio.git /tmp/rucio
+ARG GIT_CLONE_ARGS="--depth 1 https://github.com/rucio/rucio.git"
+
+RUN git clone $GIT_CLONE_ARGS /tmp/rucio && rm -rf /tmp/rucio/.git
 
 ENV RUCIOHOME=/opt/rucio
 RUN mkdir -p $RUCIOHOME && \
@@ -41,13 +46,15 @@ RUN mkdir -p \
       lib/rucio \
       tools
 
-RUN python3 -m pip install --upgrade pip && \
-    python3 -m pip install --upgrade setuptools && \
+RUN python3 -m pip install --no-cache --upgrade pip && \
+    python3 -m pip install --no-cache --upgrade setuptools wheel && \
     rm -rf /usr/lib/python3.6/site-packages/ipaddress*  && \
-    python3 -m pip install -r /tmp/rucio/etc/pip-requires-client && \
-    python3 -m pip install -r /tmp/rucio/etc/pip-requires && \
-    python3 -m pip install -r /tmp/rucio/etc/pip-requires-test && \
-    python3 -m pip install psycopg2-binary && \
+    if [ -r /tmp/rucio/requirements.txt ]; then \
+        python3 -m pip install --no-cache --upgrade -r /tmp/rucio/requirements.txt ; \
+    else \
+        python3 -m pip install --no-cache --upgrade -r /tmp/rucio/etc/pip-requires-client \
+                -r /tmp/rucio/etc/pip-requires -r /tmp/rucio/etc/pip-requires-test psycopg2-binary ; \
+    fi && \
     ln -s $RUCIOHOME/lib/rucio /usr/local/lib/python3.6/site-packages/rucio
 
 #additional configuration for fts-rest-cli
