@@ -79,7 +79,9 @@ COPY httpd.conf /etc/httpd/conf/httpd.conf
 COPY rucio.conf /etc/httpd/conf.d/rucio.conf
 COPY certs/usercert.pem certs/userkey.pem certs/usercertkey.pem $RUCIOHOME/etc/
 RUN chmod 0400 $RUCIOHOME/etc/userkey.pem && mkdir /root/.ssh && \
-    chmod 700 /root/.ssh
+    chmod 700 /root/.ssh && echo "Host ssh1" > /root/.ssh/config && \
+    echo "IdentityFile /root/.ssh/ruciouser_sshkey" >> /root/.ssh/config
+
 
 COPY certs/hostcert_rucio.pem /etc/grid-security/hostcert.pem
 COPY certs/hostcert_rucio.key.pem /etc/grid-security/hostkey.pem
