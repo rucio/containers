@@ -27,6 +27,7 @@ RUN yum -y install epel-release && \
     yum -y install gcc httpd mod_ssl mod_auth_kerb python-setuptools python-pip python36u-pip python36-devel \
             python36-mod_wsgi python36-m2crypto gmp-devel krb5-devel git openssl-devel gridsite which libaio memcached \
             nmap-ncat gfal2-all gfal2-util gfal2-python3 fts-rest-cli xrootd-client multitail vim libxml2-devel \
+            openssh-clients \
             xmlsec1-devel xmlsec1-openssl-devel libtool-ltdl-devel && \
     yum clean all && \
     rm -rf /var/cache/yum
@@ -77,10 +78,13 @@ COPY 00-mpm.conf /etc/httpd/conf.modules.d/00-mpm.conf
 COPY httpd.conf /etc/httpd/conf/httpd.conf
 COPY rucio.conf /etc/httpd/conf.d/rucio.conf
 COPY certs/usercert.pem certs/userkey.pem certs/usercertkey.pem $RUCIOHOME/etc/
-RUN chmod 0400 $RUCIOHOME/etc/userkey.pem
+RUN chmod 0400 $RUCIOHOME/etc/userkey.pem && mkdir /root/.ssh && \
+    chmod 700 /root/.ssh
 
 COPY certs/hostcert_rucio.pem /etc/grid-security/hostcert.pem
 COPY certs/hostcert_rucio.key.pem /etc/grid-security/hostkey.pem
+COPY certs/ssh/ruciouser_sshkey.pub /root/.ssh/ruciouser_sshkey.pub
+COPY certs/ssh/ruciouser_sshkey /root/.ssh/ruciouser_sshkey
 RUN chmod 0400 /etc/grid-security/hostkey.pem && \
     chmod 777 /var/log/rucio/trace && \
     rm -rf $RUCIOHOME/tools && \
@@ -108,5 +112,6 @@ RUN rm -r /tmp/rucio && \
 EXPOSE 443
 
 ENV PATH $PATH:$RUCIOHOME/bin
-
+RUN chmod 0600 /root/.ssh/ruciouser_sshkey && \
+    chmod 0644 /root/.ssh/ruciouser_sshkey.pub
 CMD ["httpd","-D","FOREGROUND"]
