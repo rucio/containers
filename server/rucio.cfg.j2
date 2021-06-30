@@ -77,3 +77,4 @@ idpsecrets = {{ RUCIO_CFG_OIDC_IDPSECRETS | default('/opt/rucio/etc/idpsecrets.j
 
 [conveyor]
 {% if RUCIO_CFG_CONVEYOR_USE_PREPARER is defined %}use_preparer = {{ RUCIO_CFG_CONVEYOR_USE_PREPARER }}{% endif %}
+{% if RUCIO_CFG_CONVEYOR_USERCERT is defined %}usercert = {{ RUCIO_CFG_CONVEYOR_USERCERT }}{% endif %}
