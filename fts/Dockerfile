@@ -26,6 +26,9 @@ RUN echo "" > /etc/httpd/conf.d/ssl.conf &&\
     echo "" > /etc/httpd/conf.d/welcome.conf &&\
     echo "" > /etc/httpd/conf.d/zgridsite.conf
 
+# FTS monitoring ActiveMQ configuration
+COPY fts-msg-monitoring.conf /etc/fts3/fts-msg-monitoring.conf
+
 # Entrypoint waiting script for MySQL
 COPY wait-for-it.sh /usr/local/bin/wait-for-it.sh
 RUN chmod +x /usr/local/bin/wait-for-it.sh
