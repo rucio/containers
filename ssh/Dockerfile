@@ -3,8 +3,10 @@ FROM centos:7
 # Install OpenSSH
 RUN yum install -y epel-release.noarch
 RUN yum upgrade -y
-RUN yum -y install openssh-server openssh-clients sudo  python3-pip && \
-    pip3 install -U dumb-init
+RUN yum -y install openssh-server openssh-clients sudo python3-pip && \
+    pip3 install -U dumb-init && \
+    yum -y install rsync && \
+    yum -y install rclone
 RUN yum clean all && \
     rm -rf /var/cache/yum
 

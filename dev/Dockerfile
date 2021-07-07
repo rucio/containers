@@ -29,7 +29,7 @@ RUN yum -y install epel-release && \
     yum -y install gcc httpd mod_ssl mod_auth_kerb python-setuptools python-pip python36u-pip python36-devel \
             python36-mod_wsgi python36-m2crypto gmp-devel krb5-devel git openssl-devel gridsite which libaio memcached \
             nmap-ncat gfal2-all gfal2-util gfal2-python3 fts-rest-cli xrootd-client multitail vim libxml2-devel \
-            openssh-clients xmlsec1-devel xmlsec1-openssl-devel libtool-ltdl-devel && \
+            openssh-clients xmlsec1-devel xmlsec1-openssl-devel libtool-ltdl-devel rclone && \
     curl -sSL https://downloads.mariadb.com/Connectors/c/connector-c-3.1.13/mariadb-connector-c-3.1.13-centos7-amd64.tar.gz | tar xzv && \
     alternatives --install /usr/bin/mariadb_config mariadb_config /mariadb-connector-c-3.1.13-centos7-amd64/bin/mariadb_config 1 && \
     alternatives --install /usr/lib64/libmariadb.so.3 libmariadb.so.3 /mariadb-connector-c-3.1.13-centos7-amd64/lib/mariadb/libmariadb.so.3 1 && \
@@ -77,6 +77,7 @@ RUN cp -r /tmp/rucio/etc . && \
 COPY rucio.cfg alembic.ini google-cloud-storage-test.json $RUCIOHOME/etc/
 COPY rucio_multi_vo_tst.cfg $RUCIOHOME/etc/multi_vo/tst/etc/rucio.cfg
 COPY rucio_multi_vo_ts2.cfg $RUCIOHOME/etc/multi_vo/ts2/etc/rucio.cfg
+COPY rclone-init.cfg $RUCIOHOME/etc/rclone-init.cfg
 COPY certs/rucio_ca.pem /etc/grid-security/certificates/5fca1cb1.0
 
 COPY 00-mpm.conf /etc/httpd/conf.modules.d/00-mpm.conf
@@ -105,7 +106,9 @@ RUN chmod 0400 /etc/grid-security/hostkey.pem && \
 
 COPY logshow restartweb run_daemons create_monit_data /usr/local/bin/
 COPY monit-entrypoint.sh /monit-entrypoint.sh
+
 COPY dashboards/* $RUCIOHOME/etc/dashboards/
+COPY rse_repository.json $RUCIOHOME/etc/rse_repository.json
 
 RUN rm -r /tmp/rucio && \
     chmod +x /usr/local/bin/logshow && \
@@ -117,7 +120,6 @@ RUN rm -r /tmp/rucio && \
     ln -fs /usr/bin/python3 /usr/bin/python
 
 EXPOSE 443
-
 ENV PATH $PATH:$RUCIOHOME/bin
 RUN chmod 0600 /root/.ssh/ruciouser_sshkey && \
     chmod 0644 /root/.ssh/ruciouser_sshkey.pub
