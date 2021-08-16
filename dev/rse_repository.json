@@ -1,0 +1,644 @@
+{
+  "SWIFT": {
+    "backend_type": "S3",
+    "deterministic": true,
+    "protocols": {
+      "default": "s3",
+      "supported": {
+        "s3": {
+          "impl": "rucio.rse.protocols.s3.Default",
+          "hostname": "swift.cern.ch",
+          "port": 443,
+          "domains": {
+            "lan": {
+              "read": 1,
+              "write": 1,
+              "delete": 1
+            },
+            "wan": {
+              "read": 1,
+              "write": 1,
+              "delete": 1
+            }
+          }
+        }
+      }
+    },
+    "storage_usage_tool": "rucio.rse.protocols.s3.Default.getSpace"
+  },
+ "AMAZON-BOTO": {
+    "backend_type": "S3",
+    "deterministic": true,
+    "protocols": {
+      "default": "s3",
+      "supported": {
+        "s3": {
+          "impl": "rucio.rse.protocols.s3boto.Default",
+          "hostname": "s3.amazonaws.com",
+          "port": 80,
+          "scheme": "s3",
+          "prefix": "rucio_bucket",
+          "domains": {
+            "lan": {
+              "read": 1,
+              "write": 1,
+              "delete": 1
+            },
+            "wan": {
+              "read": 1,
+              "write": 1,
+              "delete": 1
+            }
+          }
+        }
+      }
+    },
+    "storage_usage_tool": "rucio.rse.protocols.s3boto.Default.getSpace"
+  },
+  "BNL-BOTO": {
+    "backend_type": "S3",
+    "deterministic": true,
+    "protocols": {
+      "default": "s3",
+      "supported": {
+        "s3": {
+          "impl": "rucio.rse.protocols.s3boto.Default",
+          "hostname": "cephgw.usatlas.bnl.gov.mock",
+          "port": 8443,
+          "scheme": "s3",
+          "prefix": "rucio_bucket",
+          "domains": {
+            "lan": {
+              "read": 1,
+              "write": 1,
+              "delete": 1
+            },
+            "wan": {
+              "read": 1,
+              "write": 1,
+              "delete": 1
+            }
+          }
+        }
+      }
+    },
+    "storage_usage_tool": "rucio.rse.protocols.s3boto.Default.getSpace"
+  },
+  "CERN-S3-LOGS": {
+    "backend_type": "S3",
+    "deterministic": true,
+    "protocols": {
+      "default": "s3",
+      "supported": {
+        "s3": {
+          "impl": "rucio.rse.protocols.s3http.Default",
+          "hostname": "cephgw.usatlas.bnl.gov",
+          "port": 8443,
+          "scheme": "s3",
+          "prefix": "rucio_bucket",
+          "domains": {
+            "lan": {
+              "read": 1,
+              "write": 1,
+              "delete": 1
+            },
+            "wan": {
+              "read": 1,
+              "write": 1,
+              "delete": 1
+            }
+          }
+        }
+      }
+    },
+    "storage_usage_tool": "rucio.rse.protocols.s3http.Default.getSpace"
+  },
+  "LXPLUS":{
+    "backend_type": "SFTP",
+    "deterministic": true,
+    "protocols": {
+      "default": "sftp",
+      "supported": {
+        "sftp": {
+          "prefix": "/afs/cern.ch/user/d/ddmlab/rse_test_run/",
+          "impl": "rucio.rse.protocols.sftp.Default",
+          "port": 22,
+          "domains": {
+            "lan": {
+              "read": 1,
+              "write": 1,
+              "delete": 1
+            },
+            "wan": {
+              "read": 1,
+              "write": 1,
+              "delete": 1
+            }
+          },
+          "hostname": "lxplus.cern.ch"
+        }
+      }
+    },
+    "storage_usage_tool": "rucio.rse.protocols.sftp.Default.getSpace"
+  },
+  "MOCK-POSIX":{
+    "backend_type": "POSIX",
+    "deterministic": true,
+    "protocols": {
+      "default": "file",
+      "supported": {
+        "file": {
+          "prefix": "/tmp/rucio_rse/",
+          "domains": {
+            "lan": {
+              "read": 1,
+              "write": 1,
+              "delete": 1
+            },
+            "wan": {
+              "read": 1,
+              "write": 1,
+              "delete": 1
+            }
+          },
+          "impl": "rucio.rse.protocols.posix.Default"
+        }
+      }
+    },
+    "storage_usage_tool": "rucio.rse.protocols.posix.Default.getSpace"
+  },
+  "MOCK":{
+    "backend_type": "MOCK",
+    "city": "Upton",
+    "country_name": "United States",
+    "staging_area": false,
+    "continent": "NA",
+    "ISP": "Brookhaven National Laboratory",
+    "protocols": {
+      "default": "mock",
+      "supported": {
+        "https": {
+          "impl": "rucio.rse.protocols.webdav.Default",
+          "hostname": "mock.com",
+          "port": 2880,
+          "scheme": "https",
+          "prefix": "/pnfs/rucio/disk-only/scratchdisk/",
+          "domains": {
+            "lan": {
+              "read": 1,
+              "write": 1,
+              "delete": 1
+            },
+            "wan": {
+              "read": 1,
+              "write": 1,
+              "delete": 1
+            }
+          }
+        },
+        "srm": {
+          "impl": "rucio.rse.protocols.srm.Default",
+          "hostname": "mock.com",
+          "scheme": "srm",
+          "port": 8443,
+          "prefix": "/rucio/tmpdisk/rucio_tests/",
+          "extended_attributes": {"web_service_path": "/srm/managerv2?SFN=", "space_token": "RUCIODISK"},
+          "domains": {
+            "lan": {
+              "read": 2,
+              "write": 2,
+              "delete": 2
+            },
+            "wan": {
+              "read": 2,
+              "write": 2,
+              "delete": 2
+            }
+          }
+        },
+        "mock": {
+          "impl": "rucio.rse.protocols.mock.Default",
+          "domains": {
+            "lan": {
+              "read": 1,
+              "write": 1,
+              "delete": 1
+            },
+            "wan": {
+              "read": 1,
+              "write": 1,
+              "delete": 1
+            }
+          },
+          "prefix": "/tmp/rucio_rse/"
+        }
+      }
+    },
+    "storage_usage_tool": "rucio.rse.protocols.posix.Default.getSpace"
+  },
+  "MOCK2":{
+    "backend_type": "POSIX",
+    "deterministic": false,
+    "city": "Geneva",
+    "region_code": "07",
+    "country_name": "Switzerland",
+    "continent": "EU",
+    "time_zone": "Europe/Zurich",
+    "staging_area": false,
+    "ISP": "CERN- LHC",
+    "protocols": {
+      "default": "mock",
+      "supported": {
+        "mock": {
+          "prefix": "/tmp/rucio_rse/",
+          "impl": "rucio.rse.protocols.posix.Default",
+          "scheme": "mock",
+          "domains": {
+            "lan": {
+              "read": 1,
+              "write": 1,
+              "delete": 1
+            },
+            "wan": {
+              "read": 1,
+              "write": 1,
+              "delete": 1
+            }
+          }
+        },
+        "srm": {
+          "impl": "rucio.rse.protocols.srm.Default",
+          "hostname": "mock2.com",
+          "scheme": "srm",
+          "port": 8443,
+          "prefix": "/rucio/tmpdisk/rucio_tests/",
+          "extended_attributes": {"web_service_path": "/srm/managerv2?SFN=", "space_token": "RUCIODISK"},
+          "domains": {
+            "lan": {
+              "read": 2,
+              "write": 2,
+              "delete": 2
+            },
+            "wan": {
+              "read": 2,
+              "write": 2,
+              "delete": 2
+            }
+          }
+        }
+      }
+    },
+    "storage_usage_tool": "rucio.rse.protocols.posix.Default.getSpace"
+  },
+  "MOCK3":{
+    "backend_type": "POSIX",
+    "deterministic": true,
+    "city": "Geneva",
+    "region_code": "07",
+    "country_name": "Switzerland",
+    "continent": "EU",
+    "time_zone": "Europe/Zurich",
+    "ISP": "CERN- LHC",
+    "protocols": {
+      "default": "file",
+      "supported": {
+        "https": {
+          "impl": "rucio.rse.protocols.webdav.Default",
+          "hostname": "mock3.com",
+          "port": 2880,
+          "scheme": "https",
+          "prefix": "/pnfs/rucio/disk-only/scratchdisk/",
+          "domains": {
+            "lan": {
+              "read": 1,
+              "write": 1,
+              "delete": 1
+            },
+            "wan": {
+              "read": 1,
+              "write": 1,
+              "delete": 1
+            }
+          }
+        },
+        "srm": {
+          "impl": "rucio.rse.protocols.srm.Default",
+          "hostname": "mock3.com",
+          "scheme": "srm",
+          "port": 8443,
+          "prefix": "/rucio/tmpdisk/rucio_tests/",
+          "extended_attributes": {"web_service_path": "/srm/managerv2?SFN=", "space_token": "RUCIODISK"},
+          "domains": {
+            "lan": {
+              "read": 1,
+              "write": 1,
+              "delete": 1
+            },
+            "wan": {
+              "read": 1,
+              "write": 1,
+              "delete": 1
+            }
+          }
+        },
+        "file": {
+          "prefix": "/tmp/rucio_rse/",
+          "impl": "rucio.rse.protocols.posix.Default",
+          "extended_attributes": {"web_service_path": "/srm/managerv2?SFN=", "space_token": "ATLASDATATAPE"},
+          "domains": {
+            "lan": {
+              "read": 1,
+              "write": 1,
+              "delete": 1
+            },
+            "wan": {
+              "read": 1,
+              "write": 1,
+              "delete": 1
+            }
+          }
+        }
+      }
+    },
+    "storage_usage_tool": "rucio.rse.protocols.posix.Default.getSpace"
+  },
+  "MOCK4":{
+    "backend_type": "POSIX",
+    "deterministic": true,
+    "protocols": {
+      "default": "file",
+      "supported": {
+        "file": {
+          "prefix": "/tmp/rucio_rse/",
+          "impl": "rucio.rse.protocols.posix.Default",
+          "extended_attributes": {"web_service_path": "/srm/managerv2?SFN=", "space_token": "ATLASDATATAPE"},
+          "domains": {
+            "lan": {
+              "read": 1,
+              "write": 1,
+              "delete": 1
+            },
+            "wan": {
+              "read": 1,
+              "write": 1,
+              "delete": 1
+            }
+          }
+        }
+      }
+    },
+    "storage_usage_tool": "rucio.rse.protocols.posix.Default.getSpace"
+  },
+  "MOCK5":{
+    "backend_type": "POSIX",
+    "deterministic": true,
+    "protocols": {
+      "default": "file",
+      "supported": {
+        "file": {
+          "prefix": "/tmp/rucio_rse/",
+          "impl": "rucio.rse.protocols.posix.Default",
+          "extended_attributes": {"web_service_path": "/srm/managerv2?SFN=", "space_token": "ATLASDATATAPE"},
+          "domains": {
+            "lan": {
+              "read": 1,
+              "write": 1,
+              "delete": 1
+            },
+            "wan": {
+              "read": 1,
+              "write": 1,
+              "delete": 1
+            }
+          }
+        }
+      }
+    },
+    "storage_usage_tool": "rucio.rse.protocols.posix.Default.getSpace"
+  },
+  "MOCK_SUSPICIOUS":{
+    "backend_type": "POSIX",
+    "deterministic": true,
+    "protocols": {
+      "default": "file",
+      "supported": {
+        "file": {
+          "prefix": "/tmp/rucio_rse1/",
+          "impl": "rucio.rse.protocols.posix.Default",
+          "extended_attributes": {"web_service_path": "/srm/managerv2?SFN=", "space_token": "ATLASDATADISK1"},
+          "domains": {
+            "lan": {
+              "read": 1,
+              "write": 1,
+              "delete": 1
+            },
+            "wan": {
+              "read": 1,
+              "write": 1,
+              "delete": 1
+            }
+          }
+        }
+      }
+    },
+    "storage_usage_tool": "rucio.rse.protocols.posix.Default.getSpace"
+  },
+  "MOCK_RECOVERY":{
+    "backend_type": "POSIX",
+    "deterministic": true,
+    "protocols": {
+      "default": "file",
+      "supported": {
+        "file": {
+          "prefix": "/tmp/rucio_rse2/",
+          "impl": "rucio.rse.protocols.posix.Default",
+          "extended_attributes": {"web_service_path": "/srm/managerv2?SFN=", "space_token": "ATLASDATADISK2"},
+          "domains": {
+            "lan": {
+              "read": 1,
+              "write": 1,
+              "delete": 1
+            },
+            "wan": {
+              "read": 1,
+              "write": 1,
+              "delete": 1
+            }
+          }
+        }
+      }
+    },
+    "storage_usage_tool": "rucio.rse.protocols.posix.Default.getSpace"
+  },
+  "FZK-LCG2_SCRATCHDISK":{
+    "backend_type": "dCache",
+    "protocols": {
+      "default": "https",
+      "supported": {
+        "https": {
+          "impl": "rucio.rse.protocols.webdav.Default",
+          "hostname": "f01-060-114-e.gridka.de.mock",
+          "port": 2880,
+          "scheme": "https",
+          "prefix": "/pnfs/gridka.de/atlas/disk-only/atlasscratchdisk/",
+          "domains": {
+            "lan": {
+              "read": 1,
+              "write": 1,
+              "delete": 1
+            },
+            "wan": {
+              "read": 1,
+              "write": 1,
+              "delete": 1
+            }
+          }
+        },
+        "srm": {
+          "impl": "rucio.rse.protocols.srm.Default",
+          "hostname": "srm://atlassrm-fzk.gridka.de.mock",
+          "prefix": "/pnfs/gridka.de/atlas/disk-only/atlasscratchdisk/",
+          "extended_attributes": {"web_service_path": "/srm/managerv2?SFN=", "space_token": "ATLASSCRATCHDISK"},
+          "domains": {
+            "lan": {
+              "read": 2,
+              "write": 2,
+              "delete": 2
+            },
+            "wan": {
+              "read": 2,
+              "write": 2,
+              "delete": 2
+            }
+          }
+        }
+      }
+    },
+    "storage_usage_tool": "rucio.rse.protocols.webdav.Default.getSpace"
+  },
+  "CERN-PROD_TZERO":{
+    "backend_type": "Castor",
+    "deterministic": false,
+    "protocols": {
+      "default": "castor",
+      "supported": {
+        "rfio": {
+          "impl": "rucio.rse.protocols.rfio.Default",
+          "hostname": "castoratlas.cern.ch.mock",
+          "port": 9002,
+          "prefix": "/castor/cern.ch/grid/atlas/tzero/",
+          "domains": {
+            "lan": {
+              "read": 1,
+              "write": 1,
+              "delete": 1
+            },
+            "wan": {
+              "read": 1,
+              "write": 1,
+              "delete": 1
+            }
+          },
+          "extended_attributes": "{'The One After the Port': '/srm/managerv2'}"
+        }
+      }
+    },
+    "storage_usage_tool": "rucio.rse.protocols.webdav.Default.getSpace"
+  },
+  "WJ-XROOTD":{
+    "backend_type": "XROOTD",
+    "deterministic": true,
+    "protocols": {
+      "default": "xroot",
+      "supported": {
+        "xroot": {
+          "prefix": "/tmp/rucio_rse/",
+          "impl": "rucio.rse.protocols.xrootd.Default",
+          "hostname": "chenghsi-eos00.cern.ch.mock",
+          "port": 1094,
+          "domains": {
+            "lan": {
+              "read": 1,
+              "write": 1,
+              "delete": 1
+            },
+            "wan": {
+              "read": 1,
+              "write": 1,
+              "delete": 1
+            }
+          }
+        }
+      }
+    },
+    "storage_usage_tool": "rucio.rse.protocols.xrootd.Default.getSpace"
+  },
+  "SSH_DISK":{
+    "backend_type": "SSH",
+    "deterministic": true,
+    "protocols": {
+      "default": "ssh",
+      "supported": {
+        "ssh": {
+          "prefix": "/tmp/rucio_rse/",
+          "impl": "rucio.rse.protocols.ssh.Default",
+          "hostname": "ssh1",
+          "scheme": "scp",
+          "extended_attributes": {"user": "root"},
+          "port": 22,
+          "domains": {
+            "lan": {
+              "read": 1,
+              "write": 1,
+              "delete": 1
+            },
+            "wan": {
+              "read": 1,
+              "write": 1,
+              "delete": 1
+            }
+          }
+        },
+      "rsync": {
+        "prefix": "/tmp/rucio_rse/",
+        "impl": "rucio.rse.protocols.ssh.Rsync",
+        "hostname": "ssh1",
+        "scheme": "rsync",
+        "extended_attributes": {"user": "root"},
+        "port": 22,
+        "domains": {
+            "lan": {
+            "read": 2,
+              "write": 2,
+              "delete": 2
+            },
+            "wan": {
+              "read": 2,
+              "write": 2,
+              "delete": 2
+            }
+          }
+        },
+      "rclone": {
+        "prefix": "/tmp/rucio_rse/",
+        "impl": "rucio.rse.protocols.rclone.Default",
+        "scheme": "rclone",
+        "port": 22,
+        "domains": {
+            "lan": {
+              "read": 3,
+              "write": 3,
+              "delete": 3
+            },
+            "wan": {
+              "read": 3,
+              "write": 3,
+              "delete": 3
+            }
+          }
+        }        
+      }
+    },
+    "storage_usage_tool": "rucio.rse.protocols.ssh.Default.getSpace"
+  }
+}
