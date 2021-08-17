@@ -13,5 +13,8 @@ LogLevel=DEBUG
 MinRequiredFreeRAM = 16
 MaxUrlCopyProcesses = 4
 
+StagingBulkSize = 1
+StagingWaitingFactor = 1
+
 [roles]
 Public = all:transfer;all:config;all:datamanagement
