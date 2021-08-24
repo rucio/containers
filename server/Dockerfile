@@ -25,8 +25,8 @@ RUN yum -y install https://repo.ius.io/ius-release-el7.rpm &&\
     yum clean all && \
     rm -rf /var/cache/yum
 
-RUN rpm -i https://download.oracle.com/otn_software/linux/instantclient/211000/oracle-instantclient-basiclite-21.1.0.0.0-1.x86_64.rpm; \
-    echo "/usr/lib/oracle/21/client64/lib" >/etc/ld.so.conf.d/oracle.conf; \
+RUN rpm -i https://download.oracle.com/otn_software/linux/instantclient/1912000/oracle-instantclient19.12-basiclite-19.12.0.0.0-1.x86_64.rpm; \
+    echo "/usr/lib/oracle/19/client64/lib" >/etc/ld.so.conf.d/oracle.conf; \
     ldconfig
 RUN python3 -m pip install --no-cache-dir --upgrade pip
 RUN python3 -m pip install --no-cache-dir --upgrade setuptools
