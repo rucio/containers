@@ -83,7 +83,39 @@ CacheRoot /tmp
 {% if RUCIO_DEFINE_ALIASES|default('False') == 'True' %}
  Include /opt/rucio/etc/aliases.conf
 {% else %}
+{% if RUCIO_SERVER_TYPE|default('api') == 'flask' %}
  WSGIScriptAlias /                       /usr/local/lib/python3.6/site-packages/rucio/web/rest/flaskapi/v1/main.py process-group=rucio application-group=rucio
+{% else %}
+ WSGIScriptAlias /ping                   /usr/local/lib/python3.6/site-packages/rucio/web/rest/ping.py process-group=rucio application-group=rucio
+{% if RUCIO_SERVER_TYPE|default('api') == 'all' or RUCIO_SERVER_TYPE|default('api') == 'api' %}
+ WSGIScriptAlias /accounts               /usr/local/lib/python3.6/site-packages/rucio/web/rest/account.py process-group=rucio application-group=rucio
+ WSGIScriptAlias /accountlimits          /usr/local/lib/python3.6/site-packages/rucio/web/rest/account_limit.py process-group=rucio application-group=rucio
+ WSGIScriptAlias /config                 /usr/local/lib/python3.6/site-packages/rucio/web/rest/config.py process-group=rucio application-group=rucio
+ WSGIScriptAlias /credentials            /usr/local/lib/python3.6/site-packages/rucio/web/rest/credential.py process-group=rucio application-group=rucio
+ WSGIScriptAlias /dids                   /usr/local/lib/python3.6/site-packages/rucio/web/rest/did.py process-group=rucio application-group=rucio
+ WSGIScriptAlias /export                 /usr/local/lib/python3.6/site-packages/rucio/web/rest/exporter.py process-group=rucio application-group=rucio
+ WSGIScriptAlias /identities             /usr/local/lib/python3.6/site-packages/rucio/web/rest/identity.py process-group=rucio application-group=rucio
+ WSGIScriptAlias /import                 /usr/local/lib/python3.6/site-packages/rucio/web/rest/importer.py process-group=rucio application-group=rucio
+ WSGIScriptAlias /heartbeats             /usr/local/lib/python3.6/site-packages/rucio/web/rest/heartbeat.py process-group=rucio application-group=rucio
+ WSGIScriptAlias /locks                  /usr/local/lib/python3.6/site-packages/rucio/web/rest/lock.py process-group=rucio application-group=rucio
+ WSGIScriptAlias /meta                   /usr/local/lib/python3.6/site-packages/rucio/web/rest/meta.py process-group=rucio application-group=rucio
+ WSGIScriptAlias /ping                   /usr/local/lib/python3.6/site-packages/rucio/web/rest/ping.py process-group=rucio application-group=rucio
+ WSGIScriptAlias /redirect               /usr/local/lib/python3.6/site-packages/rucio/web/rest/redirect.py process-group=rucio application-group=rucio
+ WSGIScriptAlias /replicas               /usr/local/lib/python3.6/site-packages/rucio/web/rest/replica.py process-group=rucio application-group=rucio
+ WSGIScriptAlias /requests               /usr/local/lib/python3.6/site-packages/rucio/web/rest/request.py process-group=rucio application-group=rucio
+ WSGIScriptAlias /rses                   /usr/local/lib/python3.6/site-packages/rucio/web/rest/rse.py process-group=rucio application-group=rucio
+ WSGIScriptAlias /rules                  /usr/local/lib/python3.6/site-packages/rucio/web/rest/rule.py process-group=rucio application-group=rucio
+ WSGIScriptAlias /scopes                 /usr/local/lib/python3.6/site-packages/rucio/web/rest/scope.py process-group=rucio application-group=rucio
+ WSGIScriptAlias /subscriptions          /usr/local/lib/python3.6/site-packages/rucio/web/rest/subscription.py process-group=rucio application-group=rucio
+ WSGIScriptAlias /lifetime_exceptions    /usr/local/lib/python3.6/site-packages/rucio/web/rest/lifetime_exception.py process-group=rucio application-group=rucio
+{% endif %}
+{% if RUCIO_SERVER_TYPE|default('api') == 'all' or RUCIO_SERVER_TYPE|default('api') == 'auth' %}
+ WSGIScriptAlias /auth                   /usr/local/lib/python3.6/site-packages/rucio/web/rest/authentication.py process-group=rucio application-group=rucio
+{% endif %}
+{% if RUCIO_SERVER_TYPE|default('api') == 'all' or RUCIO_SERVER_TYPE|default('api') == 'trace' %}
+ WSGIScriptAlias /traces                 /usr/local/lib/python3.6/site-packages/rucio/web/rest/trace.py process-group=rucio application-group=rucio
+{% endif %}
+{% endif %}
 {% endif %}
 
 {% if RUCIO_HTTPD_ENCODED_SLASHES|default('False') == 'True' %}
