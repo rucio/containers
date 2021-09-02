@@ -32,25 +32,29 @@ jobs:
         uses: actions/checkout@v2
         
       - name: Get the new Release Tag
+        if: ${{ github.repository_owner == 'maany' }}
         id: release
         shell: bash
         run: | 
           GIT_TAG=$(echo $(git describe --tags --abbrev=0))
-          IMAGE_NAME=$(echo '${{ github.repository_owner }}/rucio-${{ matrix.context_dir }}:release'-$GIT_TAG)
+          IMAGE_TAG=$(echo '${{ github.repository_owner }}/rucio-${{ matrix.context_dir }}:release'-$GIT_TAG)
+          LATEST_TAG=$(echo '${{ github.repository_owner }}/rucio-${{ matrix.context_dir }}:latest')
+          DOCKER_HUB_TAGS=$IMAGE_TAG,$LATEST_TAG
           echo ::set-output name=tag::$GIT_TAG
-          echo ::set-output name=image::$IMAGE_NAME
-          echo $IMAGE_NAME
+          echo ::set-output name=tags::$DOCKER_HUB_TAGS
       
       - name: Prepare Docker Image name
         shell: bash
         run: |
+          echo 'The following images will be pushed'
           echo '${{ steps.release.outputs.image }}'
-      
+          echo '${{ steps.release.outputs.latest }}'
+
       - name: Build and push
         id: docker_build
         uses: docker/build-push-action@v2
         with:
           context: ./${{ matrix.context_dir }}
           push: true
-          tags: '${{ steps.release.outputs.image }}'
+          tags: '${{ steps.release.outputs.tags }}'
           build-args: TAG=${{ steps.release.outputs.tag }}
