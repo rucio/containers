@@ -1,11 +1,6 @@
 name: docker-auto-build
 
 on:
-  push:
-    branches:
-      - '!*'
-    tags:
-      - '!*'
   release: 
     types: [created]
 
