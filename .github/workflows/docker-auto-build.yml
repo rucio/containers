@@ -27,7 +27,6 @@ jobs:
         uses: actions/checkout@v2
         
       - name: Get the new Release Tag
-        if: ${{ github.repository_owner == 'maany' }}
         id: release
         shell: bash
         run: | 
