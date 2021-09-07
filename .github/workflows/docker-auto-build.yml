@@ -32,7 +32,7 @@ jobs:
         run: | 
           GIT_TAG=$(echo $(git describe --tags --abbrev=0))
           IMAGE_TAG=$(echo '${{ github.repository_owner }}/rucio-${{ matrix.context_dir }}:release'-$GIT_TAG)
-          LATEST_TAG=$(echo '${{ github.repository_owner }}/rucio-${{ matrix.context_dir }}:latest')
+          # LATEST_TAG=$(echo '${{ github.repository_owner }}/rucio-${{ matrix.context_dir }}:latest')
           DOCKER_HUB_TAGS=$IMAGE_TAG,$LATEST_TAG
           echo ::set-output name=tag::$GIT_TAG
           echo ::set-output name=tags::$DOCKER_HUB_TAGS
