@@ -84,9 +84,9 @@ jobs:
           GIT_MASTER_LATEST_COMMIT_SHA=$(echo $(git ls-remote --heads origin | grep master  |  awk -F '\t' '{print $1}'))
 
           if [[ ${CONTEXT} =~ .*"prepend-rucio".* ]]; then
-          BASE_TAG+="rucio-$CONTEXT_DIR"
+            BASE_TAG+="rucio-$CONTEXT_DIR"
           else
-          BASE_TAG+=$CONTEXT_DIR
+            BASE_TAG+=$CONTEXT_DIR
           fi
 
           LATEST_TAG=''
