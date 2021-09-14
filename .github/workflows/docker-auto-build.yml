@@ -16,7 +16,7 @@ jobs:
           'daemons, prepend-rucio, prepend-release, push-tagged, push-latest',
           'ui, prepend-rucio, prepend-release, push-tagged, push-latest',
           'init, prepend-rucio, prepend-release, push-tagged, push-latest',
-          'probes, push-latest'
+          'probes, push-latest',
           'fts, push-latest',
           'fts-cron, push-latest',
           'ssh, push-latest',
