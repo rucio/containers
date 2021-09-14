@@ -94,18 +94,18 @@ jobs:
           TAGS_TO_PUSH=''
 
           if [[ ! ${CONTEXT} =~ .*"prepend-release".* && ! ${CONTEXT} =~ .*"push-tagged".* ]]; then
-          echo "Image with release tag will not be pushed! Will check if image with the latest tag can be pushed"
+            echo "Image with release tag will not be pushed! Will check if image with the latest tag can be pushed"
           elif [[ ! ${CONTEXT} =~ .*"prepend-release".* && ${CONTEXT} =~ .*"push-tagged".* ]]; then
-          IMAGE_TAG+="$BASE_TAG:$GIT_TAG"
+            IMAGE_TAG+="$BASE_TAG:$GIT_TAG"
           elif [[ ${CONTEXT} =~ .*"prepend-release".* && ! ${CONTEXT} =~ .*"push-tagged".* ]]; then
-          echo "Config Error!!"
+            echo "Config Error!!"
           else
-          IMAGE_TAG+="$BASE_TAG:release-$GIT_TAG"
+            IMAGE_TAG+="$BASE_TAG:release-$GIT_TAG"
           fi
 
           if [[ "${CONTEXT}" =~ .*"push-latest".* &&  $GIT_MASTER_LATEST_COMMIT_SHA == $GIT_TAG_COMMIT_SHA  ]]; then
               echo "There's a match between the SHA of latest commit on Master ($GIT_MASTER_LATEST_COMMIT_SHA) and \
-                  latest commit on current tag $TAG ($GIT_TAG_COMMIT_SHA)"
+                    latest commit on current tag $TAG ($GIT_TAG_COMMIT_SHA)"
               echo "An image with latest tag will be pushed to Docker Hub"
               LATEST_TAG="$BASE_TAG:latest"
           elif [[ "${CONTEXT}" =~ .*"push-latest".*  ]]; then
@@ -115,8 +115,8 @@ jobs:
           fi
 
           if [[ "${CONTEXT}" =~ .*"force-latest".* ]]; then
-          echo "Will force push the latest tag"  
-          LATEST_TAG="$BASE_TAG:latest"
+            echo "Will force push the latest tag"  
+            LATEST_TAG="$BASE_TAG:latest"
           fi
 
           if [[ -z "$IMAGE_TAG" && -z "$LATEST_TAG" ]]; then
@@ -130,8 +130,8 @@ jobs:
           fi
 
           if [[ "${CONTEXT}" =~ .*"latest-only".* ]]; then
-          echo "Only the latest tag will be pushed"  
-          TAGS_TO_PUSH="$BASE_TAG:latest"
+            echo "Only the latest tag will be pushed"  
+            TAGS_TO_PUSH="$BASE_TAG:latest"
           fi
 
           echo ::set-output name=git_tag::$GIT_TAG
