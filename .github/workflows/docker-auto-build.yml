@@ -53,11 +53,11 @@ jobs:
           # CONFIG PARAMS
           # -------------
           # prepend-rucio: adds `rucio-` to image name
-          # prepend-release: adds `release-` to the image name
-          # push-tagged: adds the $GIT_TAG to the image name
-          # push-latest: if present, and the latest commit SHA on the master branch 
-          #              matches the last commit SHA of the current tag, adds the release 
-          #              version to the image name.
+          # prepend-release: adds `release-` to image name
+          # push-tagged: adds the $GIT_TAG to image name
+          # push-latest: if present, and the latest commit SHA on master branch 
+          #              matches the last commmit SHA of the current tag, adds release 
+          #              version to image name.
           # force-latest: if present, the latest tag will be force pushed to Docker Hub
           # latest-only: if present, only the latest tag will be pushed to Docker Hub
           #
@@ -65,7 +65,7 @@ jobs:
           # The configuration parammeters are: preprend_release, push_tagged
           # | prepend_release 	| push_tagged 	| image_tag         	|
           # |-----------------	|-------------	|-------------------	|
-          # | 0               	| 0           	| Config Error      	|
+          # | 0               	| 0           	| Check for latest tag|
           # | 0               	| 1           	| :$GIT_TAG         	|
           # | 0               	| 0           	| Config Error      	|
           # | 0               	| 1           	| :release-$GIT_TAG 	|
@@ -87,9 +87,9 @@ jobs:
           LATEST_TAG=''
           IMAGE_TAG+=''
           TAGS_TO_PUSH=''
-          
+
           if [[ ! ${CONTEXT} =~ .*"prepend-release".* && ! ${CONTEXT} =~ .*"push-tagged".* ]]; then
-            echo "Config Error!!"
+            echo "Image with release tag will not be pushed! Will check if image with the latest tag can be pushed"
           elif [[ ! ${CONTEXT} =~ .*"prepend-release".* && ${CONTEXT} =~ .*"push-tagged".* ]]; then
             IMAGE_TAG+="$BASE_TAG:$GIT_TAG"
           elif [[ ${CONTEXT} =~ .*"prepend-release".* && ! ${CONTEXT} =~ .*"push-tagged".* ]]; then
@@ -132,7 +132,7 @@ jobs:
           echo ::set-output name=git_tag::$GIT_TAG
           echo ::set-output name=tags::$TAGS_TO_PUSH
           echo ::set-output name=context_dir::$CONTEXT_DIR
-          
+
           echo "For tag: $GIT_TAG, the following images will be pushed: $TAGS_TO_PUSH"
           
       - name: Set up Docker Buildx
