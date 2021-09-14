@@ -85,6 +85,7 @@ usercert = {{ RUCIO_CFG_CONVEYOR_USERCERT | default('/opt/rucio/tools/x509up') }
 {% if RUCIO_CFG_CONVEYOR_GLOBUS_AUTH_APP is defined %}globus_auth_app = {{ RUCIO_CFG_CONVEYOR_GLOBUS_AUTH_APP }}{% endif %}
 {% if RUCIO_CFG_CONVEYOR_TRANSFERTYPE is defined %}transfertype = {{ RUCIO_CFG_CONVEYOR_TRANSFERTYPE }}{% endif %}
 {% if RUCIO_CFG_CONVEYOR_FILTER_TRANSFERTOOL is defined %}filter_transfertool = {{ RUCIO_CFG_CONVEYOR_FILTER_TRANSFERTOOL }}{% endif %}
+{% if RUCIO_CFG_CONVEYOR_MAX_TIME_IN_QUEUE is defined %}max_time_in_queue = {{ RUCIO_CFG_CONVEYOR_MAX_TIME_IN_QUEUE }}{% endif %}
 
 [messaging-fts3]
 port = {{ RUCIO_CFG_MESSAGING_FTS3_PORT | default('61123') }}
