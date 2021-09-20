@@ -108,7 +108,7 @@ port = {{ RUCIO_CFG_MESSAGING_HERMES_PORT | default('61023') }}
 ssl_key_file = {{ RUCIO_CFG_MESSAGING_HERMES_SSL_KEY_FILE | default('/etc/grid-security/hostkey.pem') }}
 ssl_cert_file = {{ RUCIO_CFG_MESSAGING_HERMES_SSL_CERT_FILE | default('/etc/grid-security/hostcert.pem') }}
 destination = {{ RUCIO_CFG_MESSAGING_HERMES_DESTINATION | default('/topic/rucio.events') }}
-brokers = {{ RUCIO_CFG_MESSAGING_HERMES_BROKERS | default('atlas-test-mb.cern.ch') }}
+brokers = {{ RUCIO_CFG_MESSAGING_HERMES_BROKERS | default('localhost') }}
 {% if RUCIO_CFG_MESSAGING_HERMES_BROKER_VIRTUAL_HOST is defined %}broker_virtual_host = {{ RUCIO_CFG_MESSAGING_HERMES_BROKER_VIRTUAL_HOST }}{% endif %}
 voname = {{ RUCIO_CFG_MESSAGING_HERMES_VONAME | default('atlas') }}
 email_from = {{ RUCIO_CFG_MESSAGING_HERMES_EMAIL_FROM | default('Rucio <atlas-adc-ddm-support@cern.ch>') }}
@@ -119,7 +119,7 @@ email_from = {{ RUCIO_CFG_MESSAGING_HERMES_EMAIL_FROM | default('Rucio <atlas-ad
 {% if RUCIO_CFG_MESSAGING_HERMES2_INFLUXDB_ENDPOINT is defined %}influxdb_endpoint = {{ RUCIO_CFG_MESSAGING_HERMES2_INFLUXDB_ENDPOINT }}{% endif %}
 
 [tracer-kronos]
-brokers= {{ RUCIO_CFG_TRACER_KRONOS_BROKERS | default('atlas-test-mb.cern.ch') }}
+brokers= {{ RUCIO_CFG_TRACER_KRONOS_BROKERS | default('localhost') }}
 port= {{ RUCIO_CFG_TRACER_KRONOS_PORT | default('61013') }}
 ssl_key_file = {{ RUCIO_CFG_TRACER_KRONOS_SSL_KEY_FILE | default('/etc/grid-security/hostkey.pem') }}
 ssl_cert_file = {{ RUCIO_CFG_TRACER_KRONOS_SSL_CERT_FILE | default('/etc/grid-security/hostcert.pem') }}
