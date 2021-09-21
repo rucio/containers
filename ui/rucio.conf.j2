@@ -61,7 +61,7 @@ CacheRoot /tmp
  LogLevel info
 {% endif %}
 
-{% if RUCIO_ENABLE_LOGFILE|default('False') == 'True' %}
+{% if RUCIO_ENABLE_LOGS|default('False') == 'True' %}
 {% if RUCIO_HTTPD_LOG_DIR is defined %}
  CustomLog {{RUCIO_HTTPD_LOG_DIR}}/access_log combinedrucio
  ErrorLog {{RUCIO_HTTPD_LOG_DIR}}/error_log
