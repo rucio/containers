@@ -59,13 +59,13 @@ Same as `RUCIO_PROXY_SCHEME` but for the authentication server.
 
 If you are using SSL and want use `SSLCACertificatePath` and `SSLCARevocationPath` you can do so by specifying the path in this variable.
 
-### `RUCIO_ENABLE_LOGFILE`
+### `RUCIO_ENABLE_LOGS`
 
 By default the log output of the web server is written to stdout and stderr. If you set this variable to `True` the output will be written to `access_log` and `error_log` under `/var/log/httpd`.
 
 ### `RUCIO_HTTPD_LOG_DIR`
 
-If `RUCIO_ENABLE_LOGFILE` is set use this variable to change the default logfile output directory.
+If `RUCIO_ENABLE_LOGS` is set use this variable to change the default logfile output directory.
 
 ### `RUCIO_LOG_LEVEL`
 
