@@ -10,7 +10,7 @@ jobs:
     
     strategy:
       matrix:
-        context_dir: ['clients', 'server', 'daemons']
+        context_dir: ['clients', 'server', 'daemons', 'ruciofs']
       fail-fast: false
     
     steps:      
