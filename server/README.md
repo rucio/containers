@@ -66,7 +66,7 @@ By default the output of the Apache web server is written directly to stdout and
       -v /tmp/rucio.cfg:/opt/rucio/etc/rucio.cfg \
       -v /tmp/logs:/var/log/httpd \
       -p 80:80 \
-      -e RUCIO_ENABLE_LOGFILE=True \
+      -e RUCIO_ENABLE_LOGS=True \
       rucio/rucio-server
 
 ## Environment Variables
@@ -93,7 +93,7 @@ This variable is used to set SSLCARevocationCheck. The default value is "chain".
 
 By default the web server is configured with all common rest endpoints except the authentication endpoint. If you want to specify your own set of aliases you can set this variable to `True`. The web server then expects an alias file under `/opt/rucio/etc/aliases.conf`
 
-### `RUCIO_ENABLE_LOGFILE`
+### `RUCIO_ENABLE_LOGS`
 
 By default the log output of the web server is written to stdout and stderr. If you set this variable to `True` the output will be written to `access_log` and `error_log` under `/var/log/httpd`.
 

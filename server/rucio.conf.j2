@@ -72,7 +72,7 @@ CacheRoot /tmp
  LogLevel info
 {% endif %}
 
-{% if RUCIO_ENABLE_LOGFILE|default('False') == 'True' %}
+{% if RUCIO_ENABLE_LOGS|default('False') == 'True' %}
  CustomLog logs/access_log combinedrucio
  ErrorLog logs/error_log
 {% else %}
