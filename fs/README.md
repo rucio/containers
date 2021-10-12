@@ -28,7 +28,7 @@ Starting the container using the environment with userpass authentication:
       -e RUCIO_CFG_PASSWORD=secret \
       -e RUCIO_CFG_ACCOUNT=root \
       --cap-add SYS_ADMIN --device /dev/fuse \
-      --name=ruciofs \
+      --name=rucio-fs \
       -it -d rucio/rucio-fs
 
 With X509 authentication:
@@ -43,7 +43,7 @@ With X509 authentication:
       -v /opt/rucio/etc/usercert.pem:/opt/rucio/etc/usercert.pem \
       -v /opt/rucio/etc/userkey.pem:/opt/rucio/etc/userkey.pem \
       --cap-add SYS_ADMIN --device /dev/fuse \
-      --name=ruciofs \
+      --name=rucio-fs \
       -it -d rucio/rucio-fs
 
 Using host's proxy:
@@ -57,7 +57,7 @@ Using host's proxy:
       -e RUCIO_CFG_ACCOUNT=root \
       -v $(X509_USER_PROXY):/tmp/x509up_u0
       --cap-add SYS_ADMIN --device /dev/fuse \
-      --name=ruciofs \
+      --name=rucio-fs \
       -it -d rucio/rucio-fs
 
 Allowing ruciofs access from host requires adding the following docker run argument:
@@ -70,7 +70,7 @@ If you already have one or more rucio.cfg files you can also use those all toget
       -v /tmp/rucio.cfg:/ruciofs-settings/rucio.cfg \
       [-v /tmp/rucio1.cfg:/ruciofs-settings/rucio1.cfg] \
       --cap-add SYS_ADMIN --device /dev/fuse \
-      --name=ruciofs \
+      --name=rucio-fs \
       -it -d rucio/rucio-fs
 
 In case your RSE require x509 auth we recommend installing the GRID CA certificates.
