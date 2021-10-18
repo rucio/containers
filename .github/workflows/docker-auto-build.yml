@@ -21,7 +21,8 @@ jobs:
           'fts-cron, push-latest',
           'ssh, push-latest',
           'xrootd, push-latest',
-          'xrootd-noauth, push-latest'
+          'xrootd-noauth, push-latest',
+          'fs, prepend-rucio, prepend-release, push-tagged, push-latest'
           ]
       fail-fast: false
     
