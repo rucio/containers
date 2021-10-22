@@ -1,4 +1,5 @@
-FROM rucio/rucio-clients:$TAG
+ARG TAG
+FROM rucio/rucio-clients:release-$TAG
 
 USER root
 RUN yum install -y git cmake3 libcurl-devel fuse-devel
