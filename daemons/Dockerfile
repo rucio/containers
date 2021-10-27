@@ -48,7 +48,8 @@ RUN yum install -y \
     yum clean all && \
     rm -rf /var/cache/yum
 
-ADD rucio.cfg.j2 /tmp/
+ADD rucio.config.default.cfg /tmp/
+ADD merge_rucio_configs.py /tmp/
 ADD start-daemon.sh /
 
 RUN mkdir /var/log/rucio
