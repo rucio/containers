@@ -1,3 +1,6 @@
+[core]
+{% if RUCIO_CFG_CORE_DEFAULT_MAIL_FROM is defined %}default_mail_from = {{ RUCIO_CFG_CORE_DEFAULT_MAIL_FROM }}{% endif %}
+
 [common]
 logdir = {{ RUCIO_CFG_COMMON_LOGDIR | default('/var/log/rucio') }}
 loglevel = {{ RUCIO_CFG_COMMON_LOGLEVEL | default('DEBUG') }}
