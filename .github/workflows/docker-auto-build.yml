@@ -18,7 +18,8 @@ jobs:
           'init, prepend-rucio, prepend-release, push-tagged, push-latest',
           'probes, push-latest',
           'fts, push-latest',
-          'fts-cron, push-latest',
+          'fts-cron/Dockerfile_cpp, push-latest',
+          'fts-cron/Dockerfile_java, custom-tag=java',
           'ssh, push-latest',
           'xrootd, push-latest',
           'xrootd-noauth, push-latest',
@@ -61,7 +62,8 @@ jobs:
           # {sub_directory}, {parent_image}, {config_paramms}
           # where,
           #     sub_directory: name of the sub_directory in rucio/containers reposistory that contains
-          #                    the Dockerfile
+          #                    the Dockerfile. If the Dockerfile has a different name, then the full path to the Dockerfile must be specified.
+          #                    For example, fts-cron/Dockerfile_cpp is also a valid value.
           #     parent_image:  OPTIONAL name of the parent image that is required to be available on Docker Hub before building this image.
           #                    Parent images must begin with rucio- and can specify the #TAG placeholder to refer to the current tag being pushed.
           #                    For example, rucio-clients:release-#TAG
@@ -78,6 +80,8 @@ jobs:
           #              version to image name.
           # force-latest: if present, the latest tag will be force pushed to Docker Hub
           # latest-only: if present, only the latest tag will be pushed to Docker Hub
+          # custom-tag=value: If present, the value of the custom tag will be appended to the image tag.
+          #                   For example, custom-tag=java will append `java` to the image name.
           #
           # The following truth table is used to determine the Docker Hub tag
           # The configuration parammeters are: preprend_release, push_tagged
@@ -89,14 +93,29 @@ jobs:
           # | 0               	| 1           	| :release-$GIT_TAG 	|
 
           CONTEXT=$(echo "${{ matrix.context }}")
-          CONTEXT_DIR=$(echo "${{ matrix.context }}" | cut -d, -f1 )
-          PARENT=$(echo "${{ matrix.context }}" | cut -d, -f2 | xargs)
+          CONTEXT_DIR=$(echo "${CONTEXT}" | cut -d, -f1 )
+          PARENT=$(echo "${CONTEXT}" | cut -d, -f2 | xargs)
           GIT_TAG=${{ steps.release_tag.outputs.version }}
           BASE_TAG="${{ github.repository_owner}}/"
           PARENT_IMAGE_AVAILIBILITY_INTERVAL=60
           MAX_ATTEMPTS=10
           GIT_TAG_COMMIT_SHA=$(echo $(git rev-list -n 1 $GIT_TAG))
           GIT_MASTER_LATEST_COMMIT_SHA=$(echo $(git ls-remote --heads origin | grep master  |  awk -F '\t' '{print $1}'))
+
+          if [[ -d $CONTEXT_DIR ]]; then
+            if [[ -f "${CONTEXT_DIR}/Dockerfile" ]]; then 
+                FILE="Dockerfile"
+            else
+                echo "Dockerfile not found in $CONTEXT_DIR. Exiting!"
+                exit 1
+            fi
+          elif [[ -f $CONTEXT_DIR ]]; then
+            FILE="$(basename -- $CONTEXT_DIR)"
+            CONTEXT_DIR="$(dirname $CONTEXT_DIR)"
+          else
+            echo "$CONTEXT_DIR is not a file or directory. Exiting"
+            exit 1
+          fi
 
           if [[ ${CONTEXT} =~ .*"prepend-rucio".* ]]; then
             BASE_TAG+="rucio-$CONTEXT_DIR"
@@ -134,6 +153,18 @@ jobs:
             LATEST_TAG="$BASE_TAG:latest"
           fi
 
+          if [[ $CONTEXT =~ custom-tag=([a-zA-Z0-9]*) ]]; then
+            CUSTOM_TAG="${BASH_REMATCH[1]}"
+            if [[ -z $IMAGE_TAG ]]; then
+              IMAGE_TAG="${BASE_TAG}:${CUSTOM_TAG}"
+            else
+              IMAGE_TAG="${IMAGE_TAG}${CUSTOM_TAG}"
+            fi
+          else
+            echo "No custom tag detected!"
+          fi
+          echo $CONTEXT
+
           if [[ -z "$IMAGE_TAG" && -z "$LATEST_TAG" ]]; then
               TAGS_TO_PUSH=''
           elif [[ "$IMAGE_TAG" && -z "$LATEST_TAG" ]]; then
@@ -167,14 +198,14 @@ jobs:
                 fi
             done
           else
-            echo "No parent image has been specified for $CONTEXT_DIR. Parent images are the second parameter in the csv build description and must begin with '/rucio-'."
+            echo "No parent image has been specified for $CONTEXT_DIR. Parent images are the second parameter in the csv build description and must begin with 'rucio-'."
           fi
   
 
           echo ::set-output name=git_tag::$GIT_TAG
           echo ::set-output name=tags::$TAGS_TO_PUSH
           echo ::set-output name=context_dir::$CONTEXT_DIR
-          
+          echo ::set-output name=file::$FILE
 
           echo "For tag: $GIT_TAG, the following images will be pushed: $TAGS_TO_PUSH"
 
@@ -184,6 +215,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: ./${{ steps.release.outputs.context_dir }}
+          file: ./${{ steps.release.outputs.context_dir }}/${{ steps.release.outputs.file }}
           push: true
           tags: '${{ steps.release.outputs.tags }}'
           build-args: TAG=${{ steps.release.outputs.git_tag }}
