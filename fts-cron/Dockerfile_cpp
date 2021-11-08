@@ -30,7 +30,7 @@ RUN yum -y install ca-certificates.noarch lcg-CA voms-clients-cpp fts-rest-cli \
 
 RUN python3 -m pip install --no-cache-dir --upgrade pip
 RUN python3 -m pip install --no-cache-dir --upgrade setuptools
-RUN python3 -m pip install j2cli
+RUN python3 -m pip install --no-cache-dir j2cli
 
 RUN mkdir -p /opt/rucio/certs/
 RUN mkdir -p /opt/rucio/kubeconfig/
