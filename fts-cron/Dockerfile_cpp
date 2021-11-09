@@ -11,6 +11,11 @@ RUN yum update -y && \
     yum upgrade -y && \
     yum clean all && \
     rm -rf /var/cache/yum
+    
+RUN yum -y install https://repo.ius.io/ius-release-el7.rpm &&\
+    yum install -y httpd python36u-pip python36-mod_wsgi libaio gcc python36-devel.x86_64 mod_ssl openssl-devel.x86_64 python36-m2crypto libnsl.x86_64 patch.x86_64 && \
+    yum clean all && \
+    rm -rf /var/cache/yum
 
 # Install latest kubectl
 RUN curl -o /usr/bin/kubectl -L https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
@@ -23,9 +28,9 @@ RUN yum -y install ca-certificates.noarch lcg-CA voms-clients-cpp fts-rest-cli \
     yum clean all && \
     rm -rf /var/cache/yum
 
-RUN pip install --upgrade pip 
-RUN pip install --upgrade setuptools
-RUN pip install j2cli
+RUN python3 -m pip install --no-cache-dir --upgrade pip
+RUN python3 -m pip install --no-cache-dir --upgrade setuptools
+RUN python3 -m pip install --no-cache-dir j2cli
 
 RUN mkdir -p /opt/rucio/certs/
 RUN mkdir -p /opt/rucio/kubeconfig/
