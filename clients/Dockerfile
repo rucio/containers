@@ -19,7 +19,7 @@ RUN yum -y install https://repo.ius.io/ius-release-el7.rpm && \
 # Upgrade pip & setuptools and install Rucio
 RUN python3.6 -m pip install --no-cache-dir --upgrade pip && \
     python3.6 -m pip install  --no-cache-dir --upgrade setuptools && \
-    python3.6 -m pip install --no-cache-dir --pre rucio-clients==$TAG && \
+    python3.6 -m pip install --no-cache-dir --pre rucio-clients[argcomplete]==$TAG && \
     python3.6 -m pip install --no-cache-dir jinja2 j2cli pyyaml
 
 
