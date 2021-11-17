@@ -6,7 +6,10 @@ if [ -f /opt/rucio/etc/rucio.cfg ]; then
     echo "rucio.cfg already mounted."
 else
     echo "rucio.cfg not found. will generate one."
-    j2 /tmp/rucio.cfg.j2 | sed '/^\s*$/d' > /opt/rucio/etc/rucio.cfg
+    python3 /usr/local/rucio/tools/merge_rucio_configs.py \
+        -s /tmp/rucio.config.default.cfg $RUCIO_OVERRIDE_CONFIGS \
+        --use-env \
+        -d /opt/rucio/etc/rucio.cfg
 fi
 
 if [ ! -z "$RUCIO_PRINT_CFG" ]; then

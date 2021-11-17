@@ -39,7 +39,7 @@ RUN python3 -m pip install --no-cache-dir cx_oracle==6.3.1 PyMySQL
 WORKDIR /
 RUN git clone https://github.com/rucio/probes.git
 
-ADD rucio.cfg.j2 /tmp/
+ADD rucio.config.default.cfg /tmp/
 
 ADD run-probes.sh /
 
