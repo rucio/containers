@@ -34,7 +34,7 @@ RUN python3 -m pip install --no-cache-dir --pre rucio[oracle,mysql,postgresql]==
 RUN python3 -m pip install --no-cache-dir --pre rucio_webui==$TAG
 RUN python3 -m pip install --no-cache-dir j2cli
 
-ADD rucio.cfg.j2 /tmp/
+ADD rucio.config.default.cfg /tmp/
 ADD rucio.conf.j2 /tmp/
 ADD httpd.conf.j2 /tmp/
 ADD 00-mpm.conf.j2 /tmp

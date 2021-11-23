@@ -26,7 +26,7 @@ RUN python3 -m pip install jinja2 j2cli pyyaml
 
 RUN mkdir -p /opt/rucio/etc
 
-COPY rucio.cfg.j2 /tmp
+COPY rucio.config.default.cfg /tmp
 COPY alembic.ini.j2 /tmp
 COPY bootstrap.py /tmp
 COPY docker-entrypoint.sh /
