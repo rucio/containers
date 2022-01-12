@@ -21,7 +21,7 @@ RUN yum upgrade -y && \
     yum clean all && \
     rm -rf /var/cache/yum
 RUN yum -y install https://repo.ius.io/ius-release-el7.rpm &&\
-    yum install -y httpd python36u-pip python36-mod_wsgi libaio gcc python36-devel.x86_64 mod_ssl openssl-devel.x86_64 python36-m2crypto libnsl.x86_64 patch.x86_64 && \
+    yum install -y httpd python36u-pip python36-mod_wsgi libaio gcc python36-devel.x86_64 mod_ssl openssl-devel.x86_64 python36-m2crypto libnsl.x86_64 memcached patch.x86_64 && \
     yum clean all && \
     rm -rf /var/cache/yum
 
