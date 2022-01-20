@@ -1,13 +1,12 @@
 {% if RUCIO_ENABLE_SSL|default('False') == 'True' %}
 LoadModule ssl_module /usr/lib64/httpd/modules/mod_ssl.so
+{% set listen_port = 443 %}
+{% else %}
+{% set listen_port = 80 %}
 {% endif %}
 LoadModule unique_id_module modules/mod_unique_id.so
 LoadModule wsgi_module /usr/lib64/httpd/modules/mod_wsgi.so
-{% if RUCIO_ENABLE_SSL|default('False') == 'True' %}
-Listen 443
-{% else %}
-Listen 80
-{% endif %}
+Listen {{ listen_port }}
 Header set X-Rucio-Host "%{HTTP_HOST}e"
 RequestHeader add X-Rucio-RequestId "%{UNIQUE_ID}e"
 
@@ -26,26 +25,11 @@ WSGIApplicationGroup rucio
 
 CacheEnable disk /
 CacheRoot /tmp
+<VirtualHost *:{{ listen_port}} >
 {% if RUCIO_HOSTNAME is defined %}
-{% if RUCIO_ENABLE_SSL|default('False') == 'True' %}
-<VirtualHost *:443>
- ServerName {{ RUCIO_HOSTNAME }}:443
-{% else %}
-<VirtualHost *:80>
- ServerName {{ RUCIO_HOSTNAME }}:80
+ ServerName {{ RUCIO_HOSTNAME }}:{{ listen_port }}
 {% endif %}
-{% else %}
-{% if RUCIO_ENABLE_SSL|default('False') == 'True' %}
-<VirtualHost *:443>
-{% else %}
-<VirtualHost *:80>
-{% endif %}
-{% endif %}
-{% if RUCIO_SERVER_ADMIN is defined %}
- ServerAdmin {{ RUCIO_SERVER_ADMIN }}
-{% else %}
- ServerAdmin rucio-admin@cern.ch
-{% endif %}
+ ServerAdmin {{ RUCIO_SERVER_ADMIN | default('rucio-admin@cern.ch')}}
 {% if RUCIO_ENABLE_SSL|default('False') == 'True' %}
  SSLEngine on
  SSLCertificateFile /etc/grid-security/hostcert.pem
@@ -66,20 +50,12 @@ CacheRoot /tmp
  #AB: for Security
  SSLCipherSuite           HIGH:!CAMELLIA:!ADH:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!3DES
 {% endif %}
-{% if RUCIO_LOG_LEVEL is defined %}
- LogLevel {{ RUCIO_LOG_LEVEL }}
-{% else %}
- LogLevel info
-{% endif %}
+
+ LogLevel {{ RUCIO_LOG_LEVEL | default('info') }}
 
 {% if RUCIO_ENABLE_LOGS|default('False') == 'True' %}
-{% if RUCIO_HTTPD_LOG_DIR is defined %}
- CustomLog {{RUCIO_HTTPD_LOG_DIR}}/access_log combinedrucio
- ErrorLog {{RUCIO_HTTPD_LOG_DIR}}/error_log
-{% else %}
- CustomLog logs/access_log combinedrucio
- ErrorLog logs/error_log
-{% endif %}
+ CustomLog {{RUCIO_HTTPD_LOG_DIR | default('logs') }}/access_log combinedrucio
+ ErrorLog {{RUCIO_HTTPD_LOG_DIR | default('logs') }}/error_log
 {% else %}
  CustomLog /dev/stdout combinedrucio
  ErrorLog /dev/stderr
