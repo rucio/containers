@@ -19,8 +19,8 @@ RUN yum install -y python-pip \
     rm -rf /var/cache/yum
 
 # Upgrade pip & setuptools and install Rucio
-RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir --upgrade setuptools && \
+RUN pip install --no-cache-dir --upgrade "pip < 21.0" && \
+    pip install --no-cache-dir --upgrade "setuptools < 45" && \
     pip install --no-cache-dir --pre rucio-clients==$TAG && \
     pip install --no-cache-dir jinja2 j2cli pyyaml
 
