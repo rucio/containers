@@ -28,7 +28,7 @@ RUN rpm -i /tmp/oic.rpm; \
 
 RUN rpm -i https://github.com/dshearer/jobber/releases/download/v1.4.0/jobber-1.4.0-1.el7.x86_64.rpm
 
-RUN pip install --no-cache-dir --upgrade pip 
+RUN pip install --no-cache-dir --upgrade "pip < 21.0"
 RUN pip install --no-cache-dir --upgrade setuptools
 RUN rm -rf /usr/lib/python2.7/site-packages/ipaddress*
 RUN pip install --no-cache-dir --pre rucio[oracle,mysql,postgresql]

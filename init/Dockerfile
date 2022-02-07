@@ -18,8 +18,8 @@ RUN yum install -y python-pip libaio gcc python-devel.x86_64 openssl-devel.x86_6
 RUN rpm -i /tmp/oic.rpm; \
     echo "/usr/lib/oracle/12.2/client64/lib" >/etc/ld.so.conf.d/oracle.conf; \
     ldconfig
-RUN pip install --no-cache-dir --upgrade pip
-RUN pip install --no-cache-dir --upgrade setuptools
+RUN pip install --no-cache-dir --upgrade "pip < 21.0"
+RUN pip install --no-cache-dir --upgrade "setuptools < 45"
 RUN rm -rf /usr/lib/python2.7/site-packages/ipaddress*
 RUN pip install --no-cache-dir --pre rucio[oracle,mysql,postgresql]==$TAG
 RUN pip install jinja2 j2cli pyyaml
