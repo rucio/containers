@@ -25,12 +25,13 @@ WSGIApplicationGroup rucio
 
 CacheEnable disk /
 CacheRoot /tmp
-<VirtualHost *:{{ listen_port}} >
+
+{% macro common_virtual_host_config(port, enable_ssl) %}
 {% if RUCIO_HOSTNAME is defined %}
- ServerName {{ RUCIO_HOSTNAME }}:{{ listen_port }}
+ ServerName {{ RUCIO_HOSTNAME }}:{{ port }}
 {% endif %}
  ServerAdmin {{ RUCIO_SERVER_ADMIN | default('rucio-admin@cern.ch')}}
-{% if RUCIO_ENABLE_SSL|default('False') == 'True' %}
+{% if enable_ssl %}
  SSLEngine on
  SSLCertificateFile /etc/grid-security/hostcert.pem
  SSLCertificateKeyFile /etc/grid-security/hostkey.pem
@@ -61,12 +62,6 @@ CacheRoot /tmp
  ErrorLog /dev/stderr
 {% endif %}
 
-{% if RUCIO_DEFINE_ALIASES|default('False') == 'True' %}
- Include /opt/rucio/etc/aliases.conf
-{% else %}
- WSGIScriptAlias /                       /usr/local/lib/python3.6/site-packages/rucio/web/rest/flaskapi/v1/main.py process-group=rucio application-group=rucio
-{% endif %}
-
 {% if RUCIO_HTTPD_ENCODED_SLASHES|default('False') == 'True' %}
  AllowEncodedSlashes on
 {% endif %}
@@ -74,5 +69,22 @@ CacheRoot /tmp
  RewriteEngine on
  RewriteCond %{REQUEST_METHOD} ^(TRACE|TRACK)
  RewriteRule .* - [F]
+{% endmacro %}
 
+<VirtualHost *:{{ listen_port}} >
+{{ common_virtual_host_config(port=listen_port, enable_ssl=RUCIO_ENABLE_SSL|default('False') == 'True') }}
+{% if RUCIO_DEFINE_ALIASES|default('False') == 'True' %}
+ Include /opt/rucio/etc/aliases.conf
+{% else %}
+ WSGIScriptAlias /                       /usr/local/lib/python3.6/site-packages/rucio/web/rest/flaskapi/v1/main.py process-group=rucio application-group=rucio
+{% endif %}
 </VirtualHost>
+
+{% if RUCIO_METRICS_PORT is defined %}
+Listen {{ RUCIO_METRICS_PORT }}
+<VirtualHost *:{{ RUCIO_METRICS_PORT }} >
+{{ common_virtual_host_config(port=RUCIO_METRICS_PORT, enable_ssl=false) }}
+
+ WSGIScriptAlias /metrics                /usr/local/lib/python3.6/site-packages/rucio/web/rest/metrics.py process-group=rucio application-group=rucio
+</VirtualHost>
+{% endif %}
