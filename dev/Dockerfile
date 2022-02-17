@@ -123,5 +123,6 @@ EXPOSE 443
 ENV PATH $PATH:$RUCIOHOME/bin
 RUN chmod 0600 /root/.ssh/ruciouser_sshkey && \
     chmod 0644 /root/.ssh/ruciouser_sshkey.pub
+RUN mkdir /tmp/prometheus
 ENV prometheus_multiproc_dir /tmp/prometheus
 CMD ["httpd","-D","FOREGROUND"]
