@@ -7,7 +7,7 @@ cp /opt/rucio/keys/new_userkey.pem /tmp/key.pem
 chmod 400 /tmp/key.pem
 
 # Generate a proxy with the voms extension if requested
-voms-proxy-init2 --debug -rfc -valid 96:00 -cert /tmp/cert.pem -key /tmp/key.pem -out /tmp/x509up {% if RUCIO_FTS_VOMS is defined -%}-voms {{ RUCIO_FTS_VOMS }}{%- endif %} -rfc -timeout 5
+voms-proxy-init2 --debug -rfc -valid 96:00 -bits 2048 -cert /tmp/cert.pem -key /tmp/key.pem -out /tmp/x509up {% if RUCIO_FTS_VOMS is defined -%}-voms {{ RUCIO_FTS_VOMS }}{%- endif %} -rfc -timeout 5
 
 # Delegate the proxy to the requested servers
 {% if RUCIO_FTS_SERVERS is defined %}
