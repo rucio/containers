@@ -5,7 +5,7 @@ RUN yum install -y epel-release.noarch
 RUN curl https://fts-repo.web.cern.ch/fts-repo/fts3-prod-el7.repo > /etc/yum.repos.d/fts3-prod-el7.repo
 RUN curl https://dmc-repo.web.cern.ch/dmc-repo/dmc-el7.repo > /etc/yum.repos.d/dmc-el7.repo
 RUN yum upgrade -y
-RUN yum install -y mysql multitail gfal2-plugin* fts-server fts-client fts-rest fts-monitoring fts-mysql fts-msg
+RUN yum install -y mysql multitail gfal2-plugin* fts-server fts-client fts-rest fts-monitoring fts-mysql fts-msg python2-pip
 RUN yum clean all
 
 # Setup FTS security
@@ -13,6 +13,10 @@ COPY certs/hostcert_fts.pem /etc/grid-security/hostcert.pem
 COPY certs/hostcert_fts.key.pem /etc/grid-security/hostkey.pem
 COPY certs/rucio_ca.pem /etc/grid-security/certificates/5fca1cb1.0
 RUN chmod 400 /etc/grid-security/hostkey.pem
+
+# Upgrade to high-enough version of sqlalchemy for python2
+RUN pip install --upgrade pip==20.3.4
+RUN pip install --upgrade sqlalchemy==1.2.19
 
 # Database configuration for FTS server
 COPY fts3config /etc/fts3/fts3config
