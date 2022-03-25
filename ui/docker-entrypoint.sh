@@ -32,4 +32,4 @@ echo "=================== /etc/httpd/conf.d/rucio.conf ========================"
 cat /etc/httpd/conf.d/rucio.conf
 echo ""
 
-httpd -D FOREGROUND
+exec httpd -D FOREGROUND

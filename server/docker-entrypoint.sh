@@ -53,4 +53,4 @@ fi
 
 pkill httpd || :
 sleep 2
-httpd -D FOREGROUND
+exec httpd -D FOREGROUND
