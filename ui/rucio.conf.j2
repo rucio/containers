@@ -1,8 +1,18 @@
+{% if RUCIO_ENABLE_SSL|default('True') == 'True' %}
+  {% set enable_ssl = 'True' %}
+{% else %}
+  {% set enable_ssl = 'False' %}
+{% endif %}
+
+{% if enable_ssl == 'True' %}
 LoadModule ssl_module /usr/lib64/httpd/modules/mod_ssl.so
+{% endif %}
 LoadModule unique_id_module modules/mod_unique_id.so
 LoadModule wsgi_module /usr/lib64/httpd/modules/mod_wsgi.so
 
+{% if enable_ssl == 'True' %}
 Listen 443
+{% endif %}
 Listen 80
 
 Header set X-Rucio-Host "%{HTTP_HOST}e"
@@ -20,29 +30,19 @@ LoadModule cache_disk_module modules/mod_cache_disk.so
 CacheEnable disk /
 CacheRoot /tmp
 
+{% macro common_virtual_host_config(port) %}
 {% if RUCIO_HOSTNAME is defined %}
-<VirtualHost *:80>
- ServerName {{ RUCIO_HOSTNAME }}:80
- Redirect / https://{{ RUCIO_HOSTNAME }}/
-</VirtualHost>
-
-<VirtualHost *:443>
- ServerName {{ RUCIO_HOSTNAME }}:443
-{% else %}
-<VirtualHost *:443>
+ ServerName {{ RUCIO_HOSTNAME }}:{{ port }}
 {% endif %}
-{% if RUCIO_SERVER_ADMIN is defined %}
- ServerAdmin {{ RUCIO_SERVER_ADMIN }}
-{% else %}
- ServerAdmin rucio-admin@cern.ch
-{% endif %}
-
+ ServerAdmin {{ RUCIO_SERVER_ADMIN | default('rucio-admin@cern.ch')}}
+{% if enable_ssl == 'True' %}
  SSLEngine on
  SSLCertificateFile /etc/grid-security/hostcert.pem
  SSLCertificateKeyFile /etc/grid-security/hostkey.pem
 {% if RUCIO_CA_PATH is defined %}
  SSLCACertificatePath {{ RUCIO_CA_PATH }}
  SSLCARevocationPath {{ RUCIO_CA_PATH }}
+ SSLCARevocationCheck {{ RUCIO_CA_REVOCATION_CHECK | default('chain') }}
 {% else %}
  SSLCACertificateFile /etc/grid-security/ca.pem
 {% endif %}
@@ -55,6 +55,7 @@ CacheRoot /tmp
  SSLProtocol              all -SSLv2 -SSLv3
  #AB: for Security
  SSLCipherSuite           HIGH:!CAMELLIA:!ADH:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!3DES
+{% endif %}
 {% if RUCIO_LOG_LEVEL is defined %}
  LogLevel {{ RUCIO_LOG_LEVEL }}
 {% else %}
@@ -73,7 +74,9 @@ CacheRoot /tmp
  CustomLog /dev/stdout combinedrucio
  ErrorLog /dev/stderr
 {% endif %}
+{% endmacro %}
 
+{% macro webui_routes() %}
  Alias /media                 /usr/local/lib/python3.6/site-packages/rucio/web/ui/media
  Alias /static                /usr/local/lib/python3.6/site-packages/rucio/web/ui/static
 {% if RUCIO_SERVER_TYPE|default('api') == 'flask' %}
@@ -83,11 +86,31 @@ CacheRoot /tmp
 {% endif %}
 
 {% if RUCIO_PROXY is defined %}
-  ProxyPass /proxy             {{ RUCIO_PROXY_SCHEME | default('https') }}://{{ RUCIO_PROXY }}
-  ProxyPassReverse /proxy      {{ RUCIO_PROXY_SCHEME | default('https') }}://{{ RUCIO_PROXY }}
+ ProxyPass /proxy             {{ RUCIO_PROXY_SCHEME | default('https') }}://{{ RUCIO_PROXY }}
+ ProxyPassReverse /proxy      {{ RUCIO_PROXY_SCHEME | default('https') }}://{{ RUCIO_PROXY }}
 {% endif %}
 {% if RUCIO_AUTH_PROXY is defined %}
-  ProxyPass /authproxy             {{ RUCIO_AUTH_PROXY_SCHEME | default('https') }}://{{ RUCIO_AUTH_PROXY }}
-  ProxyPassReverse /authproxy      {{ RUCIO_AUTH_PROXY_SCHEME | default('https') }}://{{ RUCIO_AUTH_PROXY }}
+ ProxyPass /authproxy             {{ RUCIO_AUTH_PROXY_SCHEME | default('https') }}://{{ RUCIO_AUTH_PROXY }}
+ ProxyPassReverse /authproxy      {{ RUCIO_AUTH_PROXY_SCHEME | default('https') }}://{{ RUCIO_AUTH_PROXY }}
+{% endif %}
+{% endmacro %}
+
+{% if enable_ssl == 'True' %}
+<VirtualHost *:80>
+{% if RUCIO_HOSTNAME is defined %}
+ ServerName {{ RUCIO_HOSTNAME }}:80
+ Redirect / https://{{ RUCIO_HOSTNAME }}/
 {% endif %}
 </VirtualHost>
+<VirtualHost *:443>
+ {{ common_virtual_host_config(port=443) }}
+ {{ webui_routes() }}
+</VirtualHost>
+{% else %}
+<VirtualHost *:80>
+ {{ common_virtual_host_config(port=80) }}
+ {{ webui_routes() }}
+</VirtualHost>
+{% endif %}
+
+

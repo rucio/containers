@@ -88,6 +88,10 @@ This variable sets the server admin in the apache config.
 
 This variable sets the MPM mode. The default is "event".
 
+### `RUCIO_ENABLE_SSL`
+
+This variable enables the SSLEngine in the Apache Config. The default value is `True`. Set this to `False` if you want to serve only `HTTP` requests. If set to False, you do not need to mount the host certificates when starting the container.
+
 ## `RUCIO_CFG` configuration parameters:
 
 Environment variables can be used to set values for the auto-generated rucio.cfg. The names are derived from the actual names in the configuration file prefixed by `RUCIO_CFG`, e.g., the `default` value in the `database` section becomes `RUCIO_CFG_DATABASE_DEFAULT`.
