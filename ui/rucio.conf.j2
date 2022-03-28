@@ -51,8 +51,12 @@ CacheRoot /tmp
  SSLOptions +StdEnvVars
  SSLProxyEngine On
 
+{% if RUCIO_SSL_PROTOCOL is defined %}
  #AB: SSLv3 disable
- SSLProtocol              all -SSLv2 -SSLv3
+ SSLProtocol              {{ RUCIO_SSL_PROTOCOL }}
+{% else %}
+ SSLProtocol              +TLSv1.2
+{% endif %}
  #AB: for Security
  SSLCipherSuite           HIGH:!CAMELLIA:!ADH:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!3DES
 {% if RUCIO_LOG_LEVEL is defined %}
