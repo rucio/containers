@@ -29,7 +29,7 @@ jobs:
       - name: Fetch all branches
         shell: bash
         run: |
-          REPO_URL=$(echo 'git://github.com/${{ github.repository_owner }}/containers.git') 
+          REPO_URL=$(echo 'https://github.com/${{ github.repository_owner }}/containers.git') 
           BRANCHES=$(git ls-remote --heads $REPO_URL | awk -F '\t' '{print $NF}' | cut -f3- -d'/')
           git fetch origin $BRANCHES
       
