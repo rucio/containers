@@ -36,7 +36,7 @@ RUN python3 -m pip install --no-cache-dir j2cli
 
 # Install dependecies
 RUN yum install -y \
-    gfal2-python3 \
+    python3-gfal2 \
     gfal2-plugin-file \
     gfal2-plugin-gridftp \
     gfal2-plugin-http \
