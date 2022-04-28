@@ -14,6 +14,7 @@ jobs:
           'clients, prepend-rucio, prepend-release, push-tagged, push-latest', 
           'server, prepend-rucio, prepend-release, push-tagged, push-latest',
           'daemons, prepend-rucio, prepend-release, push-tagged, push-latest',
+          'dev, prepend-rucio, prepend-release, push-tagged, push-latest',
           'ui, prepend-rucio, prepend-release, push-tagged, push-latest',
           'init, prepend-rucio, prepend-release, push-tagged, push-latest',
           'probes, push-latest',
