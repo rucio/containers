@@ -44,7 +44,11 @@ CacheRoot /tmp
 {% endif %}
  SSLVerifyClient optional_no_ca
  SSLVerifyDepth 10
+{% if RUCIO_HTTPD_LEGACY_DN|default('False') == 'True' %}
+ SSLOptions +StdEnvVars +LegacyDNStringFormat
+{% else %}
  SSLOptions +StdEnvVars
+{% endif %}
 
 {% if RUCIO_SSL_PROTOCOL is defined %}
  #AB: SSLv3 disable
