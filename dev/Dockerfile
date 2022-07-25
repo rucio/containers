@@ -34,6 +34,9 @@ RUN yum -y install epel-release && \
     alternatives --install /usr/bin/mariadb_config mariadb_config /mariadb-connector-c-3.1.13-centos7-amd64/bin/mariadb_config 1 && \
     alternatives --install /usr/lib64/libmariadb.so.3 libmariadb.so.3 /mariadb-connector-c-3.1.13-centos7-amd64/lib/mariadb/libmariadb.so.3 1 && \
     alternatives --install /usr/lib64/libmariadb.so libmariadb.so /mariadb-connector-c-3.1.13-centos7-amd64/lib/mariadb/libmariadb.so.3 1 && \
+    yum -y install npm nodejs && \
+    npm install --global pyright && \
+    npm cache clean -f && \
     yum clean all && \
     rm -rf /var/cache/yum
 
