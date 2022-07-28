@@ -27,7 +27,7 @@ WORKDIR /
 RUN yum -y install epel-release && \
     yum -y install https://repo.ius.io/ius-release-el7.rpm && \
     yum -y install gcc httpd mod_ssl mod_auth_kerb python-setuptools python-pip python36u-pip python36-devel \
-            python36-mod_wsgi python36-m2crypto gmp-devel krb5-devel git openssl-devel gridsite which libaio memcached \
+            python36-mod_wsgi python36-m2crypto gmp-devel krb5-devel git236 openssl-devel gridsite which libaio memcached \
             nmap-ncat gfal2-all gfal2-util gfal2-python3 xrootd-client multitail vim libxml2-devel \
             openssh-clients xmlsec1-devel xmlsec1-openssl-devel libtool-ltdl-devel rsync rclone && \
     curl -sSL https://downloads.mariadb.com/Connectors/c/connector-c-3.1.13/mariadb-connector-c-3.1.13-centos7-amd64.tar.gz | tar xzv && \
