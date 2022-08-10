@@ -6,7 +6,7 @@ RUN curl https://fts-repo.web.cern.ch/fts-repo/fts3-prod-el7.repo > /etc/yum.rep
 RUN curl https://dmc-repo.web.cern.ch/dmc-repo/dmc-el7.repo > /etc/yum.repos.d/dmc-el7.repo
 RUN yum upgrade -y && \
     yum install -y centos-release-scl
-RUN yum install -y mysql multitail gfal2-plugin* fts-server fts-client fts-rest fts-monitoring fts-mysql fts-msg python2-pip
+RUN yum install -y mysql multitail gfal2-plugin* fts-server fts-client fts-rest-server fts-monitoring fts-mysql fts-msg python2-pip
 RUN yum clean all
 
 # Setup FTS security
@@ -25,6 +25,7 @@ RUN chmod +x /usr/share/fts/fts-database-upgrade.py
 
 # Configuration for FTSREST and FTSMON
 COPY fts3rest.conf /etc/httpd/conf.d/fts3rest.conf
+COPY fts3restconfig /etc/fts3/fts3restconfig
 RUN echo "" > /etc/httpd/conf.d/ssl.conf &&\
     echo "" > /etc/httpd/conf.d/autoindex.conf &&\
     echo "" > /etc/httpd/conf.d/userdir.conf &&\
