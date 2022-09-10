@@ -18,6 +18,10 @@ DocumentRoot "/var/www/html"
 
 <Directory "/var/www/html">
     Options Indexes FollowSymLinks
+    Options -MultiViews
+    RewriteEngine On
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.html [QSA,L]
     AllowOverride None
     Require all granted
 </Directory>

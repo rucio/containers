@@ -44,22 +44,6 @@
 {% endif %}
 {% endmacro %}
 
-{% macro webui_routes() %}
-  Options -MultiViews
-  RewriteEngine On
-  RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteRule ^ index.html [QSA,L]
-{% if RUCIO_PROXY is defined %}
- ProxyPass /proxy             {{ RUCIO_PROXY_SCHEME | default('https') }}://{{ RUCIO_PROXY }}
- ProxyPassReverse /proxy      {{ RUCIO_PROXY_SCHEME | default('https') }}://{{ RUCIO_PROXY }}
-{% endif %}
-{% if RUCIO_AUTH_PROXY is defined %}
- ProxyPass /authproxy             {{ RUCIO_AUTH_PROXY_SCHEME | default('https') }}://{{ RUCIO_AUTH_PROXY }}
- ProxyPassReverse /authproxy      {{ RUCIO_AUTH_PROXY_SCHEME | default('https') }}://{{ RUCIO_AUTH_PROXY }}
-{% endif %}
-{% endmacro %}
-
-
 {% if RUCIO_ENABLE_SSL|default('True') == 'True' %}
   {% set enable_ssl = 'True' %}
 {% else %}
@@ -87,7 +71,6 @@ LogFormat "{{ RUCIO_LOG_FORMAT }}" combinedrucio
 LogFormat "%h\t%t\t%{X-Rucio-Forwarded-For}i\t%T\t%D\t\"%{X-Rucio-Auth-Token}i\"\t%{X-Rucio-RequestId}i\t%{X-Rucio-Client-Ref}i\t\"%r\"\t%>s\t%b" combinedrucio
 {% endif %}
 
-# Virtual Hosts on port 80 & 443 when SSL is enabled
 {% if enable_ssl == 'True' %}
 <VirtualHost *:80>
 
@@ -100,15 +83,13 @@ LogFormat "%h\t%t\t%{X-Rucio-Forwarded-For}i\t%T\t%D\t\"%{X-Rucio-Auth-Token}i\"
 <VirtualHost *:443>
 
  {{ common_virtual_host_config(port=443) }}
- {{ webui_routes() }}
 
 </VirtualHost>
 
 {% else %}
-#
+
 <VirtualHost *:80>
  {{ common_virtual_host_config(port=80) }}
- {{ webui_routes() }}
 </VirtualHost>
 {% endif %}
 
