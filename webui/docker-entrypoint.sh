@@ -13,19 +13,22 @@ echo "=================== /etc/httpd/conf.d/rucio.conf ========================"
 cat /etc/httpd/conf.d/rucio.conf
 echo ""
 
+j2 /tmp/.env.default.j2 | sed '/^\s*$/d' > /opt/rucio/webui/.env.default
 
-if [ -f /opt/rucio/etc/rucio.cfg ]; then
-    echo "rucio.cfg already mounted."
+if [ -f /opt/rucio/webui/.env ]; then
+    echo "/opt/rucio/webui/.env already mounted."
 else
-    echo "rucio.cfg not found. will generate one."
-    python3 /usr/bin/tools/merge_rucio_configs.py \
+    echo "/opt/rucio/webui/.env not found. will generate one."
+    python3 /opt/rucio/merge_rucio_configs.py \
+        -s /opt/rucio/webui/.env.default $RUCIO_OVERRIDE_CONFIGS \
         --use-env \
-        -d /var/www/html/etc/rucio.cfg
+        -d /opt/rucio/webui/.env
 fi
 
-# echo "=================== /opt/rucio/etc/rucio.cfg ============================"
-# cat /opt/rucio/etc/rucio.cfg
-# echo ""
+echo "=================== /opt/rucio/webui/.env ========================"
+cat /opt/rucio/webui/.env
+echo ""
 
-sleep infinity
+npm run build
+cp -rfn /opt/rucio/webui/build/* /var/www/html/
 exec httpd -D FOREGROUND
