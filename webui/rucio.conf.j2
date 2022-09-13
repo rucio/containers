@@ -23,6 +23,8 @@
  SSLProtocol              all -SSLv2 -SSLv3
  #AB: for Security
  SSLCipherSuite           HIGH:!CAMELLIA:!ADH:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!3DES
+ Header set X-SSL-Client-S-DN "expr=%{SSL_CLIENT_S_DN}"
+ Header set X-SSL-Verify "expr=%{SSL_CLIENT_VERIFY}"
 {% endif %}
 {% if RUCIO_LOG_LEVEL is defined %}
  LogLevel {{ RUCIO_LOG_LEVEL }}
