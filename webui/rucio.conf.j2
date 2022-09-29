@@ -1,0 +1,97 @@
+{% macro common_virtual_host_config(port) %}
+{% if RUCIO_HOSTNAME is defined %}
+ ServerName {{ RUCIO_HOSTNAME }}:{{ port }}
+{% endif %}
+ ServerAdmin {{ RUCIO_SERVER_ADMIN | default('rucio-admin@cern.ch')}}
+{% if enable_ssl == 'True' %}
+ SSLEngine on
+ SSLCertificateFile /etc/grid-security/hostcert.pem
+ SSLCertificateKeyFile /etc/grid-security/hostkey.pem
+{% if RUCIO_CA_PATH is defined %}
+ SSLCACertificatePath {{ RUCIO_CA_PATH }}
+ SSLCARevocationPath {{ RUCIO_CA_PATH }}
+ SSLCARevocationCheck {{ RUCIO_CA_REVOCATION_CHECK | default('chain') }}
+{% else %}
+ SSLCACertificateFile /etc/grid-security/ca.pem
+{% endif %}
+ SSLVerifyClient optional_no_ca
+ SSLVerifyDepth 10
+ SSLOptions +StdEnvVars
+ SSLProxyEngine On
+
+ #AB: SSLv3 disable
+ SSLProtocol              all -SSLv2 -SSLv3
+ #AB: for Security
+ SSLCipherSuite           HIGH:!CAMELLIA:!ADH:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!3DES
+ Header set X-SSL-Client-S-DN "expr=%{SSL_CLIENT_S_DN}"
+ Header set X-SSL-Verify "expr=%{SSL_CLIENT_VERIFY}"
+{% endif %}
+{% if RUCIO_LOG_LEVEL is defined %}
+ LogLevel {{ RUCIO_LOG_LEVEL }}
+{% else %}
+ LogLevel info
+{% endif %}
+
+{% if RUCIO_ENABLE_LOGS|default('False') == 'True' %}
+{% if RUCIO_HTTPD_LOG_DIR is defined %}
+ CustomLog {{RUCIO_HTTPD_LOG_DIR}}/access_log combinedrucio
+ ErrorLog {{RUCIO_HTTPD_LOG_DIR}}/error_log
+{% else %}
+ CustomLog logs/access_log combinedrucio
+ ErrorLog logs/error_log
+{% endif %}
+{% else %}
+ CustomLog /dev/stdout combinedrucio
+ ErrorLog /dev/stderr
+{% endif %}
+{% endmacro %}
+
+{% if RUCIO_ENABLE_SSL|default('True') == 'True' %}
+  {% set enable_ssl = 'True' %}
+{% else %}
+  {% set enable_ssl = 'False' %}
+{% endif %}
+
+{% if enable_ssl == 'True' %}
+LoadModule ssl_module /usr/lib64/httpd/modules/mod_ssl.so
+Listen 443
+{% endif %}
+LoadModule unique_id_module modules/mod_unique_id.so
+LoadModule authn_core_module modules/mod_authn_core.so
+LoadModule cache_disk_module modules/mod_cache_disk.so
+
+CacheEnable disk /
+CacheRoot /tmp
+Listen 80
+
+Header set X-Rucio-Host "%{HTTP_HOST}e"
+RequestHeader add X-Rucio-RequestId "%{UNIQUE_ID}e"
+
+{% if RUCIO_LOG_FORMAT is defined %}
+LogFormat "{{ RUCIO_LOG_FORMAT }}" combinedrucio
+{% else %}
+LogFormat "%h\t%t\t%{X-Rucio-Forwarded-For}i\t%T\t%D\t\"%{X-Rucio-Auth-Token}i\"\t%{X-Rucio-RequestId}i\t%{X-Rucio-Client-Ref}i\t\"%r\"\t%>s\t%b" combinedrucio
+{% endif %}
+
+{% if enable_ssl == 'True' %}
+<VirtualHost *:80>
+
+{% if RUCIO_HOSTNAME is defined %}
+ ServerName {{ RUCIO_HOSTNAME }}:80
+ Redirect / https://{{ RUCIO_HOSTNAME }}/
+{% endif %}
+</VirtualHost>
+
+<VirtualHost *:443>
+
+ {{ common_virtual_host_config(port=443) }}
+
+</VirtualHost>
+
+{% else %}
+
+<VirtualHost *:80>
+ {{ common_virtual_host_config(port=80) }}
+</VirtualHost>
+{% endif %}
+
