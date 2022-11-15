@@ -64,7 +64,7 @@ RUN python3 -m pip install --no-cache --upgrade pip && \
     ln -s $RUCIOHOME/lib/rucio /usr/local/lib/python3.6/site-packages/rucio
 
 #additional configuration for fts-rest-cli
-RUN pip2 install requests 
+RUN pip2 install requests==2.22.0
 
 COPY .pep8 .pep8
 COPY .flake8 .flake8
