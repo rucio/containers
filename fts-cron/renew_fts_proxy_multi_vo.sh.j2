@@ -1,0 +1,36 @@
+#!/bin/bash
+
+{% if RUCIO_FTS_VOMSES is defined %}
+{% set vomses = RUCIO_FTS_VOMSES.split(',') %}
+{% for voms in vomses %}
+
+printf "=================== {{ voms }} Renewal =========================\n\n"
+
+# We have to copy the certificates because we cannot change permissions on them as mounted secrets and voms-proxy is particular about permissions
+mkdir /tmp/{{ voms }}/
+cp /opt/rucio/certs/{{ voms }}/{{ RUCIO_LONG_PROXY }} /tmp/{{ voms }}/long.proxy
+chmod 400 /tmp/{{ voms }}/long.proxy
+
+# Generate a proxy with the voms extension if requested
+voms-proxy-init2 -valid 24:00 -cert /tmp/{{ voms }}/long.proxy -key /tmp/{{ voms }}/long.proxy -out /tmp/x509up_{{ voms }} -voms {{ voms }} -rfc -timeout 5
+
+# Delegate the proxy to the requested servers
+{% if RUCIO_FTS_SERVERS is defined %}
+{% set ftses = RUCIO_FTS_SERVERS.split(',') %}
+{% for fts in ftses %}
+fts-rest-delegate --hours=24 --force --key=/tmp/x509up_{{ voms }} --cert=/tmp/x509up_{{ voms }} -s {{ fts }}
+{% endfor %}
+{% endif %}
+
+# Create the corresponding kubernetes secrets if asked
+{% if RUCIO_FTS_SECRETS is defined %}
+{% set secrets = RUCIO_FTS_SECRETS.split(',') %}
+{% for secret in secrets %}
+kubectl create secret generic  {{ secret }}-{{ voms }} --from-file=/tmp/x509up_{{ voms }} --dry-run=client -o yaml | kubectl apply --validate=false  -f  -
+{% endfor %}
+{% endif %}
+
+printf "\n=============== {{ voms }} Renewal Complete ====================\n\n"
+
+{% endfor %}
+{% endif %}
