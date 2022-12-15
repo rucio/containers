@@ -1,5 +1,7 @@
 #!/bin/bash -e
 
+echo "=================== Preparing renew_fts_proxy.sh ========================"
+
 if [[ $RUCIO_VO == 'atlas' ]]
 then
     j2 /opt/rucio/fts-delegate/renew_fts_proxy_atlas.sh.j2 > /opt/rucio/fts-delegate/renew_fts_proxy.sh
@@ -21,5 +23,11 @@ chmod +x /opt/rucio/fts-delegate/renew_fts_proxy.sh
 echo "=================== /renew_fts_proxy.sh ========================"
 cat /opt/rucio/fts-delegate/renew_fts_proxy.sh
 echo ""
+
+echo "=================== Updating certificate environment ========================"
+
+/usr/sbin/fetch-crl -v
+
+echo "=================== Delegating ========================"
 
 /opt/rucio/fts-delegate/renew_fts_proxy.sh

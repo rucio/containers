@@ -22,7 +22,7 @@ RUN curl -o /usr/bin/kubectl -L https://storage.googleapis.com/kubernetes-releas
 RUN chmod +x /usr/bin/kubectl
 
 # Install VOMS and FTS clients for delegating proxies
-RUN yum -y install ca-certificates.noarch lcg-CA voms-clients-java fts-rest-cli \
+RUN yum -y install ca-certificates.noarch lcg-CA ca_* fetch-crl voms-clients-java fts-rest-cli \
     wlcg-voms-cms wlcg-voms-atlas \
     python-pip python-setuptools python-requests && \
     yum clean all && \
