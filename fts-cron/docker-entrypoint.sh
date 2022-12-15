@@ -26,7 +26,7 @@ echo ""
 
 echo "=================== Updating certificate environment ========================"
 
-/usr/sbin/fetch-crl -v
+/usr/sbin/fetch-crl -v --define httptimeout=3
 
 echo "=================== Delegating ========================"
 
