@@ -45,5 +45,6 @@ ADD renew_fts_proxy_multi_vo.sh.j2 /opt/rucio/fts-delegate/
 ADD rucio_ca.pem /etc/grid-security/certificates/
 
 ADD dteam* /etc/vomses/
+ADD voms-escape* /etc/vomses/
 
 ENTRYPOINT ["/opt/rucio/fts-delegate/docker-entrypoint.sh"]
