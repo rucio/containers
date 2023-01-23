@@ -26,7 +26,7 @@ WSGIApplicationGroup rucio
 CacheEnable disk /
 CacheRoot /tmp
 
-{% macro common_virtual_host_config(port, enable_ssl) %}
+{% macro common_virtual_host_config(port, enable_ssl, require_x509_auth ) %}
 {% if RUCIO_HOSTNAME is defined %}
  ServerName {{ RUCIO_HOSTNAME }}:{{ port }}
 {% endif %}
@@ -44,6 +44,12 @@ CacheRoot /tmp
 {% endif %}
  SSLVerifyClient optional_no_ca
  SSLVerifyDepth 10
+ {% if require_x509_auth %}
+ <Location /auth/x509>
+    SSLVerifyClient require
+    SSLVerifyDepth 10
+ </Location>
+{% endif %}
 {% if RUCIO_HTTPD_LEGACY_DN|default('False') == 'True' %}
  SSLOptions +StdEnvVars +LegacyDNStringFormat
 {% else %}
@@ -80,7 +86,7 @@ CacheRoot /tmp
 {% endmacro %}
 
 <VirtualHost *:{{ listen_port}} >
-{{ common_virtual_host_config(port=listen_port, enable_ssl=RUCIO_ENABLE_SSL|default('False') == 'True') }}
+{{ common_virtual_host_config(port=listen_port, enable_ssl=RUCIO_ENABLE_SSL|default('False') == 'True', require_x509_auth=true ) }}
 {% if RUCIO_DEFINE_ALIASES|default('False') == 'True' %}
  Include /opt/rucio/etc/aliases.conf
 {% else %}
