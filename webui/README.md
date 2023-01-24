@@ -93,7 +93,6 @@ The following environment variables are used to configure the rucio specific asp
 | `RUCIO_HOSTNAME` | This variable sets the server name in the apache config. |  |
 | `RUCIO_SERVER_ADMIN` | This variable sets the server admin in the apache config. |  |
 | `RUCIO_ENABLE_SSL` | Enable SSL/TLS Termination. | Optional, default: `False` |
-| `RUCIO_CA_PATH` | If you are using SSL and want use `SSLCACertificatePath` and `SSLCARevocationPath` you can do so by specifying the path in this variable. | Optional, Default: `/etc/grid-security/ca.pem` |
 | `RUCIO_LOG_FORMAT` | The default rucio log format is `%h\t%t\t%{X-Rucio-Forwarded-For}i\t%T\t%D\t\"%{X-Rucio-Auth-Token}i\"\t%{X-Rucio-RequestId}i\t%{X-Rucio-Client-Ref}i\t\"%r\"\t%>s\t%b` You can set your own format using this variable. |  |
 | `RUCIO_ENABLE_LOGS`| By default the log output of the web server is written to stdout and stderr. If you set this variable to `True` the output will be written to `access_log` and `error_log` under `/var/log/httpd`. |  |
 | `RUCIO_LOG_LEVEL` | The log level of Apache | Default: info |
@@ -148,6 +147,19 @@ This would allow the end-users to click on the `x509 Authentication` button in t
 While, this is a totally valid httpd configuration, most browsers, at the time of writing this document, do not support [`post-handshake`](https://stackoverflow.com/questions/53062504/apache-2-4-37-with-openssl-1-1-1-cannot-perform-post-handshake-authentication) authentication. Therefore, the `SSLVerifyClient` directive must be used in the <VirtualHost *:443> directive.
 
 In case this changes in future, please coordinate with the developers of the webui to adapt to the `post-handshake` authentication scenario.
+
+-----
+** UPDATE 24/01/2023 **
+
+The following configuration has been moved to rucio server's `httpd.conf.j2` template. https://github.com/rucio/containers/issues/216
+
+```
+<Location /auth/x509> 
+ SSLVerifyClient optional_no_ca
+ SSLVerifyDepth 10
+</Location>
+```
+and `post-handshake` authentication works as expected. The entire scope of changes are described [here](https://github.com/rucio/rucio/issues/6048).
 
 ## Enabling docker auto builds
 Once the new webui is ready to be included as part of the main release process of Rucio, it must be added to the docker auto build and push workflow defined in this repository.
