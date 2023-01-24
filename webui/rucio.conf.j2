@@ -7,24 +7,11 @@
  SSLEngine on
  SSLCertificateFile /etc/grid-security/hostcert.pem
  SSLCertificateKeyFile /etc/grid-security/hostkey.pem
-{% if RUCIO_CA_PATH is defined %}
- SSLCACertificatePath {{ RUCIO_CA_PATH }}
- SSLCARevocationPath {{ RUCIO_CA_PATH }}
- SSLCARevocationCheck {{ RUCIO_CA_REVOCATION_CHECK | default('chain') }}
-{% else %}
- SSLCACertificateFile /etc/grid-security/ca.pem
-{% endif %}
- SSLVerifyClient optional_no_ca
- SSLVerifyDepth 10
  SSLOptions +StdEnvVars
- SSLProxyEngine On
-
  #AB: SSLv3 disable
  SSLProtocol              all -SSLv2 -SSLv3
  #AB: for Security
  SSLCipherSuite           HIGH:!CAMELLIA:!ADH:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!3DES
- Header set X-SSL-Client-S-DN "expr=%{SSL_CLIENT_S_DN}"
- Header set X-SSL-Verify "expr=%{SSL_CLIENT_VERIFY}"
 {% endif %}
 {% if RUCIO_LOG_LEVEL is defined %}
  LogLevel {{ RUCIO_LOG_LEVEL }}
