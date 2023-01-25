@@ -68,7 +68,8 @@ The following environment variables are used to configure the React App.
 | `WEBUI_LOGIN_PAGE_IMAGE_PRIMARY` | The path to the primary image to be displayed on the login page. | Optional, the image must be volume mounted onto the container |
 | `WEBUI_LOGIN_PAGE_IMAGE_SECONDARY` | The path to the secondary image to be displayed on the login page. | Optional, the image must be volume mounted onto the container |
 | `WEBUI_MULTI_VO_ENABLED` | Enable multi-vo support. | Optional, set 'true' to enable |
-| `WEBUI_VOS` | List of VOs for multi-vo | Optional
+| `WEBUI_VOS` | List of 3 character VOs names for multi-vo | Required for multi-vo |
+| `RUCIO_CFG_REACT_APP_VO_<3 char vo name>` | Display name for respective VO | Required for multi-vo |
 
 ## OIDC Authentication
 
