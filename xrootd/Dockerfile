@@ -1,5 +1,21 @@
 FROM centos:7
 
+# Install CERN CA
+ADD ca.repo /etc/yum.repos.d/ca.repo
+
+RUN yum install -y epel-release.noarch http://linuxsoft.cern.ch/wlcg/centos7/x86_64/wlcg-repo-1.0.0-1.el7.noarch.rpm && \
+    yum clean all && \
+    rm -rf /var/cache/yum
+
+RUN yum update -y && \
+    yum upgrade -y && \
+    yum clean all && \
+    rm -rf /var/cache/yum
+
+RUN yum -y install ca-certificates.noarch lcg-CA ca_* \
+    yum clean all && \
+    rm -rf /var/cache/yum
+
 # Install XrootD
 RUN yum install -y epel-release.noarch
 RUN yum upgrade -y
