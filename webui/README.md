@@ -67,6 +67,8 @@ The following environment variables are used to configure the React App.
 | `RUCIO_HOST` | The URL of the Rucio server to connect to. | Required |
 | `WEBUI_LOGIN_PAGE_IMAGE_PRIMARY` | The path to the primary image to be displayed on the login page. | Optional, the image must be volume mounted onto the container |
 | `WEBUI_LOGIN_PAGE_IMAGE_SECONDARY` | The path to the secondary image to be displayed on the login page. | Optional, the image must be volume mounted onto the container |
+| `WEBUI_MULTI_VO_ENABLED` | Enable multi-vo support. | Optional, set 'true' to enable |
+| `WEBUI_VOS` | List of VOs for multi-vo | Optional
 
 ## OIDC Authentication
 
@@ -78,11 +80,13 @@ Then, you can specify the OIDC client configuration in the WebUI by providing th
 
 | Variable | Description | Required/Optional |
 | --- | --- | --- |
-| `RUCIO_CFG_OIDC_REACT_APP_oidc_provider_<num>` | The name of the OIDC provider. | Required |
-| `RUCIO_CFG_OIDC_REACT_APP_oidc_client_id_<num>` | The client ID of the OIDC provider. | Required |
-| `RUCIO_CFG_OIDC_REACT_APP_oidc_authorization_endpoint_<num>` | The authorization endpoint of the OIDC provider, without the trailing '/'. | Required |
-| `RUCIO_CFG_OIDC_REACT_APP_oidc_token_endpoint_<num>` | The token endpoint of the OIDC provider, without the trailing '/'. | Required |
-| `RUCIO_CFG_OIDC_REACT_APP_oidc_redirect_uri_<num>` | The redirect URI of the OIDC provider. | Required |
+| `RUCIO_CFG_OIDC_REACT_APP_oidc_providers` | List of OIDC provider names. | Required |
+| `RUCIO_CFG_OIDC_REACT_APP_oidc_provider_<name>_client_id` | The client ID of the OIDC provider. | Required |
+| `RUCIO_CFG_OIDC_REACT_APP_oidc_<name>_authorization_endpoint` | The authorization endpoint of the OIDC provider, without the trailing '/'. | Required |
+| `RUCIO_CFG_OIDC_REACT_APP_oidc_<name>_token_endpoint` | The token endpoint of the OIDC provider, without the trailing '/'. | Required |
+| `RUCIO_CFG_OIDC_REACT_APP_oidc_<name>_redirect_uri` | The redirect URI of the OIDC provider. | Required |
+
+For multi-vo support for OIDC `<name>` should be replaced with `<name>_<vo>`. This allows separate providers to be set for each VO.
 
 ## Web Server Configuration
 
