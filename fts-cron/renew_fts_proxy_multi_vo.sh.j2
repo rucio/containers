@@ -1,24 +1,23 @@
 #!/bin/bash
 
-{% if RUCIO_FTS_VOMSES is defined %}
-{% set vomses = RUCIO_FTS_VOMSES.split(',') %}
-{% for voms in vomses %}
+{% set vos = RUCIO_FTS_VOS.split(' ') %}
+{% for vo in vos %}
 
-printf "=================== {{ voms }} Renewal =========================\n\n"
+printf "=================== {{ vo }} Renewal =========================\n\n"
 
 # We have to copy the certificates because we cannot change permissions on them as mounted secrets and voms-proxy is particular about permissions
-mkdir /tmp/{{ voms }}/
-cp /opt/rucio/certs/{{ voms }}/{{ RUCIO_LONG_PROXY }} /tmp/{{ voms }}/long.proxy
-chmod 400 /tmp/{{ voms }}/long.proxy
+mkdir /tmp/{{ vo }}/
+cp /opt/rucio/certs/{{ vo }}/{{ RUCIO_LONG_PROXY }} /tmp/{{ vo }}/long.proxy
+chmod 400 /tmp/{{ vo }}/long.proxy
 
 # Generate a proxy with the voms extension if requested
-voms-proxy-init2 -valid 24:00 -cert /tmp/{{ voms }}/long.proxy -key /tmp/{{ voms }}/long.proxy -out /tmp/x509up_{{ voms }} -voms {{ voms }} -rfc -timeout 5
+voms-proxy-init2 -valid 24:00 -cert /tmp/{{ vo }}/long.proxy -key /tmp/{{ vo }}/long.proxy -out /tmp/x509up_{{ vo }} -voms $RUCIO_FTS_VOMS_{{ vo | upper}} -rfc -timeout 5
 
 # Delegate the proxy to the requested servers
 {% if RUCIO_FTS_SERVERS is defined %}
 {% set ftses = RUCIO_FTS_SERVERS.split(',') %}
 {% for fts in ftses %}
-fts-rest-delegate --hours=24 --force --key=/tmp/x509up_{{ voms }} --cert=/tmp/x509up_{{ voms }} -s {{ fts }}
+fts-rest-delegate --hours=24 --force --key=/tmp/x509up_{{ vo }} --cert=/tmp/x509up_{{ vo }} -s {{ fts }}
 {% endfor %}
 {% endif %}
 
@@ -26,11 +25,10 @@ fts-rest-delegate --hours=24 --force --key=/tmp/x509up_{{ voms }} --cert=/tmp/x5
 {% if RUCIO_FTS_SECRETS is defined %}
 {% set secrets = RUCIO_FTS_SECRETS.split(',') %}
 {% for secret in secrets %}
-kubectl create secret generic  {{ secret }}-{{ voms }} --from-file=/tmp/x509up_{{ voms }} --dry-run=client -o yaml | kubectl apply --validate=false  -f  -
+kubectl create secret generic  {{ secret }}-{{ vo }} --from-file=/tmp/x509up_{{ vo }} --dry-run=client -o yaml | kubectl apply --validate=false  -f  -
 {% endfor %}
 {% endif %}
 
-printf "\n=============== {{ voms }} Renewal Complete ====================\n\n"
+printf "\n=============== {{ vo }} Renewal Complete ====================\n\n"
 
 {% endfor %}
-{% endif %}
