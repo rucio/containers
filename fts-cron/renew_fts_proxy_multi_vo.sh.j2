@@ -1,5 +1,6 @@
 #!/bin/bash
 
+{% if RUCIO_FTS_VOS is defined -%}
 {% set vos = RUCIO_FTS_VOS.split(' ') %}
 {% for vo in vos %}
 
@@ -11,7 +12,12 @@ cp /opt/rucio/certs/{{ vo }}/{{ RUCIO_LONG_PROXY }} /tmp/{{ vo }}/long.proxy
 chmod 400 /tmp/{{ vo }}/long.proxy
 
 # Generate a proxy with the voms extension if requested
-voms-proxy-init2 -valid 24:00 -cert /tmp/{{ vo }}/long.proxy -key /tmp/{{ vo }}/long.proxy -out /tmp/x509up_{{ vo }} -voms $RUCIO_FTS_VOMS_{{ vo | upper}} -rfc -timeout 5
+if [ $RUCIO_FTS_VOMS_{{ vo | upper }} ]
+then
+    voms-proxy-init2 -valid 24:00 -cert /tmp/{{ vo }}/long.proxy -key /tmp/{{ vo }}/long.proxy -out /tmp/x509up_{{ vo }} -rfc -timeout 5 -voms $RUCIO_FTS_VOMS_{{ vo | upper }}
+else
+    voms-proxy-init2 -valid 24:00 -cert /tmp/{{ vo }}/long.proxy -key /tmp/{{ vo }}/long.proxy -out /tmp/x509up_{{ vo }} -rfc -timeout 5
+fi
 
 # Delegate the proxy to the requested servers
 {% if RUCIO_FTS_SERVERS is defined %}
@@ -32,3 +38,4 @@ kubectl create secret generic  {{ secret }}-{{ vo }} --from-file=/tmp/x509up_{{ 
 printf "\n=============== {{ vo }} Renewal Complete ====================\n\n"
 
 {% endfor %}
+{%- endif %}
