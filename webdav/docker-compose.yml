@@ -1,0 +1,7 @@
+version: '3'
+services:
+  webdav:
+    image: thephisch/webdav:withit
+    restart: always
+    ports:
+      - "9002:443"
