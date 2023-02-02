@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Pull ESCAPE voms and place in /etc/vomses/
+wget https://indigo-iam.github.io/escape-docs/voms-config/voms-escape.cloud.cnaf.infn.it.vomses -O /etc/vomses/voms-escape.cloud.cnaf.infn.it.vomses
+
 # We have to copy the certificates because we cannot change permissions on them as mounted secrets and voms-proxy is particular about permissions
 cp /opt/rucio/certs/{{ USERCERT_NAME }} /tmp/cert.pem
 cp /opt/rucio/keys/{{ USERKEY_NAME }} /tmp/key.pem
