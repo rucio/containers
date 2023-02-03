@@ -6,10 +6,19 @@ FROM httpd:latest
 
 # Copy in our configuration files.
 COPY conf/ conf/
-COPY hostcert_web1.key.pem /web1key.pem
-COPY hostcert_web1.pem /web1cert.pem
 
 RUN set -ex; \
+    # Download current `mod_want_digest.c` file (and store into root dir)
+    cd /;\
+    apt-get update; \
+    apt-get install -y curl; \
+    curl -LJ https://github.com/wetzel-desy/mod_want_digest/tarball/main -o wetzel-desy-tarball; \
+    tar -xf wetzel-desy-tarball; \
+    FILENAME=$(find . -name mod_want_digest.c); \
+    mv $FILENAME .; \
+    rm -rf wetzel-desy-*; \
+    cd $HTTPD_PREFIX;\
+    \
     # Create empty default DocumentRoot.
     mkdir -p "/var/www/html"; \
     # Create directories for Dav data and lock database.
@@ -55,7 +64,19 @@ RUN set -ex; \
     ln -s ../sites-available/default.conf "conf/sites-enabled"; \
     # Install openssl if we need to generate a self-signed certificate.
     # apk add --no-cache openssl
-    apt-get install openssl
+    apt-get install openssl; \
+    \
+    # install mod_want_digest
+    mv /mod_want_digest.c mod_want_digest.c; \
+    apt-get install -y libtool libaprutil1-dev libapr1-dev zlib1g-dev build-essential; \
+    ln -s /usr/lib/x86_64-linux-gnu/libz.so /usr/lib/x86_64-linux-gnu/libzlib.so; \
+    apxs -c -lzlib mod_want_digest.c; \
+    apxs -ia mod_want_digest.la; \
+    \
+    # enable SSL
+    ln -s "../sites-available/default-ssl.conf" "conf/sites-enabled"; \
+    sed -i -e "/^#LoadModule ssl_module.*/s/^#//" "conf/httpd.conf"
+
 
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 EXPOSE 80/tcp 443/tcp
