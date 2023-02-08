@@ -14,16 +14,16 @@ chmod 400 /tmp/{{ vo }}/long.proxy
 # Generate a proxy with the voms extension if requested
 if [ $RUCIO_FTS_VOMS_{{ vo | upper }} ]
 then
-    voms-proxy-init2 -valid 24:00 -cert /tmp/{{ vo }}/long.proxy -key /tmp/{{ vo }}/long.proxy -out /tmp/x509up_{{ vo }} -rfc -timeout 5 -voms $RUCIO_FTS_VOMS_{{ vo | upper }}
+    voms-proxy-init2 -valid 24:00 -cert /tmp/{{ vo }}/long.proxy -key /tmp/{{ vo }}/long.proxy -out /tmp/{{ vo }}/x509up -rfc -timeout 5 -voms $RUCIO_FTS_VOMS_{{ vo | upper }}
 else
-    voms-proxy-init2 -valid 24:00 -cert /tmp/{{ vo }}/long.proxy -key /tmp/{{ vo }}/long.proxy -out /tmp/x509up_{{ vo }} -rfc -timeout 5
+    voms-proxy-init2 -valid 24:00 -cert /tmp/{{ vo }}/long.proxy -key /tmp/{{ vo }}/long.proxy -out /tmp/{{ vo }}/x509up -rfc -timeout 5
 fi
 
 # Delegate the proxy to the requested servers
 {% if RUCIO_FTS_SERVERS is defined %}
 {% set ftses = RUCIO_FTS_SERVERS.split(',') %}
 {% for fts in ftses %}
-fts-rest-delegate --hours=24 --force --key=/tmp/x509up_{{ vo }} --cert=/tmp/x509up_{{ vo }} -s {{ fts }}
+fts-rest-delegate --hours=24 --force --key=/tmp/{{ vo }}/x509up --cert=/tmp/{{ vo }}/x509up -s {{ fts }}
 {% endfor %}
 {% endif %}
 
@@ -31,7 +31,7 @@ fts-rest-delegate --hours=24 --force --key=/tmp/x509up_{{ vo }} --cert=/tmp/x509
 {% if RUCIO_FTS_SECRETS is defined %}
 {% set secrets = RUCIO_FTS_SECRETS.split(',') %}
 {% for secret in secrets %}
-kubectl create secret generic  {{ secret }}-{{ vo }} --from-file=/tmp/x509up_{{ vo }} --dry-run=client -o yaml | kubectl apply --validate=false  -f  -
+kubectl create secret generic  {{ secret }}-{{ vo }} --from-file=/tmp/{{ vo }}/x509up --dry-run=client -o yaml | kubectl apply --validate=false  -f  -
 {% endfor %}
 {% endif %}
 
