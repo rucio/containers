@@ -16,6 +16,7 @@ jobs:
           'daemons, prepend-rucio, prepend-release, push-tagged, push-latest',
           'dev, prepend-rucio, prepend-release, push-tagged, push-latest',
           'ui, prepend-rucio, prepend-release, push-tagged, push-latest',
+          'webui, prepend-rucio, prepend-release, push-tagged, push-latest',
           'init, prepend-rucio, prepend-release, push-tagged, push-latest',
           'probes, push-latest',
           'fts, push-latest',
@@ -58,8 +59,16 @@ jobs:
         id: release
         shell: bash
         run: |
+          # There are two types of releases managed by this script. If the git tag for the release 
+          # is of the form `<semantic_version>`, then the release is a standard rucio release.
+          # If the git tag for the release is of the form `webui-<semantic_version>`, then the release is a WebUI release.
+          # Standard rucio releases are tagged with the rucio release version and DO NOT build the WebUI.
+          # WebUI releases are tagged with the WebUI release version and build the webui containers only.
+          #
+          # Below is the usage of the script to describe the tagging scheme used by the Docker Images
+          #
           # Generates the image tags for the containers present in the containers repository
-          # The input is inn CSV format:
+          # The input is in CSV format:
           # {sub_directory}, {parent_image}, {config_paramms}
           # where,
           #     sub_directory: name of the sub_directory in rucio/containers reposistory that contains
@@ -102,6 +111,20 @@ jobs:
           MAX_ATTEMPTS=10
           GIT_TAG_COMMIT_SHA=$(echo $(git rev-list -n 1 $GIT_TAG))
           GIT_MASTER_LATEST_COMMIT_SHA=$(echo $(git ls-remote --heads origin | grep master  |  awk -F '\t' '{print $1}'))
+
+          # if git tag begins with webui-{semantic version}, then treat context as a webui release
+          if [[ $GIT_TAG =~ ^webui-([0-9]+.[0-9]+.[0-9]+)$ ]]; then
+              GIT_TAG="${BASH_REMATCH[1]}"
+              if [[ ! $CONTEXT_DIR =~ .*"webui".* ]]; then
+                  echo "This is a Rucio WebUI release. Building of other containers is therefore skipped!"
+                  exit 0
+              fi
+          else 
+              if [[ $CONTEXT_DIR =~ .*"webui".* ]]; then
+                  echo "This is a standard Rucio release. Building of WebUI container is therefore skipped!"
+                  exit 0
+              fi
+          fi
 
           if [[ -d $CONTEXT_DIR ]]; then
             if [[ -f "${CONTEXT_DIR}/Dockerfile" ]]; then 
