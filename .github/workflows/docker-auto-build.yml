@@ -20,14 +20,14 @@ jobs:
           'ui, prepend-rucio, prepend-release, push-tagged, push-latest',
           'webui, prepend-rucio, prepend-release, push-tagged, push-latest',
           'init, prepend-rucio, prepend-release, push-tagged, push-latest',
-          'probes, push-latest',
-          'fts, push-latest',
-          'fts-cron/Dockerfile_cpp, push-latest',
-          'fts-cron/Dockerfile_java, custom-tag=java',
-          'ssh, push-latest',
-          'xrootd, push-latest',
-          'xrootd-noauth, push-latest',
-          'fs, rucio-clients:release-#TAG, prepend-rucio, prepend-release, push-tagged, push-latest'
+          'probes, push-tagged, push-latest',
+          'fts, push-tagged, push-latest',
+          'fts-cron/Dockerfile_cpp, push-tagged, push-latest',
+          'fts-cron/Dockerfile_java, push-tagged, push-latest, custom-tag=-java',
+          'ssh, push-tagged, push-latest',
+          'xrootd, push-tagged, push-latest',
+          'xrootd-noauth, push-tagged, push-latest',
+          'fs, rucio-clients:release-#TAG, push-tagged, push-latest'
         ]
       fail-fast: false
     
@@ -80,7 +80,7 @@ jobs:
           #                    Parent images must begin with rucio- and can specify the #TAG placeholder to refer to the current tag being pushed.
           #                    For example, rucio-clients:release-#TAG
           #     config_params: These are described in the CONFIG section and are used to generate 
-          #                    the image tags that will be pushed to DockerHub fot the given {sub_directory}
+          #                    the image tags that will be pushed to DockerHub for the given {sub_directory}
           #
           # CONFIG PARAMS
           # -------------
@@ -101,8 +101,8 @@ jobs:
           # |-----------------	|-------------	|-------------------	|
           # | 0               	| 0           	| Check for latest tag|
           # | 0               	| 1           	| :$GIT_TAG         	|
-          # | 0               	| 0           	| Config Error      	|
-          # | 0               	| 1           	| :release-$GIT_TAG 	|
+          # | 1               	| 0           	| Config Error      	|
+          # | 1               	| 1           	| :release-$GIT_TAG 	|
 
           CONTEXT=$(echo "${{ matrix.context }}")
           CONTEXT_DIR=$(echo "${CONTEXT}" | cut -d, -f1 )
