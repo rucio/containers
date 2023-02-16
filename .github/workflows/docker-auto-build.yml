@@ -23,7 +23,7 @@ jobs:
           'probes, push-tagged, push-latest',
           'fts, push-tagged, push-latest',
           'fts-cron/Dockerfile_cpp, push-tagged, push-latest',
-          'fts-cron/Dockerfile_java, push-tagged, push-latest, custom-tag=-java',
+          'fts-cron/Dockerfile_java, push-tagged, push-latest, custom-tag=java',
           'ssh, push-tagged, push-latest',
           'xrootd, push-tagged, push-latest',
           'xrootd-noauth, push-tagged, push-latest',
@@ -93,6 +93,7 @@ jobs:
           # force-latest: if present, the latest tag will be force pushed to Docker Hub
           # latest-only: if present, only the latest tag will be pushed to Docker Hub
           # custom-tag=value: If present, the value of the custom tag will be appended to the image tag.
+          #                   If push-latest is also present, then the custom tag will be appended to the latest tag as well.
           #                   For example, custom-tag=java will append `java` to the image name.
           #
           # The following truth table is used to determine the Docker Hub tag
@@ -182,13 +183,20 @@ jobs:
           if [[ $CONTEXT =~ custom-tag=([-a-zA-Z0-9]*) ]]; then
             CUSTOM_TAG="${BASH_REMATCH[1]}"
             if [[ -z $IMAGE_TAG ]]; then
-              IMAGE_TAG="${BASE_TAG}:${CUSTOM_TAG}"
+                  IMAGE_TAG="${BASE_TAG}:${CUSTOM_TAG}"
             else
-              IMAGE_TAG="${IMAGE_TAG}${CUSTOM_TAG}"
+                  IMAGE_TAG="${IMAGE_TAG}-${CUSTOM_TAG}"
+            fi
+            
+            if [[ -z $LATEST_TAG ]]; then
+                  LATEST_TAG="${BASE_TAG}:latest-${CUSTOM_TAG}"
+            else
+                  LATEST_TAG="${LATEST_TAG}-${CUSTOM_TAG}"
             fi
           else
-            echo "No custom tag detected!"
+              echo "No custom tag detected!"
           fi
+          
           echo $CONTEXT
 
           if [[ -z "$IMAGE_TAG" && -z "$LATEST_TAG" ]]; then
