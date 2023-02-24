@@ -13,6 +13,7 @@ jobs:
         context: [
           'clients, prepend-rucio, prepend-release, push-tagged, push-latest', 
           'server, prepend-rucio, prepend-release, push-tagged, push-latest',
+          'server/alma9.Dockerfile, prepend-rucio, prepend-release, push-tagged, custom-tag=-alma9',
           'daemons, prepend-rucio, prepend-release, push-tagged, push-latest',
           'dev, prepend-rucio, prepend-release, push-tagged, push-latest',
           'ui, prepend-rucio, prepend-release, push-tagged, push-latest',
@@ -154,7 +155,7 @@ jobs:
             LATEST_TAG="$BASE_TAG:latest"
           fi
 
-          if [[ $CONTEXT =~ custom-tag=([a-zA-Z0-9]*) ]]; then
+          if [[ $CONTEXT =~ custom-tag=([-a-zA-Z0-9]*) ]]; then
             CUSTOM_TAG="${BASH_REMATCH[1]}"
             if [[ -z $IMAGE_TAG ]]; then
               IMAGE_TAG="${BASE_TAG}:${CUSTOM_TAG}"
