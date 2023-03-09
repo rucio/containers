@@ -27,9 +27,12 @@ echo "=================== /renew_fts_proxy.sh ========================"
 cat /opt/rucio/fts-delegate/renew_fts_proxy.sh
 echo ""
 
-echo "=================== Updating certificate environment ========================"
 
-/usr/sbin/fetch-crl -v --define httptimeout=3 || true
+if [ -z "$FETCH_CRL" -o "$FETCH_CRL" = "True" ]; then
+    echo "=================== Updating certificate environment ========================"
+
+    /usr/sbin/fetch-crl -v --define httptimeout=3 || true
+fi
 
 echo "=================== Delegating ========================"
 
