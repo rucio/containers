@@ -4,6 +4,9 @@ LoadModule ssl_module /usr/lib64/httpd/modules/mod_ssl.so
 {% else %}
 {% set listen_port = 80 %}
 {% endif %}
+{% if RUCIO_HTTPD_GRID_SITE_ENABLED | default('False') == 'True' %}
+LoadModule gridsite_module /usr/lib64/httpd/modules/mod_gridsite.so
+{% endif %}
 LoadModule unique_id_module modules/mod_unique_id.so
 LoadModule wsgi_module /usr/lib64/httpd/modules/mod_wsgi.so
 Listen {{ listen_port }}
@@ -84,7 +87,22 @@ CacheRoot /tmp
 {% if RUCIO_DEFINE_ALIASES|default('False') == 'True' %}
  Include /opt/rucio/etc/aliases.conf
 {% else %}
- WSGIScriptAlias /                       /usr/local/lib/python3.6/site-packages/rucio/web/rest/flaskapi/v1/main.py process-group=rucio application-group=rucio
+ WSGIScriptAlias / {{ RUCIO_PYTHON_PATH }}/web/rest/flaskapi/v1/main.py process-group=rucio application-group=rucio
+{% endif %}
+
+{% if RUCIO_HTTPD_PROXY_PROTOCOL_ENABLED | default('False') == 'True' %}
+ RemoteIPProxyProtocol On
+ RemoteIPProxyProtocolExceptions 127.0.0.1 ::1 {{ RUCIO_HTTPD_PROXY_PROTOCOL_EXCEPTIONS }}
+{% endif %}
+
+{% if RUCIO_HTTPD_GRID_SITE_ENABLED | default('False') == 'True' %}
+ <LocationMatch {{ RUCIO_HTTPD_GRID_SITE_LOCATION_MATCH | default('/auth/x509_proxy') }} >
+  GridSiteIndexes {{ RUCIO_HTTPD_GRID_SITE_INDEXES | default('on') }}
+  GridSiteAuth {{ RUCIO_HTTPD_GRID_SITE_AUTH | default('on') }}
+  GridSiteGSIProxyLimit {{ RUCIO_HTTPD_GRID_SITE_GSI_PROXY_LIMIT | default('16') }}
+  GridSiteEnvs {{ RUCIO_HTTPD_GRID_SITE_ENVS | default('on') }}
+  GridSiteACLPath {{ RUCIO_HTTPD_GRID_SITE_ACL_PATH | default('/etc/httpd/gacl') }}
+ </LocationMatch>
 {% endif %}
 </VirtualHost>
 
@@ -93,6 +111,6 @@ Listen {{ RUCIO_METRICS_PORT }}
 <VirtualHost *:{{ RUCIO_METRICS_PORT }} >
 {{ common_virtual_host_config(port=RUCIO_METRICS_PORT, enable_ssl=false) }}
 
- WSGIScriptAlias /metrics                /usr/local/lib/python3.6/site-packages/rucio/web/rest/metrics.py process-group=rucio application-group=rucio
+ WSGIScriptAlias /metrics {{ RUCIO_PYTHON_PATH }}/web/rest/metrics.py process-group=rucio application-group=rucio
 </VirtualHost>
 {% endif %}

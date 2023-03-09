@@ -16,6 +16,8 @@ if [ ! -z "$RUCIO_PRINT_CFG" ]; then
     echo ""
 fi
 
+RUCIO_PYTHON_PATH=$(python3 -c "import os; import rucio; print(os.path.dirname(rucio.__file__))")
+
 /usr/bin/memcached -u memcached -p 11211 -m 64 -c 1024 &
 
 if [ "$RUCIO_DAEMON" == "hermes" ]
@@ -30,7 +32,7 @@ then
     for patchfile in /patch/*
     do
         echo "Apply patch ${patchfile}"
-        patch -p3 -d /usr/local/lib/python3.6/site-packages/rucio < $patchfile
+        patch -p3 -d "$RUCIO_PYTHON_PATH" < $patchfile
     done
 fi
 

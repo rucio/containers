@@ -28,7 +28,9 @@ if [ ! -z "$RUCIO_PRINT_CFG" ]; then
     echo ""
 fi
 
-j2 /tmp/rucio.conf.j2 | sed '/^\s*$/d' > /etc/httpd/conf.d/rucio.conf
+RUCIO_PYTHON_PATH=$(python3 -c "import os; import rucio; print(os.path.dirname(rucio.__file__))")
+
+(export RUCIO_PYTHON_PATH; j2 /tmp/rucio.conf.j2 | sed '/^\s*$/d' > /etc/httpd/conf.d/rucio.conf)
 
 /usr/bin/memcached -u memcached -p 11211 -m 128 -c 1024 &
 
@@ -47,7 +49,7 @@ then
     for patchfile in /patch/*
     do
         echo "Apply patch ${patchfile}"
-        patch -p3 -d /usr/local/lib/python3.6/site-packages/rucio < $patchfile
+        patch -p3 -d "$RUCIO_PYTHON_PATH" < $patchfile
     done
 fi
 
