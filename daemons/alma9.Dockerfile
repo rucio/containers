@@ -44,6 +44,8 @@ RUN python3 -m pip install --no-cache-dir j2cli
 ADD rucio.config.default.cfg /tmp/
 ADD start-daemon.sh /
 
+RUN update-crypto-policies --set DEFAULT:SHA1
+
 RUN mkdir /var/log/rucio
 
 VOLUME /var/log/rucio
