@@ -1,5 +1,11 @@
 #!/bin/sh
 
+if [ ! -z "$USE_DAVIX_WITH_OPENSSL31" ]; then
+    echo "=================== installing davix with openssl 3.1 ============================"
+    rpm -i /tmp/rpms/openssl31-libs-3*.rpm
+    rpm -U --force /tmp/rpms/davix-libs-0*.rpm
+fi
+
 if [ -f /opt/rucio/etc/rucio.cfg ]; then
     echo "rucio.cfg already mounted."
 else
