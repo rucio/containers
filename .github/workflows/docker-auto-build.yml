@@ -27,7 +27,7 @@ jobs:
           'ssh, push-tagged, push-latest',
           'xrootd, push-tagged, push-latest',
           'xrootd-noauth, push-tagged, push-latest',
-          'fs, rucio-clients:release-#TAG, push-tagged, push-latest'
+          'fs, rucio-clients:release-#TAG, prepend-rucio, push-tagged, push-latest'
         ]
       fail-fast: false
     
