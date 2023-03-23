@@ -3,16 +3,20 @@ FROM centos:7
 ARG TAG
 
 RUN yum install -y epel-release.noarch && \
-    yum clean all && \
-    rm -rf /var/cache/yum
-RUN yum upgrade -y && \
-    yum clean all && \
-    rm -rf /var/cache/yum
-RUN yum -y install https://repo.ius.io/ius-release-el7.rpm && \
-    yum install -y python36u-pip voms-clients-java gfal2-all gfal2-util python3-gfal2 xrootd-client\
-                   nordugrid-arc-client nordugrid-arc-plugins-gfal \
-                   nordugrid-arc-plugins-globus nordugrid-arc-plugins-s3 \
-                   nordugrid-arc-plugins-xrootd && \
+    yum upgrade -y && \
+    yum install -y https://repo.ius.io/ius-release-el7.rpm && \
+    yum install -y \
+        gfal2-all \
+        gfal2-util \
+        python3-gfal2 \
+        python36u-pip \
+        nordugrid-arc6-client \
+        nordugrid-arc6-plugins-gfal \
+        nordugrid-arc6-plugins-globus \
+        nordugrid-arc6-plugins-s3 \
+        nordugrid-arc6-plugins-xrootd \
+        voms-clients-java \
+        xrootd-client && \
     yum clean all && \
     rm -rf /var/cache/yum
 
