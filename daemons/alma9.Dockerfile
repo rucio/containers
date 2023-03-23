@@ -68,4 +68,6 @@ COPY --from=rpm_builder /root/rpmbuild/RPMS/x86_64/*.rpm /tmp/rpms/
 VOLUME /var/log/rucio
 VOLUME /opt/rucio/etc
 
+ENV USE_DAVIX_WITH_OPENSSL31=True
+
 ENTRYPOINT ["/start-daemon.sh"]
