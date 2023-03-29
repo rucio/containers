@@ -53,7 +53,7 @@ RUN rpm -i https://download.oracle.com/otn_software/linux/instantclient/1912000/
 
 RUN python3 -m pip install --no-cache-dir --upgrade pip && \
     python3 -m pip install --no-cache-dir --upgrade setuptools
-RUN python3 -m pip install --no-cache-dir --pre rucio[oracle,mysql,postgresql]==$TAG
+RUN python3 -m pip install --no-cache-dir --pre rucio[oracle,mysql,postgresql,globus]==$TAG
 
 RUN python3 -m pip install --no-cache-dir j2cli
 ADD rucio.config.default.cfg /tmp/
