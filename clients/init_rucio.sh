@@ -7,7 +7,9 @@ shopt -s checkwinsize
 if [ ! -f /opt/rucio/etc/rucio.cfg ]; then
     echo "File rucio.cfg not found. It will generate one."
     mkdir -p /opt/rucio/etc/
-    j2 /opt/user/rucio.cfg.j2 > /opt/rucio/etc/rucio.cfg
+    python3 /usr/local/rucio_client/merge_rucio_configs.py \
+        --use-env \
+        -d /opt/rucio/etc/rucio.cfg
 fi
 
 echo "Enable shell completion on the rucio commands"
