@@ -43,7 +43,6 @@ ADD renew_fts_proxy_dteam.sh.j2 /opt/rucio/fts-delegate/
 ADD renew_fts_proxy_tutorial.sh.j2 /opt/rucio/fts-delegate/
 ADD renew_fts_proxy_multi_vo.sh.j2 /opt/rucio/fts-delegate/
 ADD renew_fts_proxy_escape.sh.j2 /opt/rucio/fts-delegate/
-ADD rucio_ca.pem /etc/grid-security/certificates/
 
 ADD dteam* /etc/vomses/
 

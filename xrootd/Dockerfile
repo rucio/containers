@@ -22,12 +22,9 @@ RUN yum upgrade -y
 RUN yum install -y xrootd xrootd-client
 RUN yum clean all
 
-# Install the Rucio CA
-RUN mkdir -p /etc/grid-security/certificates
-ADD rucio_ca.pem /etc/grid-security/certificates/5fca1cb1.0
-
 # Host certificate directory
-RUN mkdir /etc/grid-security/xrd
+RUN mkdir -p /etc/grid-security/certificates
+RUN mkdir -p /etc/grid-security/xrd
 RUN chown -R xrootd:xrootd /etc/grid-security/xrd
 
 # Create storage area

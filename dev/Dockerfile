@@ -76,22 +76,15 @@ COPY rucio.cfg alembic.ini google-cloud-storage-test.json $RUCIOHOME/etc/
 COPY rucio_multi_vo_tst.cfg $RUCIOHOME/etc/multi_vo/tst/etc/rucio.cfg
 COPY rucio_multi_vo_ts2.cfg $RUCIOHOME/etc/multi_vo/ts2/etc/rucio.cfg
 COPY rclone-init.cfg $RUCIOHOME/etc/rclone-init.cfg
-COPY certs/rucio_ca.pem /etc/grid-security/certificates/5fca1cb1.0
 
 COPY 00-mpm.conf /etc/httpd/conf.modules.d/00-mpm.conf
 COPY httpd.conf /etc/httpd/conf/httpd.conf
 COPY rucio.conf /etc/httpd/conf.d/rucio.conf
-COPY certs/usercert.pem certs/userkey.pem certs/usercertkey.pem $RUCIOHOME/etc/
-RUN chmod 0400 $RUCIOHOME/etc/userkey.pem && mkdir /root/.ssh && \
+RUN mkdir /root/.ssh && \
     chmod 700 /root/.ssh && echo "Host ssh1" > /root/.ssh/config && \
     echo "IdentityFile /root/.ssh/ruciouser_sshkey" >> /root/.ssh/config
 
-COPY certs/hostcert_rucio.pem /etc/grid-security/hostcert.pem
-COPY certs/hostcert_rucio.key.pem /etc/grid-security/hostkey.pem
-COPY certs/ssh/ruciouser_sshkey.pub /root/.ssh/ruciouser_sshkey.pub
-COPY certs/ssh/ruciouser_sshkey /root/.ssh/ruciouser_sshkey
-RUN chmod 0400 /etc/grid-security/hostkey.pem && \
-    chmod 777 /var/log/rucio/trace && \
+RUN chmod 777 /var/log/rucio/trace && \
     rm -rf $RUCIOHOME/tools && \
     mkdir -p $RUCIOHOME/tools && \
     mkdir -p /etc/httpd && \
