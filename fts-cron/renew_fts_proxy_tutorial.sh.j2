@@ -1,9 +1,30 @@
 #! /bin/bash
 
+
+if [[ -z "$X509_CERT" ]] || [[ -z "$X509_KEY" ]]
+then
+  X509_CERT=/opt/rucio/certs/usercert.pem
+  X509_KEY=/opt/rucio/keys/userkey.pem
+fi
+
+if [[ -z "$X509_CA" ]]
+then
+  X509_CA=/etc/grid-security/certificates/rucio_ca.pem
+fi
+
 # Delegate the proxy to the requested servers
 {% if RUCIO_FTS_SERVERS is defined %}
 {% set ftses = RUCIO_FTS_SERVERS.split(',') %}
 {% for fts in ftses %}
-fts-rest-delegate -v -f -H 9999 --key=/opt/rucio/keys/userkey.pem --cert=/opt/rucio/certs/usercert.pem --capath /etc/grid-security/certificates/rucio_ca.pem -s {{ fts }}
+fts-rest-delegate -v -f -H 9999 --key="$X509_KEY" --cert="$X509_CERT" --capath "$X509_CA" -s {{ fts }}
+{% endfor %}
+{% endif %}
+
+
+{% if RUCIO_PROXY_SECRETS is defined %}
+xrdgsiproxy init -valid 9999:00 -cert "$X509_CERT" -key "$X509_KEY" -f /tmp/x509up
+{% set secrets = RUCIO_PROXY_SECRETS.split(',') %}
+{% for secret in secrets %}
+kubectl create secret generic  {{ secret }} --from-file=/tmp/x509up --dry-run=client -o yaml | kubectl apply --validate=false  -f  -
 {% endfor %}
 {% endif %}
