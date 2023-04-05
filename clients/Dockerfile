@@ -22,7 +22,7 @@ RUN yum install -y epel-release.noarch && \
 
 # Upgrade pip & setuptools and install Rucio
 RUN python3.6 -m pip install --no-cache-dir --upgrade pip && \
-    python3.6 -m pip install  --no-cache-dir --upgrade setuptools && \
+    python3.6 -m pip install --no-cache-dir --upgrade setuptools && \
     python3.6 -m pip install --no-cache-dir --pre rucio-clients[argcomplete]==$TAG && \
     python3.6 -m pip install --no-cache-dir jinja2 j2cli pyyaml
 
@@ -38,8 +38,6 @@ RUN groupadd -g 1000 user && \
 USER user
 WORKDIR /home/user
 
-# Add the configuration template and enable bash completion for the rucio clients
-ADD --chown=user:user rucio.cfg.j2 /opt/user/rucio.cfg.j2
 ADD init_rucio.sh /etc/profile.d/rucio_init.sh
 
 ENV PATH $PATH:/opt/rucio/bin
