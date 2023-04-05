@@ -44,6 +44,6 @@ ADD renew_fts_proxy_tutorial.sh.j2 /opt/rucio/fts-delegate/
 ADD renew_fts_proxy_multi_vo.sh.j2 /opt/rucio/fts-delegate/
 ADD renew_fts_proxy_escape.sh.j2 /opt/rucio/fts-delegate/
 
-ADD dteam* /etc/vomses/
+ADD vomses/* /etc/vomses/
 
 ENTRYPOINT ["/opt/rucio/fts-delegate/docker-entrypoint.sh"]
