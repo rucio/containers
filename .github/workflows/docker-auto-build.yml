@@ -17,6 +17,7 @@ jobs:
           'daemons, prepend-rucio, prepend-release, push-tagged, push-latest',
           'daemons/alma9.Dockerfile, prepend-rucio, prepend-release, push-tagged, custom-tag=alma9',
           'dev, prepend-rucio, prepend-release, push-tagged, push-latest',
+          'dev/alma9.Dockerfile, prepend-rucio, prepend-release, push-tagged, push-latest, custom-tag=alma9',
           'ui, prepend-rucio, prepend-release, push-tagged, push-latest',
           'webui, prepend-rucio, prepend-release, push-tagged, push-latest',
           'init, prepend-rucio, prepend-release, push-tagged, push-latest',
