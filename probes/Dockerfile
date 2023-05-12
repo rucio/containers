@@ -34,7 +34,7 @@ RUN python3 -m pip install --no-cache-dir --upgrade setuptools
 RUN rm -rf /usr/lib/python3.6/site-packages/ipaddress*
 RUN python3 -m pip install --no-cache-dir --pre rucio[oracle,mysql,postgresql]
 RUN python3 -m pip install --no-cache-dir j2cli psycopg2-binary
-RUN python3 -m pip install --no-cache-dir cx_oracle==6.3.1 PyMySQL
+RUN python3 -m pip install --no-cache-dir cx-oracle PyMySQL
 
 WORKDIR /
 RUN git clone https://github.com/rucio/probes.git
