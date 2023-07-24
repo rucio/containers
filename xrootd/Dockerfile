@@ -1,26 +1,26 @@
-FROM centos:7
+FROM almalinux:9
 
 # Install CERN CA
 ADD ca.repo /etc/yum.repos.d/ca.repo
 
-RUN yum install -y epel-release.noarch http://linuxsoft.cern.ch/wlcg/centos7/x86_64/wlcg-repo-1.0.0-1.el7.noarch.rpm && \
-    yum clean all && \
-    rm -rf /var/cache/yum
+RUN dnf install -y epel-release.noarch http://linuxsoft.cern.ch/wlcg/centos7/x86_64/wlcg-repo-1.0.0-1.el7.noarch.rpm && \
+    dnf clean all && \
+    rm -rf /var/cache/dnf
 
-RUN yum update -y && \
-    yum upgrade -y && \
-    yum clean all && \
-    rm -rf /var/cache/yum
+RUN dnf update -y && \
+    dnf upgrade -y && \
+    dnf clean all && \
+    rm -rf /var/cache/dnf
 
-RUN yum -y install ca-certificates.noarch lcg-CA ca_* \
-    yum clean all && \
-    rm -rf /var/cache/yum
+RUN dnf --disablerepo="*" --enablerepo="carepo" -y install 'ca*' && \
+    dnf clean all && \
+    rm -rf /var/cache/dnf
 
 # Install XrootD
-RUN yum install -y epel-release.noarch
-RUN yum upgrade -y
-RUN yum install -y xrootd xrootd-client
-RUN yum clean all
+RUN dnf install -y epel-release.noarch
+RUN dnf upgrade -y
+RUN dnf install -y xrootd xrootd-client
+RUN dnf clean all
 
 # Host certificate directory
 RUN mkdir -p /etc/grid-security/certificates
