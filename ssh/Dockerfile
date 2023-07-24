@@ -1,14 +1,19 @@
-FROM centos:7
+FROM almalinux:9
 
-# Install OpenSSH
-RUN yum install -y epel-release.noarch
-RUN yum upgrade -y
-RUN yum -y install gcc openssh-server openssh-clients sudo python3-pip && \
-    pip3 install -U dumb-init && \
-    yum -y install rsync && \
-    yum -y install rclone
-RUN yum clean all && \
-    rm -rf /var/cache/yum
+RUN dnf install -y epel-release.noarch && \
+    dnf upgrade -y && \
+    dnf install -y \
+        gcc \
+        openssh-server \
+        openssh-clients \
+        python-pip \
+        rclone \
+        rsync \
+        sudo && \
+    dnf clean all && \
+    rm -rf /var/cache/dnf
+
+RUN python -m pip install -U dumb-init
 
 # Server config
 RUN /usr/bin/ssh-keygen -A && \

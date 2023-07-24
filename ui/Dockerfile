@@ -7,22 +7,28 @@
 # Authors:
 # - Thomas Beermann, <thomas.beermann@cern.ch>, 2019
 
-FROM centos:7
+FROM almalinux:9
 
 ARG TAG
 
 WORKDIR /tmp
 
-RUN yum install -y epel-release.noarch && \
-    yum clean all && \
-    rm -rf /var/cache/yum
-RUN yum upgrade -y && \
-    yum clean all && \
-    rm -rf /var/cache/yum
-RUN yum -y install https://repo.ius.io/ius-release-el7.rpm &&\
-    yum install -y httpd python36u-pip python36-mod_wsgi libaio gcc python36-devel.x86_64 mod_ssl openssl-devel.x86_64 python36-m2crypto libnsl.x86_64 && \
-    yum clean all && \
-    rm -rf /var/cache/yum
+RUN dnf install -y epel-release.noarch && \
+    dnf upgrade -y && \
+    dnf install -y \
+        gcc \
+        httpd \
+        libnsl \
+        libaio \
+        openssl-devel \
+        mod_ssl \
+        procps-ng \
+        python3-mod_wsgi \
+        python3-m2crypto \
+        python-devel \
+        python-pip && \
+    dnf clean all && \
+    rm -rf /var/cache/dnf
 
 RUN rpm -i https://download.oracle.com/otn_software/linux/instantclient/1912000/oracle-instantclient19.12-basiclite-19.12.0.0.0-1.x86_64.rpm; \
     echo "/usr/lib/oracle/19/client64/lib" >/etc/ld.so.conf.d/oracle.conf; \
