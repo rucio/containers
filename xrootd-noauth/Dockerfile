@@ -1,10 +1,11 @@
-FROM centos:7
+FROM almalinux:9
 
-# Install XrootD
-RUN yum install -y epel-release.noarch
-RUN yum upgrade -y
-RUN yum install -y xrootd xrootd-client
-RUN yum clean all
+RUN dnf install -y epel-release.noarch && \
+    dnf update -y && \
+    dnf upgrade -y && \
+    dnf install -y xrootd xrootd-client && \
+    dnf clean all && \
+    rm -rf /var/cache/dnf
 
 # Host certificate directory
 RUN mkdir -p /etc/grid-security/xrd

@@ -7,21 +7,24 @@
 # Authors:
 # - Eric Vaandering, <ewv@fnal.gov>, 2020
 
-FROM centos:7
+FROM almalinux:9
 
 WORKDIR /tmp
 ADD oic.rpm /tmp
 
-RUN yum install -y epel-release.noarch && \
-    yum clean all && \
-    rm -rf /var/cache/yum
-RUN yum upgrade -y && \
-    yum clean all && \
-    rm -rf /var/cache/yum
-RUN yum -y install https://repo.ius.io/ius-release-el7.rpm &&\
-    yum install -y python36u-pip libaio gcc python36-devel.x86_64 openssl-devel.x86_64 MySQL-python git && \
-    yum clean all && \
-    rm -rf /var/cache/yum
+RUN dnf install -y epel-release.noarch && \
+    dnf upgrade -y && \
+    dnf install -y \
+        git \
+        gcc \
+        libnsl \
+        libaio \
+        openssl-devel \
+        procps-ng \
+        python-devel \
+        python-pip && \
+    dnf clean all && \
+    rm -rf /var/cache/dnf
 
 RUN rpm -i https://download.oracle.com/otn_software/linux/instantclient/1912000/oracle-instantclient19.12-basiclite-19.12.0.0.0-1.x86_64.rpm; \
     echo "/usr/lib/oracle/19/client64/lib" >/etc/ld.so.conf.d/oracle.conf; \
