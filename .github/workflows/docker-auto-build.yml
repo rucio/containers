@@ -12,12 +12,9 @@ jobs:
       matrix:
         context: [
           'clients, prepend-rucio, prepend-release, push-tagged, push-latest', 
-          'server, prepend-rucio, prepend-release, push-tagged, push-latest',
-          'server/alma9.Dockerfile, prepend-rucio, prepend-release, push-tagged, custom-tag=alma9',
-          'daemons, prepend-rucio, prepend-release, push-tagged, push-latest',
-          'daemons/alma9.Dockerfile, prepend-rucio, prepend-release, push-tagged, custom-tag=alma9',
-          'dev, prepend-rucio, prepend-release, push-tagged, push-latest',
-          'dev/alma9.Dockerfile, prepend-rucio, prepend-release, push-tagged, push-latest, custom-tag=alma9',
+          'server, prepend-rucio, prepend-release, push-tagged, push-latest, push-alma9-latest',
+          'daemons, prepend-rucio, prepend-release, push-tagged, push-latest, push-alma9-latest',
+          'dev, prepend-rucio, prepend-release, push-tagged, push-latest, push-alma9-latest',
           'ui, prepend-rucio, prepend-release, push-tagged, push-latest',
           'webui, prepend-rucio, prepend-release, push-tagged, push-latest',
           'init, prepend-rucio, prepend-release, push-tagged, push-latest',
@@ -209,6 +206,11 @@ jobs:
               TAGS_TO_PUSH=$LATEST_TAG
           else
               TAGS_TO_PUSH=$IMAGE_TAG,$LATEST_TAG
+          fi
+         
+          # TODO: remove this hack hack once rucio tests are updated to use the default image.
+          if [[ "${CONTEXT}" =~ .*"push-alma9-latest".* ]]; then
+              TAGS_TO_PUSH="${LATEST_TAG}-alma9,${TAGS_TO_PUSH}"
           fi
 
           if [[ "${CONTEXT}" =~ .*"latest-only".* ]]; then
