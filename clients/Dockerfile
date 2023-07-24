@@ -1,30 +1,30 @@
-FROM centos:7
+FROM almalinux:9
 
 ARG TAG
 
-RUN yum install -y epel-release.noarch && \
-    yum upgrade -y && \
-    yum install -y https://repo.ius.io/ius-release-el7.rpm && \
-    yum install -y \
+RUN dnf -y install yum-utils epel-release.noarch && \
+    dnf upgrade -y && \
+    yum-config-manager --enable crb && \
+    dnf install -y \
         gfal2-all \
         gfal2-util \
         python3-gfal2 \
-        python36u-pip \
-        nordugrid-arc6-client \
-        nordugrid-arc6-plugins-gfal \
-        nordugrid-arc6-plugins-globus \
-        nordugrid-arc6-plugins-s3 \
-        nordugrid-arc6-plugins-xrootd \
+        python3-pip \
+        nordugrid-arc-client \
+        nordugrid-arc-plugins-gfal \
+        nordugrid-arc-plugins-globus \
+        nordugrid-arc-plugins-s3 \
+        nordugrid-arc-plugins-xrootd \
         voms-clients-java \
         xrootd-client && \
-    yum clean all && \
-    rm -rf /var/cache/yum
+    dnf clean all && \
+    rm -rf /var/cache/dnf
 
 # Upgrade pip & setuptools and install Rucio
-RUN python3.6 -m pip install --no-cache-dir --upgrade pip && \
-    python3.6 -m pip install --no-cache-dir --upgrade setuptools && \
-    python3.6 -m pip install --no-cache-dir --pre rucio-clients[argcomplete]==$TAG && \
-    python3.6 -m pip install --no-cache-dir jinja2 j2cli pyyaml
+RUN python3 -m pip install --no-cache-dir --upgrade pip && \
+    python3 -m pip install --no-cache-dir --upgrade setuptools && \
+    python3 -m pip install --no-cache-dir --pre rucio-clients[argcomplete]==$TAG && \
+    python3 -m pip install --no-cache-dir jinja2 j2cli pyyaml
 
 
 # Add a separate user and change ownership of config dir to that user

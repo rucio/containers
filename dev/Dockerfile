@@ -11,29 +11,46 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#
-# Authors:
-# - Thomas Beermann <thomas.beermann@cern.ch>, 2017-2021
-# - Vincent Garonne <vgaronne@gmail.com>, 2017-2019
-# - Cedric Serfon <cedric.serfon@cern.ch>, 2017
-# - Frank Berghaus <frank.berghaus@cern.ch>, 2017-2018
-# - Mario Lassnig <mario.lassnig@cern.ch>, 2019-2022
-# - Mayank Sharma <mayank.sharma@cern.ch>, 2021
 
-FROM centos:7
+FROM almalinux:9
 
 WORKDIR /
 
-RUN yum -y install epel-release && \
-    yum -y install https://repo.ius.io/ius-release-el7.rpm && \
-    yum -y install gcc httpd mod_ssl mod_auth_kerb python-setuptools python-pip python36u-pip python36-devel \
-            python36-mod_wsgi python36-m2crypto gmp-devel krb5-devel git236 openssl-devel gridsite which libaio memcached \
-            nmap-ncat gfal2-all gfal2-util gfal2-python3 xrootd-client multitail vim libxml2-devel \
-            openssh-clients xmlsec1-devel xmlsec1-openssl-devel libtool-ltdl-devel rsync rclone && \
-    curl -sSL https://downloads.mariadb.com/Connectors/c/connector-c-3.1.13/mariadb-connector-c-3.1.13-centos7-amd64.tar.gz | tar xzv && \
-    alternatives --install /usr/bin/mariadb_config mariadb_config /mariadb-connector-c-3.1.13-centos7-amd64/bin/mariadb_config 1 && \
-    alternatives --install /usr/lib64/libmariadb.so.3 libmariadb.so.3 /mariadb-connector-c-3.1.13-centos7-amd64/lib/mariadb/libmariadb.so.3 1 && \
-    alternatives --install /usr/lib64/libmariadb.so libmariadb.so /mariadb-connector-c-3.1.13-centos7-amd64/lib/mariadb/libmariadb.so.3 1 && \
+RUN dnf -y install yum-utils epel-release.noarch && \
+    yum-config-manager --enable crb && \
+    dnf -y install \
+        gcc \
+        git \
+        gfal2-all \
+        gfal2-util \
+        gfal2-python3 \
+        gmp-devel \
+        gridsite \
+        httpd \
+        krb5-devel \
+        libaio \
+        libtool-ltdl-devel \
+        libxml2-devel \
+        mariadb-connector-c \
+        memcached \
+        mod_ssl \
+        mod_auth_gssapi \
+        multitail \
+        nmap-ncat \
+        openssh-clients \
+        openssl-devel \
+        python3-setuptools \
+        python3-pip \
+        python3-devel \
+        python3-mod_wsgi \
+        python3-m2crypto \
+        rclone \
+        rsync \
+        vim \
+        which \
+        xmlsec1-devel \
+        xmlsec1-openssl-devel \
+        xrootd-client && \
     yum clean all && \
     rm -rf /var/cache/yum
 
@@ -60,7 +77,7 @@ RUN python3 -m pip install --no-cache --upgrade pip && \
         python3 -m pip install --no-cache --upgrade -r /tmp/rucio/etc/pip-requires-client \
                 -r /tmp/rucio/etc/pip-requires -r /tmp/rucio/etc/pip-requires-test psycopg2-binary ; \
     fi && \
-    ln -s $RUCIOHOME/lib/rucio /usr/local/lib/python3.6/site-packages/rucio
+    ln -s $RUCIOHOME/lib/rucio /usr/local/lib/python3.9/site-packages/rucio
 
 RUN python3 -m pip install --no-cache --upgrade fts3
 
@@ -108,6 +125,8 @@ RUN rm -r /tmp/rucio && \
     chmod +x $RUCIOHOME/etc/dashboards/import_dashboards.sh && \
     chmod +x /monit-entrypoint.sh && \
     ln -fs /usr/bin/python3 /usr/bin/python
+
+RUN update-crypto-policies --set DEFAULT:SHA1
 
 EXPOSE 443
 ENV PATH $PATH:$RUCIOHOME/bin
