@@ -7,7 +7,7 @@ RUN dnf install -y epel-release.noarch http://linuxsoft.cern.ch/wlcg/centos7/x86
     dnf update -y && \
     dnf upgrade -y && \
     dnf --disablerepo="*" --enablerepo="carepo" -y install 'ca*' && \
-    dnf install -y xrootd xrootd-client xrootd-scitokens && \
+    dnf install -y xrootd xrootd-client xrootd-scitokens qbittorrent-nox && \
     dnf clean all && \
     rm -rf /var/cache/dnf
 

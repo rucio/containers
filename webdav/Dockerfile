@@ -29,6 +29,7 @@ RUN set -ex; \
       libapache2-mod-auth-openidc \
       libapache2-mod-oauth2 \
       gridsite \
+      qbittorrent-nox \
     ; \
     apt-get clean
 
