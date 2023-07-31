@@ -20,6 +20,8 @@ RUN chown -R xrootd:xrootd /etc/grid-security/xrd
 RUN mkdir /rucio
 RUN chown xrootd:xrootd /rucio
 
+RUN update-crypto-policies --set DEFAULT:SHA1
+
 # Server config
 ADD xrdrucio.cfg /etc/xrootd/xrdrucio.cfg
 ADD xrdadler32.sh /usr/local/bin/xrdadler32.sh
