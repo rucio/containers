@@ -48,7 +48,7 @@ CacheRoot /tmp
  SSLVerifyClient optional_no_ca
  SSLVerifyDepth 10
  {% if require_x509_auth %}
- <Location /auth/x509>
+ <Location /auth/x509/webui>    
     SSLVerifyClient require
     SSLVerifyDepth 10
  </Location>
