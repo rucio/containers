@@ -35,7 +35,6 @@ RUN rpm -i https://download.oracle.com/otn_software/linux/instantclient/1912000/
     ldconfig
 RUN python3 -m pip install --no-cache-dir --upgrade pip
 RUN python3 -m pip install --no-cache-dir --upgrade setuptools
-RUN rm -rf /usr/lib/python3.6/site-packages/ipaddress*
 RUN python3 -m pip install --no-cache-dir --pre rucio[oracle,mysql,postgresql]==$TAG
 RUN python3 -m pip install --no-cache-dir --pre rucio_webui==$TAG
 RUN python3 -m pip install --no-cache-dir j2cli
