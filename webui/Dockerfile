@@ -6,34 +6,37 @@
 #
 # Authors:
 # - Mayank Sharma, <mayank.sharma@cern.ch>, 2022
+# - Eraldo Junior <ejunior@cbpf.br>, 2023
 
-FROM quay.io/centos/centos:stream8 as production
+FROM almalinux:9
+
 ARG TAG
+
 LABEL stage=production
 RUN dnf -y update && \
     dnf -y module reset nodejs && \
-    dnf -y module enable nodejs:16 && \
-    dnf -y module install nodejs:16/common && \
-    dnf -y install httpd mod_ssl python39 git procps && \
-    dnf clean all
+    dnf -y module enable nodejs:18 && \
+    dnf -y module install nodejs:18/common && \
+    dnf -y install httpd mod_ssl python39 python-pip git procps && \
+    dnf clean all && \
+    rm -rf /var/cache/dnf
 
-RUN python3 -m pip install --no-cache-dir --upgrade pip
+RUN python3 -m pip install --no-cache-dir --upgrade pip && \
+    python3 -m pip install --no-cache-dir --upgrade setuptools
 RUN python3 -m pip install --no-cache-dir j2cli
 
 WORKDIR /opt/rucio/webui
+
+ENV RUCIO_WEBUI_PATH=$(WORKDIR)
+
 RUN curl https://raw.githubusercontent.com/rucio/rucio/master/tools/merge_rucio_configs.py --output /opt/rucio/merge_rucio_configs.py
 RUN git clone --depth 1 -b ${TAG} -- https://github.com/rucio/webui.git /opt/rucio/webui
-RUN npm ci --legacy-peer-deps 
 
-COPY robots.txt /var/www/html
-COPY httpd.conf.j2 /tmp/
-COPY rucio.conf.j2 /tmp
+RUN npm install
+RUN npm run build
+
 COPY docker-entrypoint.sh /
 COPY .env.default.j2 /tmp/
-
-RUN rm /etc/httpd/conf.d/welcome.conf /etc/httpd/conf.d/userdir.conf /etc/httpd/conf.d/ssl.conf
-
-VOLUME /var/log/httpd
 
 EXPOSE 443
 EXPOSE 80
