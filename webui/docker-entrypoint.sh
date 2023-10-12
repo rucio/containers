@@ -1,34 +1,25 @@
 #!/bin/bash -e
 
-j2 /tmp/httpd.conf.j2 | sed '/^\s*$/d' > /etc/httpd/conf/httpd.conf
-
-echo "=================== /etc/httpd/conf/httpd.conf ========================"
-cat /etc/httpd/conf/httpd.conf
-echo ""
-
-
-j2 /tmp/rucio.conf.j2 | sed '/^\s*$/d' > /etc/httpd/conf.d/rucio.conf
-
-echo "=================== /etc/httpd/conf.d/rucio.conf ========================"
-cat /etc/httpd/conf.d/rucio.conf
-echo ""
-
-j2 /tmp/.env.default.j2 | sed '/^\s*$/d' > /opt/rucio/webui/.env.default
-
 if [ -f /opt/rucio/webui/.env ]; then
     echo "/opt/rucio/webui/.env already mounted."
 else
-    echo "/opt/rucio/webui/.env not found. will generate one."
-    python3 /opt/rucio/merge_rucio_configs.py \
-        -s /opt/rucio/webui/.env.default $RUCIO_OVERRIDE_CONFIGS \
-        --use-env \
-        -d /opt/rucio/webui/.env
+        echo "/opt/rucio/webui/.env not found. will generate one."
+    j2 /tmp/.env.default.j2 | sed '/^\s*$/d' > /opt/rucio/webui/.env
 fi
 
 echo "=================== /opt/rucio/webui/.env ========================"
 cat /opt/rucio/webui/.env
 echo ""
 
-npm run build
-cp -rfn /opt/rucio/webui/build/* /var/www/html/
-exec httpd -D FOREGROUND
+if [ -d "/patch" ]
+then
+    echo "Patches found. Trying to apply them"
+    for patchfile in /patch/*
+    do
+        echo "Apply patch ${patchfile}"
+        patch -p3 -d "$RUCIO_WEBUI_PATH" < $patchfile
+    done
+fi
+
+echo "=================== Starting RUCIO WEBUI ========================"
+npm run start
