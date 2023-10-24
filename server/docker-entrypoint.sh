@@ -49,7 +49,7 @@ then
     for patchfile in /patch/*
     do
         echo "Apply patch ${patchfile}"
-        patch -p3 -d "$RUCIO_WEBUI_PATH" < $patchfile
+        patch -p3 -d "$RUCIO_PYTHON_PATH" < $patchfile
     done
 fi
 
