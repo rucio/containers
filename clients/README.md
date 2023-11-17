@@ -21,24 +21,24 @@ To run this container the Rucio server and authentication hosts and the credenti
 Starting the container using the environment with userpass authentication:
 
     docker run \
-      -e RUCIO_CFG_RUCIO_HOST=https://server.rucio:443 \
-      -e RUCIO_CFG_AUTH_HOST=https://auth.rucio:443 \
-      -e RUCIO_CFG_AUTH_TYPE=userpass \
-      -e RUCIO_CFG_USERNAME=ddmlab \
-      -e RUCIO_CFG_PASSWORD=secret \
-      -e RUCIO_CFG_ACCOUNT=root \
+      -e RUCIO_CFG_CLIENT_RUCIO_HOST=https://server.rucio:443 \
+      -e RUCIO_CFG_CLIENT_AUTH_HOST=https://auth.rucio:443 \
+      -e RUCIO_CFG_CLIENT_AUTH_TYPE=userpass \
+      -e RUCIO_CFG_CLIENT_USERNAME=ddmlab \
+      -e RUCIO_CFG_CLIENT_PASSWORD=secret \
+      -e RUCIO_CFG_CLIENT_ACCOUNT=root \
       --name=rucio-client \
       -it -d rucio/rucio-clients
 
 With X509 authentication:
 
     docker run \
-      -e RUCIO_CFG_RUCIO_HOST=https://server.rucio:443 \
-      -e RUCIO_CFG_AUTH_HOST=https://auth.rucio:443 \
-      -e RUCIO_CFG_AUTH_TYPE=x509 \
-      -e RUCIO_CFG_CLIENT_CERT=/opt/rucio/etc/usercert.pem \
-      -e RUCIO_CFG_CLIENT_KEY=/opt/rucio/etc/userkey.pem \
-      -e RUCIO_CFG_ACCOUNT=root \
+      -e RUCIO_CFG_CLIENT_RUCIO_HOST=https://server.rucio:443 \
+      -e RUCIO_CFG_CLIENT_AUTH_HOST=https://auth.rucio:443 \
+      -e RUCIO_CFG_CLIENT_AUTH_TYPE=x509 \
+      -e RUCIO_CFG_CLIENT_CLIENT_CERT=/opt/rucio/etc/usercert.pem \
+      -e RUCIO_CFG_CLIENT_CLIENT_KEY=/opt/rucio/etc/userkey.pem \
+      -e RUCIO_CFG_CLIENT_ACCOUNT=root \
       -v /opt/rucio/etc/usercert.pem:/opt/rucio/etc/usercert.pem \
       -v /opt/rucio/etc/userkey.pem:/opt/rucio/etc/userkey.pem \
       --name=rucio-client \
@@ -61,25 +61,25 @@ After the container is started you can attach to it and start using the rucio co
 Environment variables can be used to set values for the auto-generated rucio.cfg. The names are derived from the actual names in the configuration file.
 The available environment variables are:
 
-* `RUCIO_CFG_ACCOUNT`
-* `RUCIO_CFG_AUTH_HOST`
-* `RUCIO_CFG_AUTH_TYPE`
-* `RUCIO_CFG_CA_CERT`
-* `RUCIO_CFG_CLIENT_CERT`
-* `RUCIO_CFG_CLIENT_KEY`
+* `RUCIO_CFG_CLIENT_ACCOUNT`
+* `RUCIO_CFG_CLIENT_AUTH_HOST`
+* `RUCIO_CFG_CLIENT_AUTH_TYPE`
+* `RUCIO_CFG_CLIENT_CA_CERT`
+* `RUCIO_CFG_CLIENT_CLIENT_CERT`
+* `RUCIO_CFG_CLIENT_CLIENT_KEY`
+* `RUCIO_CFG_CLIENT_PASSWORD`
+* `RUCIO_CFG_CLIENT_REQUEST_RETRIES`
+* `RUCIO_CFG_CLIENT_RUCIO_HOST`
+* `RUCIO_CFG_CLIENT_USERNAME`
 * `RUCIO_CFG_CLIENT_VO`
 * `RUCIO_CFG_CLIENT_X509_PROXY`
 * `RUCIO_CFG_COMMON_MULTI_VO`
-* `RUCIO_CFG_PASSWORD`
 * `RUCIO_CFG_POLICY_LFN2PFN_ALGORITHM_DEFAULT`
 * `RUCIO_CFG_POLICY_PACKAGE`
 * `RUCIO_CFG_POLICY_PERMISSION`
 * `RUCIO_CFG_POLICY_SCHEMA`
 * `RUCIO_CFG_POLICY_SUPPORT`
 * `RUCIO_CFG_POLICY_SUPPORT_RUCIO`
-* `RUCIO_CFG_REQUEST_RETRIES`
-* `RUCIO_CFG_RUCIO_HOST`
-* `RUCIO_CFG_USERNAME`
 
 ## Getting Support
 
