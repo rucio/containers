@@ -38,6 +38,8 @@ RUN groupadd -g 1000 user && \
 USER user
 WORKDIR /home/user
 
+# Add the default rucio configuration
+ADD --chown=user:user rucio.default.cfg /opt/user/rucio.default.cfg
 ADD init_rucio.sh /etc/profile.d/rucio_init.sh
 
 ENV PATH $PATH:/opt/rucio/bin
