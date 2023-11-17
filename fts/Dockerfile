@@ -2,7 +2,7 @@ FROM centos:7
 
 # Install FTS
 RUN yum install -y epel-release.noarch
-RUN curl https://fts-repo.web.cern.ch/fts-repo/fts3-prod-el7.repo > /etc/yum.repos.d/fts3-prod-el7.repo
+RUN curl https://fts-repo.web.cern.ch/fts-repo/fts3-rc-el7.repo > /etc/yum.repos.d/fts3-rc-el7.repo
 RUN curl https://fts-repo.web.cern.ch/fts-repo/fts3-depend-el7.repo >  /etc/yum.repos.d/fts3-depend-el7.repo
 RUN curl https://dmc-repo.web.cern.ch/dmc-repo/dmc-el7.repo > /etc/yum.repos.d/dmc-el7.repo
 RUN yum upgrade -y && \
