@@ -29,14 +29,19 @@ WORKDIR /opt/rucio/webui
 
 ENV RUCIO_WEBUI_PATH=$(WORKDIR)
 
-RUN curl https://raw.githubusercontent.com/rucio/rucio/master/tools/merge_rucio_configs.py --output /opt/rucio/merge_rucio_configs.py
 RUN git clone --depth 1 -b ${TAG} -- https://github.com/rucio/webui.git /opt/rucio/webui
 
+WORKDIR /opt/rucio/webui/tools/env-generator/
+RUN npm install
+RUN npm install liquidjs
+RUN npm run build
+RUN chmod +x ./dist/generate-env.js
+
+WORKDIR /opt/rucio/webui/
 RUN npm install
 RUN npm run build
 
 COPY docker-entrypoint.sh /
-COPY .env.default.j2 /tmp/
 
 EXPOSE 443
 EXPOSE 80

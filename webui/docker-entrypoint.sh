@@ -4,7 +4,7 @@ if [ -f /opt/rucio/webui/.env ]; then
     echo "/opt/rucio/webui/.env already mounted."
 else
         echo "/opt/rucio/webui/.env not found. will generate one."
-    j2 /tmp/.env.default.j2 | sed '/^\s*$/d' > /opt/rucio/webui/.env
+    /opt/rucio/webui/tools/env-generator/dist/generate-env.js make prod /opt/rucio/webui/./.env --write
 fi
 
 echo "=================== /opt/rucio/webui/.env ========================"
