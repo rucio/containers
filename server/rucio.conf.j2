@@ -124,7 +124,7 @@ Listen {{ RUCIO_METRICS_PORT }}
 {% if RUCIO_HEALTH_CHECK_PORT is defined %}
 Listen {{ RUCIO_HEALTH_CHECK_PORT }}
 <VirtualHost *:{{ RUCIO_HEALTH_CHECK_PORT }} >
-{{ common_virtual_host_config(port=RUCIO_HEALTH_CHECK_PORT, enable_ssl=RUCIO_ENABLE_SSL|default('False') == 'True') }}
+{{ common_virtual_host_config(port=RUCIO_HEALTH_CHECK_PORT, enable_ssl=RUCIO_ENABLE_SSL|default('False') == 'True', require_x509_auth=false) }}
 
  WSGIScriptAlias /ping {{ RUCIO_PYTHON_PATH }}/web/rest/ping.py process-group=rucio application-group=rucio
 </VirtualHost>
