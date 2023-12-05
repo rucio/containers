@@ -11,7 +11,7 @@
 
 Summary: Utilities from the general purpose cryptography library with TLS implementation
 Name:    openssl31
-Version: 3.1.2
+Version: 3.1.4
 Release: 1
 Source:  https://www.openssl.org/source/openssl-%{version}.tar.gz
 
