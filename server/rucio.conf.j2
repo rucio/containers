@@ -98,7 +98,7 @@ CacheRoot /tmp
 
 {% if RUCIO_HTTPD_PROXY_PROTOCOL_ENABLED | default('False') == 'True' %}
  RemoteIPProxyProtocol On
- RemoteIPProxyProtocolExceptions 127.0.0.1 ::1 {{ RUCIO_HTTPD_PROXY_PROTOCOL_EXCEPTIONS }}
+ RemoteIPProxyProtocolExceptions 127.0.0.1 ::1 {{ RUCIO_HTTPD_PROXY_PROTOCOL_EXCEPTIONS | default('') }}
 {% endif %}
 
 {% if RUCIO_HTTPD_GRID_SITE_ENABLED | default('False') == 'True' %}
