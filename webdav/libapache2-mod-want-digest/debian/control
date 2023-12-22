@@ -1,0 +1,19 @@
+Source: libapache2-mod-want-digest
+Maintainer: Rucio
+Section: web
+Priority: optional
+Standards-Version: 0.2.3
+Build-Depends:
+ curl,
+ apache2-dev,
+ libtool,
+ libaprutil1-dev,
+ libapr1-dev,
+ zlib1g-dev
+
+Package: libapache2-mod-want-digest
+Architecture: any
+Depends:
+ ${shlibs:Depends},
+ ${misc:Depends}
+Description: Apache2 httpd module that implements a data integrity check in accordance with RFC 3230

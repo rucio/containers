@@ -1,0 +1,23 @@
+#!/usr/bin/make -f
+
+override_dh_auto_build:
+	curl -LJ https://github.com/wetzel-desy/mod_want_digest/tarball/main -o mod_want_digest.tar.gz
+	tar -xf mod_want_digest.tar.gz --strip-components=1 --wildcards "*mod_want_digest.c"
+	apxs -Wc,-ffile-prefix-map=$(CURDIR)=. -lz -c mod_want_digest.c
+
+override_dh_auto_install:
+	# Don't install using the upstream Makefile. Use apache2 and
+	# examples files instead.
+
+override_dh_installexamples:
+	# Examples were renamed, let's follow the scheme:
+	dh_installexamples
+
+override_dh_clean:
+	# Clean built files:
+	rm -rf .libs
+	# Clean renamed examples:
+	dh_clean
+
+%:
+	dh $@ --with apache2

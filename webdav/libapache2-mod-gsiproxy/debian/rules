@@ -1,0 +1,11 @@
+#!/usr/bin/make -f
+
+override_dh_auto_build:
+	apxs -Wc,-ffile-prefix-map=$(CURDIR)=. -lz -c mod_gsiproxy.c
+
+override_dh_clean:
+	rm -rf .libs
+	dh_clean
+
+%:
+	dh $@ --with apache2
