@@ -209,7 +209,7 @@ jobs:
           fi
          
           # TODO: remove this hack hack once rucio tests are updated to use the default image.
-          if [[ "${CONTEXT}" =~ .*"push-alma9-latest".* ]]; then
+          if [[ "${CONTEXT}" =~ .*"push-alma9-latest".* && -n "$LATEST_TAG" ]]; then
               TAGS_TO_PUSH="${LATEST_TAG}-alma9,${TAGS_TO_PUSH}"
           fi
 
