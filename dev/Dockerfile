@@ -47,6 +47,7 @@ RUN dnf -y install yum-utils epel-release.noarch && \
         rclone \
         rsync \
         vim \
+        voms-clients-java \
         which \
         xmlsec1-devel \
         xmlsec1-openssl-devel \

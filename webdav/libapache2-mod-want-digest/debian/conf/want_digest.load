@@ -1,0 +1,1 @@
+LoadModule want_digest_filter_module /usr/lib/apache2/modules/mod_want_digest.so

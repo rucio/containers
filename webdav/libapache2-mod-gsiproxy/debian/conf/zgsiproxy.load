@@ -1,0 +1,2 @@
+# Depends: ssl
+LoadModule gsi_proxy_certs_module /usr/lib/apache2/modules/mod_gsiproxy.so

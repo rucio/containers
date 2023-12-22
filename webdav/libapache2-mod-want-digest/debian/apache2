@@ -1,0 +1,2 @@
+mod .libs/mod_want_digest.so
+mod debian/conf/want_digest.load
