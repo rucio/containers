@@ -7,7 +7,7 @@ RUN curl https://fts-repo.web.cern.ch/fts-repo/fts3-depend-el7.repo >  /etc/yum.
 RUN curl https://dmc-repo.web.cern.ch/dmc-repo/dmc-el7.repo > /etc/yum.repos.d/dmc-el7.repo
 RUN yum upgrade -y && \
     yum install -y centos-release-scl
-RUN yum install -y mysql multitail gfal2-plugin* fts-server fts-client fts-rest-server fts-monitoring fts-mysql fts-msg
+RUN yum install -y mysql multitail gfal2-plugin* fts-server fts-rest-server fts-monitoring fts-mysql fts-msg zeromq
 RUN yum clean all
 
 # Database configuration for FTS server
