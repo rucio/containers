@@ -6,7 +6,7 @@
 
 FROM almalinux:9 as rpm_builder
     RUN dnf upgrade -y
-    RUN dnf install -y rpm-build rpmdevtools yum-utils epel-release.noarch
+    RUN dnf install -y rpm-build rpmdevtools yum-utils epel-release.noarch patchutils
     RUN yum-config-manager --enable crb
     # BUILD and install openssl 3.1
     ADD openssl.spec    /root/rpmbuild/SPECS/openssl.spec
