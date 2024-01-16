@@ -48,8 +48,31 @@ then
     echo "Patches found. Trying to apply them"
     for patchfile in /patch/*
     do
-        echo "Apply patch ${patchfile}"
-        patch -p3 -d "$RUCIO_PYTHON_PATH" < $patchfile
+        echo "Applying patch ${patchfile}"
+        
+        bin_patch=$(filterdiff -i '*/bin/*' ${patchfile})
+
+        if [ -n "$bin_patch" ]
+        then
+            if patch -p3 -d "$RUCIO_PYTHON_PATH" < $bin_patch
+            then
+                echo "Patch ${bin_patch} applied."
+            else
+                echo "Patch ${bin_patch} could not be applied successfully (exit code $?). Exiting setup."
+                exit 1
+            fi            
+
+        lib_patch=$(filterdiff -i '*/lib/*' ${patchfile})
+
+        if [ -n "$lib_patch" ]
+        then
+            if patch -p3 -d "$RUCIO_PYTHON_PATH" < $lib_patch
+            then
+                echo "Patch ${lib_patch} applied."
+            else
+                echo "Patch ${lib_patch} could not be applied successfully (exit code $?). Exiting setup."
+                exit 1
+            fi            
     done
 fi
 
