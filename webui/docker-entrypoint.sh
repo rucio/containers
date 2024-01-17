@@ -14,36 +14,43 @@ echo ""
 if [ -d "/patch" ]
 then
     echo "Patches found. Trying to apply them"
-    for patchfile in /patch/*
+
+    TMP_PATCH_DIR="$(mktemp -d)"
+    trap 'rm -rf -- "$TMP_PATCH_DIR"' EXIT # Deletes temp dir when script exits
+
+    for patchfile in /patch/*.patch
     do
         echo "Applying patch ${patchfile}"
         
-        bin_patch=$(filterdiff -i '*/bin/*' ${patchfile})
+        tmp_bin_file="${TMP_PATCH_DIR}/tmp_bin"
+        filterdiff -i '*/bin/*' "${patchfile}" > ${tmp_bin_file}
 
-        if [ -n "$bin_patch" ]
+        if [ -s ${tmp_bin_file} ]
         then
-            if patch -p3 -d "$RUCIO_WEBUI_PATH" < $bin_patch
+            if patch -p2 -d "/usr/local/bin/" < ${tmp_bin_file}
             then
-                echo "Patch ${bin_patch} applied."
+                echo "Patch ${patchfile}/bin applied."
             else
-                echo "Patch ${bin_patch} could not be applied successfully (exit code $?). Exiting setup."
+                echo "Patch ${patchfile}/bin could not be applied successfully (exit code $?). Exiting setup."
                 exit 1
-            fi            
+            fi
+        fi
 
-        lib_patch=$(filterdiff -i '*/lib/*' ${patchfile})
+        tmp_lib_file="${TMP_PATCH_DIR}/tmp_lib"
+        filterdiff -i '*/lib/*' "${patchfile}" > ${tmp_lib_file}
 
-        if [ -n "$lib_patch" ]
+        if [ -s ${tmp_lib_file} ]
         then
-            if patch -p3 -d "$RUCIO_WEBUI_PATH" < $lib_patch
+            if patch -p3 -d "$RUCIO_WEBUI_PATH" < ${tmp_lib_file}
             then
-                echo "Patch ${lib_patch} applied."
+                echo "Patch ${patchfile}/lib applied."
             else
-                echo "Patch ${lib_patch} could not be applied successfully (exit code $?). Exiting setup."
+                echo "Patch ${patchfile}/lib could not be applied successfully (exit code $?). Exiting setup."
                 exit 1
-            fi            
+            fi
+        fi
     done
 fi
-
 
 echo "=================== Starting RUCIO WEBUI ========================"
 npm run start
