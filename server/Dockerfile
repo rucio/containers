@@ -20,7 +20,7 @@ RUN dnf install -y epel-release.noarch && \
         procps-ng \
         python-pip \
         python-mod_wsgi \
-        memcached && \
+        memcached \
         patchutils && \
     dnf clean all && \
     rm -rf /var/cache/dnf
