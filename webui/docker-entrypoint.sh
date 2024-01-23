@@ -1,24 +1,36 @@
 #!/bin/bash -e
 
-if [ -f /opt/rucio/webui/.env ]; then
-    echo "/opt/rucio/webui/.env already mounted."
-else
-        echo "/opt/rucio/webui/.env not found. will generate one."
-    j2 /tmp/.env.default.j2 | sed '/^\s*$/d' > /opt/rucio/webui/.env
-fi
+log() {
+    echo "$(date -u) [rucio-webui] - $@"
+}
 
-echo "=================== /opt/rucio/webui/.env ========================"
+generate_env_file() {
+    cd tools/env-generator && \
+
+    npm install liquidjs && \
+    npm run build && \
+    chmod +x ./dist/generate-env.js && \
+    ./dist/generate-env.js make prod ../../.env --write
+
+    echo "Return code: $?"
+    cd ../..
+}
+
+echo "=================== /opt/rucio/webui/.env ==================="
+if [ -f /opt/rucio/webui/.env ]; then
+    log "/opt/rucio/webui/.env already mounted."
+else
+    log "/opt/rucio/webui/.env not found. Will generate one now."
+    generate_env_file
+fi
 cat /opt/rucio/webui/.env
 echo ""
 
 if [ -d "/patch" ]
 then
-    echo "Patches found. Trying to apply them"
-
-    TMP_PATCH_DIR="$(mktemp -d)"
-    trap 'rm -rf -- "$TMP_PATCH_DIR"' EXIT # Deletes temp dir when script exits
-
-    for patchfile in /patch/*.patch
+    echo "=================== Apply Patches ==================="
+    log "Patches found. Trying to apply them"
+    for patchfile in /patch/*
     do
         echo "Applying patch ${patchfile}"
         
@@ -50,7 +62,9 @@ then
             fi
         fi
     done
+    log "Rebuilding the Rucio WebUI after applying patches!"
+    npm run build
 fi
 
-echo "=================== Starting RUCIO WEBUI ========================"
+echo "=================== Starting RUCIO WEBUI ==================="
 npm run start

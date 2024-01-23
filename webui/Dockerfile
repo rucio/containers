@@ -27,10 +27,10 @@ RUN python3 -m pip install --no-cache-dir j2cli
 
 WORKDIR /opt/rucio/webui
 
-ENV RUCIO_WEBUI_PATH=$(WORKDIR)
+ENV RUCIO_WEBUI_PATH=/opt/rucio/webui
 
 RUN curl https://raw.githubusercontent.com/rucio/rucio/master/tools/merge_rucio_configs.py --output /opt/rucio/merge_rucio_configs.py
-RUN git clone --depth 1 -b ${TAG} -- https://github.com/rucio/webui.git /opt/rucio/webui
+RUN git clone --depth 1 -b ${TAG} -- https://github.com/rucio/webui.git ${RUCIO_WEBUI_PATH}
 
 RUN npm install
 RUN npm run build
