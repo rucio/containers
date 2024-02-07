@@ -44,7 +44,11 @@ then
         echo "Applying patch ${patchfile}"
         
         tmp_bin_file="${TMP_PATCH_DIR}/tmp_bin"
-        filterdiff -i '*/bin/*' "${patchfile}" > ${tmp_bin_file}
+        
+        if ! filterdiff -i '*/bin/*' "${patchfile}" > ${tmp_bin_file}; then
+            echo "Error while filtering patch ${patchfile}/bin. Exiting setup."
+            exit 1
+        fi
 
         if [ -s ${tmp_bin_file} ]
         then
@@ -58,7 +62,11 @@ then
         fi
 
         tmp_lib_file="${TMP_PATCH_DIR}/tmp_lib"
-        filterdiff -i '*/lib/*' "${patchfile}" > ${tmp_lib_file}
+
+        if ! filterdiff -i '*/lib/*' "${patchfile}" > ${tmp_lib_file}; then
+            echo "Error while filtering patch ${patchfile}/lib. Exiting setup."
+            exit 1
+        fi
 
         if [ -s ${tmp_lib_file} ]
         then
