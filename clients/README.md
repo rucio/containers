@@ -56,6 +56,16 @@ After the container is started you can attach to it and start using the rucio co
     docker exec -it rucio-clients /bin/bash
     $ rucio ping
 
+or just run a single command:
+
+    docker exec -it rucio-clients rucio whoami
+
+You can also run commands directly:
+
+    docker run --rm -it \
+        [... config options like above ] \
+        rucio/rucio-clients rucio whoami
+
 ## `RUCIO_CFG` configuration parameters:
 
 Environment variables can be used to set values for the auto-generated rucio.cfg. The names are derived from the actual names in the configuration file.
