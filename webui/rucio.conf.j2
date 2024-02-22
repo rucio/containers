@@ -33,7 +33,7 @@
 {% endif %}
 {% endmacro %}
 
-{% if RUCIO_ENABLE_SSL|default('True') == 'True' %}
+{% if RUCIO_WEBUI_ENABLE_SSL|default('False') == 'True' %}
   {% set enable_ssl = 'True' %}
 {% else %}
   {% set enable_ssl = 'False' %}
@@ -63,22 +63,28 @@ LogFormat "%h\t%t\t%{X-Rucio-Forwarded-For}i\t%T\t%D\t\"%{X-Rucio-Auth-Token}i\"
 {% if enable_ssl == 'True' %}
 <VirtualHost *:80>
 
-{% if RUCIO_HOSTNAME is defined %}
- ServerName {{ RUCIO_HOSTNAME }}:80
- Redirect / https://{{ RUCIO_HOSTNAME }}/
+{% if RUCIO_WEBUI_HOSTNAME is defined %}
+ ServerName {{ RUCIO_WEBUI_HOSTNAME }}:80
+ Redirect / https://{{ RUCIO_WEBUI_HOSTNAME }}/
 {% endif %}
 </VirtualHost>
 
 <VirtualHost *:443>
 
  {{ common_virtual_host_config(port=443) }}
-
+ ProxyPass / http://localhost:3000/
+ ProxyPassReverse / http://localhost:3000/
 </VirtualHost>
 
 {% else %}
 
 <VirtualHost *:80>
  {{ common_virtual_host_config(port=80) }}
+ {% if RUCIO_WEBUI_HOSTNAME is defined %}
+ ServerName {{ RUCIO_WEBUI_HOSTNAME }}:80
+ ProxyPass / http://{{ RUCIO_WEBUI_HOSTNAME }}:3000/
+ ProxyPassReverse / http://{{ RUCIO_WEBUI_HOSTNAME }}:3000/
+{% endif %}
 </VirtualHost>
 {% endif %}
 

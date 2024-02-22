@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
 log() {
-    echo "$(date -u) [rucio-webui] - $@"
+    echo -e "\e[32m$(date -u) [rucio-webui] - $@\e[0m"
 }
 
 generate_env_file() {
@@ -25,6 +25,20 @@ else
 fi
 cat /opt/rucio/webui/.env
 echo ""
+
+log "Building Apache configuration files."
+j2 /tmp/httpd.conf.j2 | sed '/^\s*$/d' > /etc/httpd/conf/httpd.conf
+echo "=================== /etc/httpd/conf/httpd.conf ========================"
+cat /etc/httpd/conf/httpd.conf
+echo ""
+
+j2 /tmp/rucio.conf.j2 | sed '/^\s*$/d' > /etc/httpd/conf.d/rucio.conf
+echo "=================== /etc/httpd/conf/conf.d/rucio.conf ========================"
+cat /etc/httpd/conf.d/rucio.conf
+echo ""
+
+log "removing httpd example ssl config"
+rm -rf /etc/httpd/conf.d/ssl.conf
 
 if [ -d "/patch" ]
 then
@@ -62,9 +76,13 @@ then
             fi
         fi
     done
-    log "Rebuilding the Rucio WebUI after applying patches!"
-    npm run build
 fi
 
-echo "=================== Starting RUCIO WEBUI ==================="
-npm run start
+log "Building Rucio WebUI"
+npm run build
+
+log "Starting Rucio WebUI"
+pm2 start
+sleep 2
+exec httpd -D FOREGROUND
+echo "=================== RUCIO WEBUI started ==================="

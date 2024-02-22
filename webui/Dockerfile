@@ -32,11 +32,13 @@ ENV RUCIO_WEBUI_PATH=/opt/rucio/webui
 RUN curl https://raw.githubusercontent.com/rucio/rucio/master/tools/merge_rucio_configs.py --output /opt/rucio/merge_rucio_configs.py
 RUN git clone --depth 1 -b ${TAG} -- https://github.com/rucio/webui.git ${RUCIO_WEBUI_PATH}
 
+RUN npm i -g pm2
 RUN npm install
-RUN npm run build
 
 COPY docker-entrypoint.sh /
-COPY .env.default.j2 /tmp/
+COPY httpd.conf.j2 /tmp/
+COPY rucio.conf.j2 /tmp/
+COPY ecosystem.config.js /opt/rucio/webui/ecosystem.config.js
 
 EXPOSE 443
 EXPOSE 80
