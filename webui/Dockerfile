@@ -15,8 +15,8 @@ ARG TAG
 LABEL stage=production
 RUN dnf -y update && \
     dnf -y module reset nodejs && \
-    dnf -y module enable nodejs:18 && \
-    dnf -y module install nodejs:18/common && \
+    dnf -y module enable nodejs:20 && \
+    dnf -y module install nodejs:20/common && \
     dnf -y install httpd mod_ssl python39 python-pip git procps patchutils && \
     dnf clean all && \
     rm -rf /var/cache/dnf
