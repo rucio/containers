@@ -44,6 +44,10 @@ if [ -d "/patch" ]
 then
     echo "=================== Apply Patches ==================="
     log "Patches found. Trying to apply them"
+
+    TMP_PATCH_DIR="$(mktemp -d)"
+    trap 'rm -rf -- "$TMP_PATCH_DIR"' EXIT # Deletes temp dir when script exits
+    
     for patchfile in /patch/*
     do
         echo "Applying patch ${patchfile}"
