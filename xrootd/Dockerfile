@@ -3,7 +3,7 @@ FROM almalinux:9
 # Install CERN CA
 ADD ca.repo /etc/yum.repos.d/ca.repo
 
-RUN dnf install -y epel-release.noarch http://linuxsoft.cern.ch/wlcg/centos7/x86_64/wlcg-repo-1.0.0-1.el7.noarch.rpm && \
+RUN dnf install -y epel-release.noarch https://linuxsoft.cern.ch/wlcg/el9/x86_64/wlcg-repo-1.0.0-1.el9.noarch.rpm && \
     dnf update -y && \
     dnf upgrade -y && \
     dnf --disablerepo="*" --enablerepo="carepo" -y install 'ca*' && \
