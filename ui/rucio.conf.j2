@@ -2,7 +2,9 @@ LoadModule ssl_module /usr/lib64/httpd/modules/mod_ssl.so
 LoadModule unique_id_module modules/mod_unique_id.so
 LoadModule wsgi_module /usr/lib64/httpd/modules/mod_wsgi.so
 
+{% if RUCIO_ENABLE_SSL|default('False') == 'True' %}
 Listen 443
+{% endif %}
 Listen 80
 
 Header set X-Rucio-Host "%{HTTP_HOST}e"
@@ -20,49 +22,14 @@ LoadModule cache_disk_module modules/mod_cache_disk.so
 CacheEnable disk /
 CacheRoot /tmp
 
+{% macro common_virtual_host_config() %}
 {% if RUCIO_HOSTNAME is defined %}
-<VirtualHost *:80>
  ServerName {{ RUCIO_HOSTNAME }}:80
- Redirect / https://{{ RUCIO_HOSTNAME }}/
-</VirtualHost>
-
-<VirtualHost *:443>
- ServerName {{ RUCIO_HOSTNAME }}:443
-{% else %}
-<VirtualHost *:443>
 {% endif %}
 {% if RUCIO_SERVER_ADMIN is defined %}
  ServerAdmin {{ RUCIO_SERVER_ADMIN }}
 {% else %}
  ServerAdmin rucio-admin@cern.ch
-{% endif %}
-
-{% if RUCIO_ENABLE_SSL|default('False') == 'True' %}
- SSLEngine on
- SSLCertificateFile /etc/grid-security/hostcert.pem
- SSLCertificateKeyFile /etc/grid-security/hostkey.pem
-{% if RUCIO_CA_PATH is defined %}
- SSLCACertificatePath {{ RUCIO_CA_PATH }}
- SSLCARevocationPath {{ RUCIO_CA_PATH }}
-{% else %}
- SSLCACertificateFile /etc/grid-security/ca.pem
-{% endif %}
- SSLVerifyClient optional_no_ca
- SSLVerifyDepth 10
-{% if RUCIO_HTTPD_LEGACY_DN|default('False') == 'True' %}
- SSLOptions +StdEnvVars +LegacyDNStringFormat
-{% else %}
- SSLOptions +StdEnvVars
-{% endif %}
- SSLProxyEngine On
-{% if RUCIO_SSL_PROTOCOL is defined %}
- #AB: SSLv3 disable
- SSLProtocol              {{ RUCIO_SSL_PROTOCOL }}
-{% else %}
- SSLProtocol              +TLSv1.2
-{% endif %}
- #AB: for Security
- SSLCipherSuite           HIGH:!CAMELLIA:!ADH:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!3DES
 {% endif %}
 
 {% if RUCIO_LOG_LEVEL is defined %}
@@ -72,13 +39,8 @@ CacheRoot /tmp
 {% endif %}
 
 {% if RUCIO_ENABLE_LOGS|default('False') == 'True' %}
-{% if RUCIO_HTTPD_LOG_DIR is defined %}
- CustomLog {{RUCIO_HTTPD_LOG_DIR}}/access_log combinedrucio
- ErrorLog {{RUCIO_HTTPD_LOG_DIR}}/error_log
-{% else %}
- CustomLog logs/access_log combinedrucio
- ErrorLog logs/error_log
-{% endif %}
+ CustomLog {{RUCIO_HTTPD_LOG_DIR | default('logs') }}/access_log combinedrucio
+ ErrorLog {{RUCIO_HTTPD_LOG_DIR | default('logs') }}/error_log
 {% else %}
  CustomLog /dev/stdout combinedrucio
  ErrorLog /dev/stderr
@@ -100,4 +62,54 @@ CacheRoot /tmp
   ProxyPass /authproxy             {{ RUCIO_AUTH_PROXY_SCHEME | default('https') }}://{{ RUCIO_AUTH_PROXY }}
   ProxyPassReverse /authproxy      {{ RUCIO_AUTH_PROXY_SCHEME | default('https') }}://{{ RUCIO_AUTH_PROXY }}
 {% endif %}
+{% endmacro %}
+
+<VirtualHost *:80>
+{% if RUCIO_ENABLE_SSL|default('False') == 'True' %}
+ {% if RUCIO_HOSTNAME is defined %}
+ Redirect / https://{{ RUCIO_HOSTNAME }}/
+ {% else %}
+ Redirect / https://localhost/
+ {% endif %}
+{% else %}
+ {{ common_virtual_host_config()}}
+ {% endif%}
 </VirtualHost>
+
+{% if RUCIO_ENABLE_SSL|default('False') == 'True' %}
+<VirtualHost *:443>
+{{ common_virtual_host_config()}}
+{% if RUCIO_ENABLE_SSL|default('False') == 'True' %}
+ SSLEngine on
+ SSLCertificateFile /etc/grid-security/hostcert.pem
+ SSLCertificateKeyFile /etc/grid-security/hostkey.pem
+{% if RUCIO_CA_PATH is defined %}
+ SSLCACertificatePath {{ RUCIO_CA_PATH }}
+ SSLCARevocationPath {{ RUCIO_CA_PATH }}
+{% elif RUCIO_CA_FILE is defined %}
+ SSLCACertificateFile {{ RUCIO_CA_FILE }}
+ SSLCARevocationFile {{ RUCIO_CA_FILE }}
+{% else %}
+ SSLCACertificateFile /etc/grid-security/ca.pem
+ SSLCARevocationFile /etc/grid-security/ca.pem
+{% endif %}
+ SSLVerifyClient optional_no_ca
+ SSLVerifyDepth 10
+{% if RUCIO_HTTPD_LEGACY_DN|default('False') == 'True' %}
+ SSLOptions +StdEnvVars +LegacyDNStringFormat
+{% else %}
+ SSLOptions +StdEnvVars
+{% endif %}
+ SSLProxyEngine On
+{% if RUCIO_SSL_PROTOCOL is defined %}
+ #AB: SSLv3 disable
+ SSLProtocol              {{ RUCIO_SSL_PROTOCOL }}
+{% else %}
+ SSLProtocol              +TLSv1.2
+{% endif %}
+ #AB: for Security
+ SSLCipherSuite           HIGH:!CAMELLIA:!ADH:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!3DES
+{% endif %}
+</VirtualHost>
+{% endif %}
+

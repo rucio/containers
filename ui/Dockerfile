@@ -46,9 +46,12 @@ ADD 00-mpm.conf.j2 /tmp
 ADD docker-entrypoint.sh /
 RUN rm /etc/httpd/conf.d/welcome.conf /etc/httpd/conf.d/userdir.conf /etc/httpd/conf.d/ssl.conf
 
+RUN update-crypto-policies --set DEFAULT:SHA1
+
 VOLUME /var/log/httpd
 VOLUME /opt/rucio/etc
 
+EXPOSE 80
 EXPOSE 443
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
