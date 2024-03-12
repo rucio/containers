@@ -59,6 +59,9 @@ Same as `RUCIO_PROXY_SCHEME` but for the authentication server.
 
 If you are using SSL and want use `SSLCACertificatePath` and `SSLCARevocationPath` you can do so by specifying the path in this variable.
 
+### `RUCIO_CA_FILE`
+If you are using SSL and do not want to hash the CA certificates you can specify the path to the single CA file that contains all of the required certificates in this variable. It sets the `SSLCACertificateFile`  and `SSLCARevocationFile` directives in the apache config.
+
 ### `RUCIO_ENABLE_LOGS`
 
 By default the log output of the web server is written to stdout and stderr. If you set this variable to `True` the output will be written to `access_log` and `error_log` under `/var/log/httpd`.
