@@ -37,6 +37,7 @@ CacheRoot /tmp
  ServerAdmin rucio-admin@cern.ch
 {% endif %}
 
+{% if RUCIO_ENABLE_SSL|default('False') == 'True' %}
  SSLEngine on
  SSLCertificateFile /etc/grid-security/hostcert.pem
  SSLCertificateKeyFile /etc/grid-security/hostkey.pem
@@ -54,7 +55,6 @@ CacheRoot /tmp
  SSLOptions +StdEnvVars
 {% endif %}
  SSLProxyEngine On
-
 {% if RUCIO_SSL_PROTOCOL is defined %}
  #AB: SSLv3 disable
  SSLProtocol              {{ RUCIO_SSL_PROTOCOL }}
@@ -63,6 +63,8 @@ CacheRoot /tmp
 {% endif %}
  #AB: for Security
  SSLCipherSuite           HIGH:!CAMELLIA:!ADH:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!3DES
+{% endif %}
+
 {% if RUCIO_LOG_LEVEL is defined %}
  LogLevel {{ RUCIO_LOG_LEVEL }}
 {% else %}
