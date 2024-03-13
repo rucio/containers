@@ -9,6 +9,22 @@ Listen 80
 
 Header set X-Rucio-Host "%{HTTP_HOST}e"
 RequestHeader add X-Rucio-RequestId "%{UNIQUE_ID}e"
+Header set Referrer-Policy "no-referrer"
+Header always set Content-Security-Policy "default-src https: data: 'unsafe-inline' 'unsafe-eval'"
+Header always set X-Frame-Options "SAMEORIGIN"
+Header always set X-XSS-Protection "1; mode=block"
+Header always set X-Content-Type-Options "nosniff"
+
+{% if RUCIO_ENABLE_SSL|default('False') == 'True' %}
+{% if RUCIO_SSL_PROTOCOL is defined %}
+ #AB: SSLv3 disable
+ SSLProtocol              {{ RUCIO_SSL_PROTOCOL }}
+{% else %}
+ SSLProtocol              all -SSLv3 -TLSv1 -TLSv1.1
+{% endif %}
+SSLCipherSuite          ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384
+SSLHonorCipherOrder     off
+{% endif %}
 
 {% if RUCIO_LOG_FORMAT is defined %}
 LogFormat "{{ RUCIO_LOG_FORMAT }}" combinedrucio
@@ -55,12 +71,12 @@ CacheRoot /tmp
 {% endif %}
 
 {% if RUCIO_PROXY is defined %}
-  ProxyPass /proxy             {{ RUCIO_PROXY_SCHEME | default('https') }}://{{ RUCIO_PROXY }}
-  ProxyPassReverse /proxy      {{ RUCIO_PROXY_SCHEME | default('https') }}://{{ RUCIO_PROXY }}
+ ProxyPass /proxy             {{ RUCIO_PROXY_SCHEME | default('https') }}://{{ RUCIO_PROXY }}
+ ProxyPassReverse /proxy      {{ RUCIO_PROXY_SCHEME | default('https') }}://{{ RUCIO_PROXY }}
 {% endif %}
 {% if RUCIO_AUTH_PROXY is defined %}
-  ProxyPass /authproxy             {{ RUCIO_AUTH_PROXY_SCHEME | default('https') }}://{{ RUCIO_AUTH_PROXY }}
-  ProxyPassReverse /authproxy      {{ RUCIO_AUTH_PROXY_SCHEME | default('https') }}://{{ RUCIO_AUTH_PROXY }}
+ ProxyPass /authproxy             {{ RUCIO_AUTH_PROXY_SCHEME | default('https') }}://{{ RUCIO_AUTH_PROXY }}
+ ProxyPassReverse /authproxy      {{ RUCIO_AUTH_PROXY_SCHEME | default('https') }}://{{ RUCIO_AUTH_PROXY }}
 {% endif %}
 {% endmacro %}
 
@@ -93,7 +109,7 @@ CacheRoot /tmp
  SSLCACertificateFile /etc/grid-security/ca.pem
  SSLCARevocationFile /etc/grid-security/ca.pem
 {% endif %}
- SSLVerifyClient optional_no_ca
+ SSLVerifyClient optional
  SSLVerifyDepth 10
 {% if RUCIO_HTTPD_LEGACY_DN|default('False') == 'True' %}
  SSLOptions +StdEnvVars +LegacyDNStringFormat
@@ -101,14 +117,6 @@ CacheRoot /tmp
  SSLOptions +StdEnvVars
 {% endif %}
  SSLProxyEngine On
-{% if RUCIO_SSL_PROTOCOL is defined %}
- #AB: SSLv3 disable
- SSLProtocol              {{ RUCIO_SSL_PROTOCOL }}
-{% else %}
- SSLProtocol              +TLSv1.2
-{% endif %}
- #AB: for Security
- SSLCipherSuite           HIGH:!CAMELLIA:!ADH:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!3DES
 {% endif %}
 </VirtualHost>
 {% endif %}
