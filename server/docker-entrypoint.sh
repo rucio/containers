@@ -92,6 +92,12 @@ then
     done
 fi
 
+if [ -d /etc/grid-security/certificates ]; then
+    echo 'Adding Grid CAs to the system trust.'
+    cp -v /etc/grid-security/certificates/*.pem /etc/pki/ca-trust/source/anchors/
+    update-ca-trust extract
+fi
+
 pkill httpd || :
 sleep 2
 exec httpd -D FOREGROUND

@@ -81,6 +81,12 @@ then
     done
 fi
 
+if [ -d /etc/grid-security/certificates ]; then
+    echo 'Adding Grid CAs to the system trust.'
+    cp -v /etc/grid-security/certificates/*.pem /etc/pki/ca-trust/source/anchors/
+    update-ca-trust extract
+fi
+
 echo "starting daemon with: $RUCIO_DAEMON $RUCIO_DAEMON_ARGS"
 echo ""
 
