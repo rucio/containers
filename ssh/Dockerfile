@@ -13,6 +13,7 @@ RUN dnf install -y epel-release.noarch && \
     dnf clean all && \
     rm -rf /var/cache/dnf
 
+RUN ln -s /usr/bin/python3 /usr/bin/python
 RUN python -m pip install -U dumb-init
 
 # Server config
