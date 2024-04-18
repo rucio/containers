@@ -78,6 +78,10 @@ CacheRoot /tmp
  ProxyPass /authproxy             {{ RUCIO_AUTH_PROXY_SCHEME | default('https') }}://{{ RUCIO_AUTH_PROXY }}
  ProxyPassReverse /authproxy      {{ RUCIO_AUTH_PROXY_SCHEME | default('https') }}://{{ RUCIO_AUTH_PROXY }}
 {% endif %}
+{% if RUCIO_HTTPD_ADDITIONAL_PROXY_CONF is defined %}
+ ProxyPass {{ RUCIO_HTTPD_ADDITIONAL_PROXY_CONF}}
+ ProxyPassReverse {{ RUCIO_HTTPD_ADDITIONAL_PROXY_CONF }}
+{% endif %}
 {% endmacro %}
 
 <VirtualHost *:80>
