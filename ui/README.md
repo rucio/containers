@@ -91,6 +91,15 @@ This variable sets the server admin in the apache config.
 
 This variable sets the MPM mode. The default is "event".
 
+### `RUCIO_HTTPD_ADDITIONAL_PROXY_CONF`
+
+This variable can be used to add an additional `ProxyPass` and corresponding `ProxyPassReverse` directive to the apache config. This can be useful if you want to add additional proxies to the WebUI. The value should be a string with the format `/{path} {url}`. For example `RUCIO_HTTPD_ADDITIONAL_PROXY_CONF="/foo http://bar"` will add the following lines to the apache config located at `/etc/httpd/conf.d/rucio.conf` inside the container:
+
+```bash
+    ProxyPass /foo http://bar
+    ProxyPassReverse /foo http://bar
+```
+
 ## `RUCIO_CFG` configuration parameters:
 
 Environment variables can be used to set values for the auto-generated rucio.cfg. The names are derived from the actual names in the configuration file prefixed by `RUCIO_CFG`, e.g., the `default` value in the `database` section becomes `RUCIO_CFG_DATABASE_DEFAULT`.
