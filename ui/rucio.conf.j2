@@ -40,7 +40,7 @@ CacheRoot /tmp
 
 {% macro common_virtual_host_config() %}
 {% if RUCIO_HOSTNAME is defined %}
- ServerName {{ RUCIO_HOSTNAME }}:80
+ ServerName {{ RUCIO_HOSTNAME }}
 {% endif %}
 {% if RUCIO_SERVER_ADMIN is defined %}
  ServerAdmin {{ RUCIO_SERVER_ADMIN }}
