@@ -44,16 +44,18 @@ RUN dnf -y install yum-utils epel-release.noarch && \
         python3-devel \
         python3-mod_wsgi \
         python3-m2crypto \
-        rclone \
         rsync \
+        unzip \
         vim \
         voms-clients-java \
         which \
         xmlsec1-devel \
         xmlsec1-openssl-devel \
         xrootd-client && \
-    yum clean all && \
-    rm -rf /var/cache/yum
+    dnf clean all && \
+    rm -rf /var/cache/dnf
+
+RUN curl https://rclone.org/install.sh | bash
 
 ARG GIT_CLONE_ARGS="--depth 1 https://github.com/rucio/rucio.git"
 
