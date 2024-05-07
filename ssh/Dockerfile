@@ -7,12 +7,13 @@ RUN dnf install -y epel-release.noarch && \
         openssh-server \
         openssh-clients \
         python-pip \
-        rclone \
         rsync \
-        sudo && \
+        sudo \
+        unzip && \
     dnf clean all && \
     rm -rf /var/cache/dnf
 
+RUN curl https://rclone.org/install.sh | bash
 RUN ln -s /usr/bin/python3 /usr/bin/python
 RUN python -m pip install -U dumb-init
 
