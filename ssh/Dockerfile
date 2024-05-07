@@ -14,8 +14,7 @@ RUN dnf install -y epel-release.noarch && \
     rm -rf /var/cache/dnf
 
 RUN curl https://rclone.org/install.sh | bash
-RUN ln -s /usr/bin/python3 /usr/bin/python
-RUN python -m pip install -U dumb-init
+RUN python3 -m pip install -U dumb-init
 
 # Server config
 RUN /usr/bin/ssh-keygen -A && \
