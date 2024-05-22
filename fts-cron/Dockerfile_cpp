@@ -23,7 +23,7 @@ RUN chmod +x /usr/bin/kubectl
 
 # Install VOMS and FTS clients for delegating proxies
 RUN yum -y install ca-certificates.noarch lcg-CA ca_* fetch-crl voms-clients-cpp fts-rest-cli \
-    wlcg-voms-cms wlcg-voms-atlas \
+    wlcg-iam-lsc-atlas wlcg-iam-vomses-atlas wlcg-voms-atlas wlcg-iam-lsc-cms wlcg-iam-vomses-cms wlcg-voms-cms \
     python-pip python-setuptools python-requests && \
     yum clean all && \
     rm -rf /var/cache/yum
