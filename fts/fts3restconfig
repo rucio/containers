@@ -17,6 +17,9 @@ Alias=rucio/fts
 
 MonitoringMessaging=false
 
+[fts3]
+OAuth2 = True
+
 [sqlalchemy]
 pool_timeout=10
 pool_size=10
