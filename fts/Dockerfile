@@ -7,7 +7,17 @@ RUN curl https://fts-repo.web.cern.ch/fts-repo/fts3-depend-el7.repo >  /etc/yum.
 RUN curl https://dmc-repo.web.cern.ch/dmc-repo/dmc-el7.repo > /etc/yum.repos.d/dmc-el7.repo
 RUN yum upgrade -y && \
     yum install -y centos-release-scl
-RUN yum install -y mysql multitail gfal2-plugin* fts-server fts-rest-server fts-monitoring fts-mysql fts-msg zeromq
+RUN yum install -y \
+    mysql \
+    multitail \
+    gfal2-plugin* \ 
+    fts-libs-3.14.0-r2404100902git47e773b.el7.cern.x86_64 \
+    fts-server-3.14.0-r2404100902git47e773b.el7.cern.x86_64 \
+    fts-rest-server-3.14.0-r2404100848gitb7554d5.el7.cern.noarch \ 
+    fts-monitoring \ 
+    fts-mysql-3.14.0-r2404100902git47e773b.el7.cern.x86_64 \ 
+    fts-msg-3.14.0-r2404100902git47e773b.el7.cern.x86_64 \ 
+    zeromq
 RUN yum clean all
 
 # Database configuration for FTS server
