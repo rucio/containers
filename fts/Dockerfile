@@ -11,12 +11,12 @@ RUN yum install -y \
     mysql \
     multitail \
     gfal2-plugin* \ 
-    fts-libs-3.14.0-r2404100902git47e773b.el7.cern.x86_64 \
-    fts-server-3.14.0-r2404100902git47e773b.el7.cern.x86_64 \
-    fts-rest-server-3.14.0-r2404100848gitb7554d5.el7.cern.noarch \ 
+    fts-libs-3.13.0-r2405271344gitc6d02cc.el7.cern.x86_64 \
+    fts-server-3.13.0-r2405271344gitc6d02cc.el7.cern.x86_64 \
+    fts-rest-server-3.13.0-r2405271058git798429f.el7.cern.noarch \ 
     fts-monitoring \ 
-    fts-mysql-3.14.0-r2404100902git47e773b.el7.cern.x86_64 \ 
-    fts-msg-3.14.0-r2404100902git47e773b.el7.cern.x86_64 \ 
+    fts-mysql-3.13.0-r2405271344gitc6d02cc.el7.cern.x86_64 \ 
+    fts-msg-3.13.0-r2405271344gitc6d02cc.el7.cern.x86_64 \ 
     zeromq
 RUN yum clean all
 
