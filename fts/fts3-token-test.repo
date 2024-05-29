@@ -1,6 +1,0 @@
-[fts3-token-test-el7]
-name=FTS3 Token Test Repository
-baseurl=https://fts-repo.web.cern.ch/fts-repo/testing/FTS-1925_token_project/el7/x86_64/
-gpgcheck=0
-enabled=1
-protect=0
