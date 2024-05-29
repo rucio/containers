@@ -17,7 +17,6 @@ Alias=rucio/fts
 
 MonitoringMessaging=false
 
-[fts3]
 OAuth2 = True
 
 [sqlalchemy]
