@@ -1,37 +1,37 @@
-FROM centos:7
+FROM almalinux:9
+
+# Enable EPEL
+RUN dnf install -y yum-utils \
+  && dnf config-manager --set-enabled crb \
+  && dnf install -y epel-release
+
 
 # Install FTS
-RUN yum install -y epel-release.noarch
-ADD fts3-testing.repo /etc/yum.repos.d/fts3-testing.repo
-RUN curl https://fts-repo.web.cern.ch/fts-repo/fts3-depend-el7.repo >  /etc/yum.repos.d/fts3-depend-el7.repo
-RUN curl https://dmc-repo.web.cern.ch/dmc-repo/dmc-el7.repo > /etc/yum.repos.d/dmc-el7.repo
-RUN yum upgrade -y && \
-    yum install -y centos-release-scl
-RUN yum install -y \
-    mysql \
-    multitail \
-    gfal2-plugin* \ 
-    fts-libs-3.13.0-r2405271344gitc6d02cc.el7.cern.x86_64 \
-    fts-server-3.13.0-r2405271344gitc6d02cc.el7.cern.x86_64 \
-    fts-rest-server-3.13.0-r2405271058git798429f.el7.cern.noarch \ 
-    fts-monitoring \ 
-    fts-mysql-3.13.0-r2405271344gitc6d02cc.el7.cern.x86_64 \ 
-    fts-msg-3.13.0-r2405271344gitc6d02cc.el7.cern.x86_64 \ 
-    zeromq
-RUN yum clean all
+RUN curl -sSfL -o /etc/yum.repos.d/fts3.repo https://fts-repo.web.cern.ch/fts-repo/fts3-el9.repo \
+  && curl -sSfL -o /etc/yum.repos.d/fts3-depend.repo https://fts-repo.web.cern.ch/fts-repo/fts3-depend.repo
 
-# Database configuration for FTS server
+
+RUN  dnf install -y \
+  fts-server fts-mysql fts-rest-client fts-rest-server fts-monitoring \
+  fts-server-selinux fts-rest-server-selinux fts-monitoring-selinux \
+  fts-msg \
+  mysql \
+  multitail
+  
+
 COPY fts3config /etc/fts3/fts3config
 RUN chmod +x /usr/share/fts/fts-database-upgrade.py
 
 # Configuration for FTSREST and FTSMON
 COPY fts3rest.conf /etc/httpd/conf.d/fts3rest.conf
 COPY fts3restconfig /etc/fts3/fts3restconfig
-RUN echo "" > /etc/httpd/conf.d/ssl.conf &&\
-    echo "" > /etc/httpd/conf.d/autoindex.conf &&\
-    echo "" > /etc/httpd/conf.d/userdir.conf &&\
-    echo "" > /etc/httpd/conf.d/welcome.conf &&\
-    echo "" > /etc/httpd/conf.d/zgridsite.conf
+RUN \
+     echo "" > /etc/httpd/conf.d/ssl.conf \
+  && echo "" > /etc/httpd/conf.d/autoindex.conf \
+  && echo "" > /etc/httpd/conf.d/userdir.conf \
+  && echo "" > /etc/httpd/conf.d/welcome.conf \
+  && echo "" > /etc/httpd/conf.d/zgridsite.conf \
+  && mkdir -p /etc/grid-security/certificates
 
 # FTS monitoring ActiveMQ configuration
 COPY fts-msg-monitoring.conf /etc/fts3/fts-msg-monitoring.conf
