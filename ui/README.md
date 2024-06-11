@@ -100,6 +100,14 @@ This variable can be used to add an additional `ProxyPass` and corresponding `Pr
     ProxyPassReverse /foo http://bar
 ```
 
+### `RUCIO_HTTPD_PROXY_PROTOCOL_ENABLED`
+
+This variable can be used to enable the `ProxyProtocol` module in the apache config. The default is `Off`. It sets the `RemoteIPProxyProtocol` directive in the apache config.
+
+### `RUCIO_HTTPD_PROXY_PROTOCOL_EXCEPTIONS`
+
+This variable can be used to set the `RemoteIPProxyProtocolExceptions` directive in the apache config. If the `RUCIO_HTTPD_PROXY_PROTOCOL_ENABLED` is set to `True`, then the supplied values are excluded from proxy protocol processing.
+
 ## `RUCIO_CFG` configuration parameters:
 
 Environment variables can be used to set values for the auto-generated rucio.cfg. The names are derived from the actual names in the configuration file prefixed by `RUCIO_CFG`, e.g., the `default` value in the `database` section becomes `RUCIO_CFG_DATABASE_DEFAULT`.
