@@ -1,6 +1,0 @@
-[fts3-testing-el7]
-name=FTS3 Test Repository
-baseurl=https://fts-repo.web.cern.ch/fts-repo/testing/el7/x86_64/
-gpgcheck=0
-enabled=1
-protect=0

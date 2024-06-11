@@ -1,17 +1,18 @@
-version: "2"
 services:
   fts:
-    image: rucio/fts
+    build: .
     hostname: fts
     ports:
       - "8446:8446"
       - "8449:8449"
-    links:
-      - ftsdb:ftsdb
     depends_on:
       - ftsdb
+    networks:
+      - fts
+
+
   ftsdb:
-    image: mysql:5
+    image: mysql:8
     hostname: ftsdb
     environment:
       - MYSQL_USER=fts
@@ -20,3 +21,13 @@ services:
       - MYSQL_DATABASE=fts
     ports:
       - "3306:3306"
+    networks:
+      - fts
+    volumes:
+      - ftsdb-data:/var/lib/mysql
+
+networks:
+  fts:
+
+volumes:
+  ftsdb-data:
