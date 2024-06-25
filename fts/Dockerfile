@@ -16,7 +16,8 @@ RUN  dnf install -y \
   fts-server-selinux fts-rest-server-selinux fts-monitoring-selinux \
   fts-msg \
   mysql \
-  multitail
+  multitail \
+  gfal2-plugin*
   
 
 COPY fts3config /etc/fts3/fts3config
