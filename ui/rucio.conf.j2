@@ -79,18 +79,19 @@ CacheRoot /tmp
  ProxyPassReverse /authproxy      {{ RUCIO_AUTH_PROXY_SCHEME | default('https') }}://{{ RUCIO_AUTH_PROXY }}
 {% endif %}
 {% if RUCIO_HTTPD_ADDITIONAL_PROXY_CONF is defined %}
- ProxyPass {{ RUCIO_HTTPD_ADDITIONAL_PROXY_CONF}}
- ProxyPassReverse {{ RUCIO_HTTPD_ADDITIONAL_PROXY_CONF }}
+{% for proxy in RUCIO_HTTPD_ADDITIONAL_PROXY_CONF.split(",") %}
+ ProxyPass {{ proxy|trim }}
+ ProxyPassReverse {{ proxy|trim }}
+{% endfor %}
+{% endif %}
+{% if RUCIO_HTTPD_PROXY_PROTOCOL_ENABLED | default('False') == 'True' %}
+ RemoteIPProxyProtocol On
+ RemoteIPProxyProtocolExceptions 127.0.0.1 ::1 {{ RUCIO_HTTPD_PROXY_PROTOCOL_EXCEPTIONS | default('') }}
 {% endif %}
 {% if RUCIO_HTTPD_ADDITIONAL_REDIRECTS is defined %}
 {% for redirect in RUCIO_HTTPD_ADDITIONAL_REDIRECTS.split(',') %}
  Redirect {{ redirect|trim }}
 {% endfor %}
- ProxyPassReverse {{ RUCIO_HTTPD_ADDITIONAL_PROXY_CONF }}
-{% endif %}
-{% if RUCIO_HTTPD_PROXY_PROTOCOL_ENABLED | default('False') == 'True' %}
- RemoteIPProxyProtocol On
- RemoteIPProxyProtocolExceptions 127.0.0.1 ::1 {{ RUCIO_HTTPD_PROXY_PROTOCOL_EXCEPTIONS | default('') }}
 {% endif %}
 {% endmacro %}
 

@@ -100,6 +100,15 @@ This variable can be used to add an additional `ProxyPass` and corresponding `Pr
     ProxyPassReverse /foo http://bar
 ```
 
+You can also specify multiple proxies if you specify the value of the environment variable in the following format: `/{path1} {url1}, /{path2} {url2}, ...`. For example `RUCIO_HTTPD_ADDITIONAL_PROXY_CONF="/foo http://bar, /baz http://qux"` will add the following lines to the apache config located at `/etc/httpd/conf.d/rucio.conf` inside the container:
+
+```bash
+    ProxyPass /foo http://bar
+    ProxyPassReverse /foo http://bar
+    ProxyPass /baz http://qux
+    ProxyPassReverse /baz http://qux
+```
+
 ### `RUCIO_HTTPD_ADDITIONAL_REDIRECTS`
 
 This variable can be used to add an additional `Redirect` in the apache config. The value should be a string with the format `/{path} {url}`. For example `RUCIO_HTTPD_ADDITIONAL_REDIRECTS="/foo http://bar"` will add the following lines to the apache config located at `/etc/httpd/conf.d/rucio.conf` inside the container:
@@ -108,7 +117,7 @@ This variable can be used to add an additional `Redirect` in the apache config. 
     Redirect /foo http://bar
 ```
 
-You can add multiple refirects if you specify the value of the environment variable in the following format: `/{path1} {url1}, /{path2} {url2}, ...`. For example `RUCIO_HTTPD_ADDITIONAL_REDIRECTS="/foo http://bar, /baz http://qux"` will add the following lines to the apache config located at `/etc/httpd/conf.d/rucio.conf` inside the container:
+You can add multiple redirects if you specify the value of the environment variable in the following format: `/{path1} {url1}, /{path2} {url2}, ...`. For example `RUCIO_HTTPD_ADDITIONAL_REDIRECTS="/foo http://bar, /baz http://qux"` will add the following lines to the apache config located at `/etc/httpd/conf.d/rucio.conf` inside the container:
 
 ```bash
     Redirect /foo http://bar
