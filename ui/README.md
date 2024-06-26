@@ -100,6 +100,21 @@ This variable can be used to add an additional `ProxyPass` and corresponding `Pr
     ProxyPassReverse /foo http://bar
 ```
 
+### `RUCIO_HTTPD_ADDITIONAL_REDIRECTS`
+
+This variable can be used to add an additional `Redirect` in the apache config. The value should be a string with the format `/{path} {url}`. For example `RUCIO_HTTPD_ADDITIONAL_REDIRECTS="/foo http://bar"` will add the following lines to the apache config located at `/etc/httpd/conf.d/rucio.conf` inside the container:
+
+```bash
+    Redirect /foo http://bar
+```
+
+You can add multiple refirects if you specify the value of the environment variable in the following format: `/{path1} {url1}, /{path2} {url2}, ...`. For example `RUCIO_HTTPD_ADDITIONAL_REDIRECTS="/foo http://bar, /baz http://qux"` will add the following lines to the apache config located at `/etc/httpd/conf.d/rucio.conf` inside the container:
+
+```bash
+    Redirect /foo http://bar
+    Redirect /baz http://qux
+```
+
 ### `RUCIO_HTTPD_PROXY_PROTOCOL_ENABLED`
 
 This variable can be used to enable the `ProxyProtocol` module in the apache config. The default is `Off`. It sets the `RemoteIPProxyProtocol` directive in the apache config.
