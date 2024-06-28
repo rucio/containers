@@ -26,6 +26,8 @@ RUN dnf install -y epel-release.noarch && \
         python3-mod_wsgi \
         python3-m2crypto \
         python-devel \
+        patch \
+        patchutils \
         python-pip && \
     dnf clean all && \
     rm -rf /var/cache/dnf
