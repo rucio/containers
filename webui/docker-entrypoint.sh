@@ -40,6 +40,7 @@ echo ""
 log "removing httpd example ssl config"
 rm -rf /etc/httpd/conf.d/ssl.conf
 
+RUCIO_PYTHON_PATH=$(python3 -c "import os; import rucio; print(os.path.dirname(rucio.__file__))")
 if [ -d "/patch" ]
 then
     echo "=================== Apply Patches ==================="

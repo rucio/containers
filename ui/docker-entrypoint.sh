@@ -26,7 +26,8 @@ echo "=================== /opt/rucio/etc/rucio.cfg ============================"
 cat /opt/rucio/etc/rucio.cfg
 echo ""
 
-j2 /tmp/rucio.conf.j2 | sed '/^\s*$/d' > /etc/httpd/conf.d/rucio.conf
+RUCIO_PYTHON_PATH=$(python3 -c "import os; import rucio; print(os.path.dirname(rucio.__file__))")
+(export RUCIO_PYTHON_PATH; j2 /tmp/rucio.conf.j2 | sed '/^\s*$/d' > /etc/httpd/conf.d/rucio.conf)
 
 echo "=================== /etc/httpd/conf.d/rucio.conf ========================"
 cat /etc/httpd/conf.d/rucio.conf
