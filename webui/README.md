@@ -127,7 +127,7 @@ The following environment variables are used to configure the rucio specific asp
 | `RUCIO_CA_REVOCATION_CHECK`             | Sets the `SSLCARevocationCheck` variable for Apache                                                                                                                                                                      | Default: `chain`           |
 | `RUCIO_HTTPD_ADDITIONAL_PROXY_CONF`     | Sets the ProxyPass and ProxyPassReverse directives for Apache.                                                                                                                                                           |                            |
 | `RUCIO_HTTPD_PROXY_PROTOCOL_ENABLED`    |  Enable Proxy Protocol. Useful if your Apache is itself behind a Loadbalancer that uses Proxy Protocol to forward traffic                |                            |
-| `RUCIO_HTTPD_PROXY_PROTOCOL_EXCEPTIONS` |  The url's that must not be proxied. Sets the `RemoteIPProxyProtocolExceptions` directive in apache config.                                                                                                                                                        |                            |
+| `RUCIO_HTTPD_PROXY_PROTOCOL_EXCEPTIONS` |  The URLs that must not be proxied. Sets the `RemoteIPProxyProtocolExceptions` directive in apache config.                                                                                                                                                        |                            |
 
 The following environment variables are used to configure the Apache Web Server. Please take a look at `httpd.conf.j2` for more information.
 
