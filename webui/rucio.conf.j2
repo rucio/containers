@@ -7,11 +7,28 @@
  SSLEngine on
  SSLCertificateFile /etc/grid-security/hostcert.pem
  SSLCertificateKeyFile /etc/grid-security/hostkey.pem
+ SSLVerifyClient optional
+ SSLVerifyDepth 10
+ SSLProxyEngine On
+{% if RUCIO_HTTPD_LEGACY_DN|default('False') == 'True' %}
+ SSLOptions +StdEnvVars +LegacyDNStringFormat
+{% else %}
  SSLOptions +StdEnvVars
+{% endif %}
  #AB: SSLv3 disable
  SSLProtocol              all -SSLv2 -SSLv3
  #AB: for Security
  SSLCipherSuite           HIGH:!CAMELLIA:!ADH:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!3DES
+ {% if RUCIO_CA_PATH is defined %}
+ SSLCACertificatePath {{ RUCIO_CA_PATH }}
+ SSLCARevocationPath {{ RUCIO_CA_PATH }}
+{% elif RUCIO_CA_FILE is defined %}
+ SSLCACertificateFile {{ RUCIO_CA_FILE }}
+ SSLCARevocationFile {{ RUCIO_CA_FILE }}
+{% else %}
+ SSLCACertificateFile /etc/grid-security/ca.pem
+ SSLCARevocationFile /etc/grid-security/ca.pem
+{% endif %}
 {% endif %}
 {% if RUCIO_LOG_LEVEL is defined %}
  LogLevel {{ RUCIO_LOG_LEVEL }}
@@ -30,6 +47,21 @@
 {% else %}
  CustomLog /dev/stdout combinedrucio
  ErrorLog /dev/stderr
+{% endif %}
+{% if RUCIO_HTTPD_ADDITIONAL_PROXY_CONF is defined %}
+{% for proxy in RUCIO_HTTPD_ADDITIONAL_PROXY_CONF.split(",") %}
+ ProxyPass {{ proxy|trim }}
+ ProxyPassReverse {{ proxy|trim }}
+{% endfor %}
+{% endif %}
+{% if RUCIO_HTTPD_PROXY_PROTOCOL_ENABLED | default('False') == 'True' %}
+ RemoteIPProxyProtocol On
+ RemoteIPProxyProtocolExceptions 127.0.0.1 ::1 {{ RUCIO_HTTPD_PROXY_PROTOCOL_EXCEPTIONS | default('') }}
+{% endif %}
+{% if RUCIO_HTTPD_ADDITIONAL_REDIRECTS is defined %}
+{% for redirect in RUCIO_HTTPD_ADDITIONAL_REDIRECTS.split(',') %}
+ Redirect {{ redirect|trim }}
+{% endfor %}
 {% endif %}
 {% endmacro %}
 
