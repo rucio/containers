@@ -1,5 +1,5 @@
 # Deprecation notice
-This web UI is planned for deprecation. You can find the new web UI [here](https://github.com/rucio/containers/tree/master/webui).
+This container defines the web UI used in production, and it is planned for deprecation. You can find the new web UI [here](https://github.com/rucio/containers/tree/master/webui), which will replace the web UI in this container.
 
 # Rucio - Scientific Data Management
 
