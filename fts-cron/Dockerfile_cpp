@@ -1,30 +1,32 @@
-FROM centos:7
+FROM almalinux:9
 
 # Repos needed for (VOMS and FTS) and WLCG certs
 ADD ca.repo /etc/yum.repos.d/ca.repo
+ADD wlcg-el9.repo /etc/yum.repos.d/wlcg-el9.repo
 
-RUN yum install -y epel-release.noarch http://linuxsoft.cern.ch/wlcg/centos7/x86_64/wlcg-repo-1.0.0-1.el7.noarch.rpm && \
-    yum clean all && \
-    rm -rf /var/cache/yum
+# Enable EPEL
+RUN dnf install -y yum-utils \
+  && dnf config-manager --set-enabled crb \
+  && dnf install -y epel-release
 
-RUN yum update -y && \
-    yum upgrade -y && \
-    yum clean all && \
-    rm -rf /var/cache/yum
 
-RUN yum -y install https://repo.ius.io/ius-release-el7.rpm &&\
-    yum install -y httpd python36u-pip python36-mod_wsgi libaio gcc python36-devel.x86_64 mod_ssl openssl-devel.x86_64 python36-m2crypto libnsl.x86_64 patch.x86_64 xrootd-client && \
-    yum clean all && \
-    rm -rf /var/cache/yum
+RUN dnf update -y && \
+    dnf upgrade -y && \
+    dnf clean all && \
+    rm -rf /var/cache/dnf
+
+    RUN dnf -y install -y httpd python-pip python-mod_wsgi libaio gcc python-devel mod_ssl openssl-devel python3-m2crypto libnsl patch xrootd-client && \
+    dnf clean all && \
+    rm -rf /var/cache/dnf
 
 # Install latest kubectl
 RUN curl -o /usr/bin/kubectl -L https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
 RUN chmod +x /usr/bin/kubectl
 
 # Install VOMS and FTS clients for delegating proxies
-RUN yum -y install ca-certificates.noarch lcg-CA ca_* fetch-crl voms-clients-cpp fts-rest-cli \
+RUN dnf -y install ca-certificates.noarch ca_* fetch-crl voms-clients-cpp fts-rest-cli \
     wlcg-iam-lsc-atlas wlcg-iam-vomses-atlas wlcg-voms-atlas wlcg-iam-lsc-cms wlcg-iam-vomses-cms wlcg-voms-cms \
-    python-pip python-setuptools python-requests && \
+    python-setuptools python-requests && \
     yum clean all && \
     rm -rf /var/cache/yum
 
@@ -32,6 +34,8 @@ RUN yum -y install ca-certificates.noarch lcg-CA ca_* fetch-crl voms-clients-cpp
 RUN yum -y install wget && \
     yum clean all && \
     rm -rf /var/cache/yum
+
+CMD ["/bin/bash", "-c", "while true; do sleep 30; done;"]
 
 RUN python3 -m pip install --no-cache-dir --upgrade pip
 RUN python3 -m pip install --no-cache-dir --upgrade setuptools
