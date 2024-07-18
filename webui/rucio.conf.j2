@@ -1,6 +1,6 @@
 {% macro common_virtual_host_config(port) %}
-{% if RUCIO_HOSTNAME is defined %}
- ServerName {{ RUCIO_HOSTNAME }}:{{ port }}
+{% if RUCIO_WEBUI_HOSTNAME is defined %}
+ ServerName {{ RUCIO_WEBUI_HOSTNAME }}:{{ port }}
 {% endif %}
  ServerAdmin {{ RUCIO_SERVER_ADMIN | default('rucio-admin@cern.ch')}}
 {% if enable_ssl == 'True' %}
