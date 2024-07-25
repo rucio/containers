@@ -22,7 +22,8 @@ RUN /usr/bin/ssh-keygen -A && \
 COPY sshd_config /etc/ssh/sshd_config
 
 # Create storage area
-RUN mkdir /rucio /root/.ssh && \
+RUN mkdir -p /rucio && \
+    mkdir -p /root/.ssh && \
     echo '' > /root/.ssh/authorized_keys
 
 # Startup
