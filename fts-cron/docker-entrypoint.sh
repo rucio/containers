@@ -40,5 +40,5 @@ if [ -z "$FETCH_CRL" -o "$FETCH_CRL" = "True" ]; then
 fi
 
 echo "=================== Delegating ========================"
-
-/opt/rucio/fts-delegate/renew_fts_proxy.sh
+# Disable the delegation for now as we are testing the alma9 setup
+# /opt/rucio/fts-delegate/renew_fts_proxy.sh
