@@ -23,8 +23,8 @@ RUN curl -o /usr/bin/kubectl -L https://storage.googleapis.com/kubernetes-releas
 RUN chmod +x /usr/bin/kubectl
 
 # Install VOMS and FTS clients for delegating proxies
-RUN dnf -y install ca-certificates.noarch ca_* fetch-crl voms-clients-java fts-rest-cli \
-    wlcg-iam-lsc-atlas wlcg-iam-vomses-atlas wlcg-voms-atlas wlcg-iam-lsc-cms wlcg-iam-vomses-cms wlcg-voms-cms \
+RUN dnf -y install ca-certificates.noarch ca-policy-lcg fetch-crl voms-clients-java fts-rest-cli \
+    wlcg-iam-lsc-atlas wlcg-iam-vomses-atlas wlcg-iam-lsc-cms wlcg-iam-vomses-cms \
     python-pip python-setuptools python-requests && \
     dnf clean all && \
     rm -rf /var/cache/dnf
