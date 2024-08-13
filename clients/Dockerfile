@@ -7,7 +7,7 @@ RUN dnf -y install yum-utils epel-release.noarch && \
     yum-config-manager --enable crb && \
     dnf install -y \
         gfal2-all \
-        gfal2-util \
+        python3-gfal2-util \
         python3-gfal2 \
         python3-pip \
         nordugrid-arc-client \
