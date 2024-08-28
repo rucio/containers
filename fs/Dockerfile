@@ -1,8 +1,9 @@
-ARG TAG
+ARG TAG=32.8.0
+
 FROM rucio/rucio-clients:release-$TAG
 
 USER root
-RUN dnf install -y git cmake3 libcurl-devel fuse-devel tree
+RUN dnf install -y git cmake3 libcurl-devel fuse-devel tree g++
 
 ENV HOME=/opt/app-root/src \
     PATH=/opt/app-root/src/bin:/opt/app-root/bin:/opt/rh/devtoolset-9/root/usr/bin/:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
