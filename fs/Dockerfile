@@ -1,5 +1,4 @@
-ARG TAG=32.8.0
-
+ARG TAG
 FROM rucio/rucio-clients:release-$TAG
 
 USER root
