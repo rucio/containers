@@ -19,14 +19,14 @@ jobs:
           'webui, prepend-rucio, prepend-release, push-tagged, push-latest',                      # Common production Rucio WebUI server
           'init, prepend-rucio, prepend-release, push-tagged, push-latest',                       # Initalization container for Rucio database
           'probes, push-tagged, push-latest',                                                     # Common production probes container
-          'fts, push-tagged, push-latest',                                                        # Testing FTS containers
+          'test-fts, push-tagged, push-latest',                                                   # Testing FTS containers
           'fts-cron/Dockerfile_cpp, push-tagged, push-latest',                                    # Common production fts-cron proxy delegation
           'fts-cron/Dockerfile_java, push-tagged, push-latest, custom-tag=java',                  # Common production fts-cron proxy delegation
-          'ssh, push-tagged, push-latest',                                                        # Testing SSH RSE container
-          'xrootd, push-tagged, push-latest',                                                     # Testing XROOTD RSE container
-          'xrootd-noauth, push-tagged, push-latest',                                              # Testing XROOTD-NOAUTH RSE container
+          'test-ssh, push-tagged, push-latest',                                                   # Testing SSH RSE container
+          'test-xrootd, push-tagged, push-latest',                                                # Testing XROOTD RSE container
+          'test-xrootd-noauth, push-tagged, push-latest',                                         # Testing XROOTD-NOAUTH RSE container
           'fs, rucio-clients:release-#TAG, prepend-rucio, push-tagged, push-latest',              # Common production Rucio fuse mount
-          'webdav, push-latest'                                                                   # Testing WebDAV RSE container
+          'test-webdav, push-latest'                                                              # Testing WebDAV RSE container
         ]
       fail-fast: false
     
