@@ -11,22 +11,22 @@ jobs:
     strategy:
       matrix:
         context: [
-          'clients, prepend-rucio, prepend-release, push-tagged, push-latest', 
-          'server, prepend-rucio, prepend-release, push-tagged, push-latest, push-alma9-latest',
-          'daemons, prepend-rucio, prepend-release, push-tagged, push-latest, push-alma9-latest',
-          'dev, prepend-rucio, prepend-release, push-tagged, push-latest, push-alma9-latest',
-          'ui, prepend-rucio, prepend-release, push-tagged, push-latest',
-          'webui, prepend-rucio, prepend-release, push-tagged, push-latest',
-          'init, prepend-rucio, prepend-release, push-tagged, push-latest',
-          'probes, push-tagged, push-latest',
-          'fts, push-tagged, push-latest',
-          'fts-cron/Dockerfile_cpp, push-tagged, push-latest',
-          'fts-cron/Dockerfile_java, push-tagged, push-latest, custom-tag=java',
-          'ssh, push-tagged, push-latest',
-          'xrootd, push-tagged, push-latest',
-          'xrootd-noauth, push-tagged, push-latest',
-          'fs, rucio-clients:release-#TAG, prepend-rucio, push-tagged, push-latest',
-          'webdav, push-latest'
+          'clients, prepend-rucio, prepend-release, push-tagged, push-latest',                    # Common production Rucio clients
+          'server, prepend-rucio, prepend-release, push-tagged, push-latest, push-alma9-latest',  # Common production Rucio server
+          'daemons, prepend-rucio, prepend-release, push-tagged, push-latest, push-alma9-latest', # Common production Rucio daemons
+          'dev, prepend-rucio, prepend-release, push-tagged, push-latest, push-alma9-latest',     # Rucio development container
+          'ui, prepend-rucio, prepend-release, push-tagged, push-latest',                         # Common production Rucio UI server
+          'webui, prepend-rucio, prepend-release, push-tagged, push-latest',                      # Common production Rucio WebUI server
+          'init, prepend-rucio, prepend-release, push-tagged, push-latest',                       # Initalization container for Rucio database
+          'probes, push-tagged, push-latest',                                                     # Common production probes container
+          'fts, push-tagged, push-latest',                                                        # Testing FTS containers
+          'fts-cron/Dockerfile_cpp, push-tagged, push-latest',                                    # Common production fts-cron proxy delegation
+          'fts-cron/Dockerfile_java, push-tagged, push-latest, custom-tag=java',                  # Common production fts-cron proxy delegation
+          'ssh, push-tagged, push-latest',                                                        # Testing SSH RSE container
+          'xrootd, push-tagged, push-latest',                                                     # Testing XROOTD RSE container
+          'xrootd-noauth, push-tagged, push-latest',                                              # Testing XROOTD-NOAUTH RSE container
+          'fs, rucio-clients:release-#TAG, prepend-rucio, push-tagged, push-latest',              # Common production Rucio fuse mount
+          'webdav, push-latest'                                                                   # Testing WebDAV RSE container
         ]
       fail-fast: false
     
