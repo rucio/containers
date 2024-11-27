@@ -74,9 +74,7 @@ RUN mkdir -p \
 
 RUN python3 -m pip install --no-cache --upgrade pip && \
     python3 -m pip install --no-cache --upgrade setuptools wheel && \
-    if [ -r /tmp/rucio/requirements.txt ]; then \
-        python3 -m pip install --no-cache --upgrade -r /tmp/rucio/requirements.txt ; \
-    elif [ -r /tmp/rucio/requirements/requirements.dev.txt ]; then \
+    if [ -r /tmp/rucio/requirements/requirements.dev.txt ]; then \
         python3 -m pip install --no-cache --upgrade -r /tmp/rucio/requirements/requirements.dev.txt ; \
     else \
         python3 -m pip install --no-cache --upgrade -r /tmp/rucio/etc/pip-requires-client \
