@@ -8,7 +8,7 @@ This repository contains the Docker container and configuration file templates f
 
 ## Documentation
 
-Instructions to use and deploy the docker image for the new Rucio WebUI can be found [here](https://rucio.cern.ch/documentation/installing_webui). General information and latest documentation about Rucio can be found [here](https://rucio.cern.ch/documentation/).
+General information and latest documentation about Rucio can be found [here](https://rucio.cern.ch/documentation/).
 
 ## Deployment
 
