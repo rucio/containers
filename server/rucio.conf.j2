@@ -51,7 +51,7 @@ CacheRoot /tmp
  <Location /auth/x509/webui>
   SSLVerifyClient optional
   <LimitExcept OPTIONS>
-   SSLVerifyClient require
+   SSLVerifyClient optional
   </LimitExcept>
   SSLVerifyDepth 10
  </Location>
