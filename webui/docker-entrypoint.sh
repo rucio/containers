@@ -44,7 +44,7 @@ if [ -z "${RUCIO_WEBUI_COMMUNITY_LOGO_URL}" ]; then
     log "Environment variable RUCIO_WEBUI_COMMUNITY_LOGO_URL is not set. The default experiment-icon will be used."
 else
     log "Downloading community logo from ${RUCIO_WEBUI_COMMUNITY_LOGO_URL}"
-    wget -O /opt/rucio/webui/public/experiment-icon.png ${RUCIO_WEBUI_COMMUNITY_LOGO_URL}
+    wget -O /opt/rucio/webui/public/experiment-logo.png ${RUCIO_WEBUI_COMMUNITY_LOGO_URL}
 fi
 
 if [ -d "/patch" ]
