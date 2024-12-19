@@ -79,8 +79,6 @@ LoadModule unique_id_module modules/mod_unique_id.so
 LoadModule authn_core_module modules/mod_authn_core.so
 LoadModule cache_disk_module modules/mod_cache_disk.so
 
-CacheEnable disk /
-CacheRoot /tmp
 Listen 80
 
 Header set X-Rucio-Host "%{HTTP_HOST}e"
@@ -104,6 +102,7 @@ LogFormat "%h\t%t\t%{X-Rucio-Forwarded-For}i\t%T\t%D\t\"%{X-Rucio-Auth-Token}i\"
 <VirtualHost *:443>
 
  {{ common_virtual_host_config(port=443) }}
+ CacheDisable "/"
  ProxyPass / http://localhost:3000/
  ProxyPassReverse / http://localhost:3000/
 </VirtualHost>
