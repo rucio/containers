@@ -4,21 +4,6 @@
 # You may not use this file except in compliance with the License.
 # You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
 
-FROM almalinux:9 as rpm_builder
-    RUN dnf upgrade -y
-    RUN dnf install -y rpm-build rpmdevtools yum-utils epel-release.noarch
-    RUN yum-config-manager --enable crb
-    # BUILD and install openssl 3.1
-    ADD openssl.spec    /root/rpmbuild/SPECS/openssl.spec
-    RUN yum-builddep -y /root/rpmbuild/SPECS/openssl.spec
-    RUN spectool -g     /root/rpmbuild/SPECS/openssl.spec --directory /root/rpmbuild/SOURCES/
-    RUN rpmbuild -bb    /root/rpmbuild/SPECS/openssl.spec
-    RUN dnf install -y  /root/rpmbuild/RPMS/*/*
-    # REBUILD davix to use openssl 3.1
-    RUN yumdownloader --source davix
-    RUN yum-builddep -y --srpm davix*.src.rpm
-    RUN rpmbuild --rebuild davix-*.src.rpm
-
 FROM almalinux:9
 
 ARG TAG
@@ -63,8 +48,6 @@ ADD start-daemon.sh /
 RUN update-crypto-policies --set DEFAULT:SHA1
 
 RUN mkdir /var/log/rucio
-
-COPY --from=rpm_builder /root/rpmbuild/RPMS/x86_64/*.rpm /tmp/rpms/
 
 VOLUME /var/log/rucio
 VOLUME /opt/rucio/etc
