@@ -24,6 +24,16 @@ RUN dnf install -y epel-release.noarch && \
         patchutils && \
     dnf clean all && \
     rm -rf /var/cache/dnf
+
+# cx_oracle requires `gcc` and Python headers, not present by default on arm64
+ARG TARGETARCH
+RUN if [ $TARGETARCH = "arm64" ]; then \
+        dnf install -y \
+            gcc \
+            python3-devel \
+    ; fi
+
+
 RUN rpm -i https://download.oracle.com/otn_software/linux/instantclient/1912000/oracle-instantclient19.12-basiclite-19.12.0.0.0-1.x86_64.rpm; \
     echo "/usr/lib/oracle/19/client64/lib" >/etc/ld.so.conf.d/oracle.conf; \
     ldconfig
