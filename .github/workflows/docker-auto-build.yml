@@ -247,6 +247,15 @@ jobs:
 
           echo "For tag: $GIT_TAG, the following images will be pushed: $TAGS_TO_PUSH"
 
+      - name: Determine target platforms
+        id: determine_target_platforms
+        run: |
+          if [[ "${{ matrix.context }}" =~ "test-fts" || "${{ matrix.context }}" =~ "probes" ]]; then
+            echo "platforms=linux/amd64" >> $GITHUB_OUTPUT
+          else
+            echo "platforms=linux/amd64,linux/arm64" >> $GITHUB_OUTPUT
+          fi
+
       - name: Build and push
         if: steps.release.outputs.tags != ''
         id: docker_build
@@ -254,8 +263,8 @@ jobs:
         with:
           context: ./${{ steps.release.outputs.context_dir }}
           file: ./${{ steps.release.outputs.context_dir }}/${{ steps.release.outputs.file }}
-          platforms: linux/amd64,linux/arm64
+          platforms: ${{ steps.determine_target_platforms.outputs.platforms }}
           push: true
           tags: '${{ steps.release.outputs.tags }}'
           build-args: TAG=${{ steps.release.outputs.git_tag }}
-  
+
