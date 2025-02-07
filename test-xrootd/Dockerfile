@@ -3,6 +3,7 @@ FROM almalinux:9
 # Install CERN CA
 ADD ca.repo /etc/yum.repos.d/ca.repo
 
+# WLCG repo is the same for x86_64 and aarch64
 RUN dnf install -y epel-release.noarch https://linuxsoft.cern.ch/wlcg/el9/x86_64/wlcg-repo-1.0.0-1.el9.noarch.rpm && \
     dnf update -y && \
     dnf upgrade -y && \
