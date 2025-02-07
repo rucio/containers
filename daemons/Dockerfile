@@ -4,7 +4,7 @@
 # You may not use this file except in compliance with the License.
 # You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
 
-FROM almalinux:9 as rpm_builder
+FROM almalinux:9 AS rpm_builder
     RUN dnf upgrade -y
     RUN dnf install -y rpm-build rpmdevtools yum-utils epel-release.noarch
     RUN yum-config-manager --enable crb
