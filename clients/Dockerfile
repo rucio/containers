@@ -45,5 +45,19 @@ ADD --chown=user;user ./entrypoint.sh /opt/user/entrypoint.sh
 
 ENV PATH $PATH:/opt/rucio/bin
 
+ARG POLICY_PACKAGE_REQUIREMENTS
+ARG USER=root
+USER root
+RUN if [ -n "$POLICY_PACKAGE_REQUIREMENTS" ]; then \
+        dnf install -y git && \
+        for package in $(echo $POLICY_PACKAGE_REQUIREMENTS | tr "," "\n"); do \
+            python3 -m pip install --no-cache-dir $package; \
+        done; \
+        dnf remove -y git && \
+        dnf autoremove && \
+        dnf clean all; \
+    fi
+USER ${USER}
+
 ENTRYPOINT ["/opt/user/entrypoint.sh"]
 CMD ["bash"]
