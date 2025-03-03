@@ -23,7 +23,7 @@ RUN dnf -y install yum-utils epel-release.noarch && \
         git \
         gfal2-all \
         python3-gfal2-util \
-        gfal2-python3 \
+        python3-gfal2 \
         gmp-devel \
         gridsite \
         httpd \
