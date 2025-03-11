@@ -108,7 +108,7 @@ jobs:
           CONTEXT_DIR=$(echo "${CONTEXT}" | cut -d, -f1 )
           PARENT=$(echo "${CONTEXT}" | cut -d, -f2 | xargs)
           GIT_TAG=${{ steps.release_tag.outputs.version }}
-          BASE_TAG="${{ github.repository_owner}}/"
+          BASE_TAG="${{ secrets.DOCKER_HUB_USERNAME }}/"
           PARENT_IMAGE_AVAILIBILITY_INTERVAL=60
           MAX_ATTEMPTS=10
           GIT_TAG_COMMIT_SHA=$(echo $(git rev-list -n 1 $GIT_TAG))
@@ -223,7 +223,7 @@ jobs:
             PARENT=${PARENT/\#TAG/$GIT_TAG}
             fi
 
-            PARENT="${{ github.repository_owner }}/${PARENT}"
+            PARENT="${{ secrets.DOCKER_HUB_USERNAME }}/${PARENT}"
             for i in $(seq 1 1 $MAX_ATTEMPTS)
             do
                 echo "Attempt ${i}: Waiting for $PARENT to be available on Docker Hub"
