@@ -14,6 +14,11 @@
 
 FROM almalinux:9
 
+ARG TAG
+
+# Fail early if TAG is not provided
+RUN test -n "$TAG" || (echo "No TAG specified. Exiting." && exit 1)
+
 WORKDIR /
 
 RUN dnf -y install yum-utils epel-release.noarch && \
@@ -57,9 +62,7 @@ RUN dnf -y install yum-utils epel-release.noarch && \
 
 RUN curl https://rclone.org/install.sh | bash
 
-ARG GIT_CLONE_ARGS="--depth 1 https://github.com/rucio/rucio.git"
-
-RUN git clone $GIT_CLONE_ARGS /tmp/rucio && rm -rf /tmp/rucio/.git
+RUN git clone --depth 1 --branch "$TAG" https://github.com/rucio/rucio.git /tmp/rucio && rm -rf /tmp/rucio/.git
 
 ENV RUCIOHOME=/opt/rucio
 RUN mkdir -p $RUCIOHOME && \
