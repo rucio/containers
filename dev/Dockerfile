@@ -14,10 +14,7 @@
 
 FROM almalinux:9
 
-ARG TAG
-
-# Fail early if TAG is not provided
-RUN test -n "$TAG" || (echo "No TAG specified. Exiting." && exit 1)
+ARG TAG="master"
 
 WORKDIR /
 
