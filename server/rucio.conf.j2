@@ -82,7 +82,7 @@ CacheRoot /tmp
  ErrorLog /dev/stderr
 {% endif %}
 
-{% if RUCIO_HTTPD_ENCODED_SLASHES|default('False') == 'True' %}
+{% if RUCIO_HTTPD_ENCODED_SLASHES|default('True') == 'True' %}
  AllowEncodedSlashes on
 {% endif %}
 
