@@ -61,8 +61,6 @@ RUN mkdir /var/log/rucio
 VOLUME /var/log/rucio
 VOLUME /opt/rucio/etc
 
-ENV USE_DAVIX_WITH_OPENSSL31=True
-
 ARG POLICY_PACKAGE_REQUIREMENTS
 ARG USER=root
 USER root
