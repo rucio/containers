@@ -259,7 +259,7 @@ jobs:
       - name: Build and push
         if: steps.release.outputs.tags != ''
         id: docker_build
-        uses: docker/build-push-action@v6.13.0
+        uses: docker/build-push-action@v6.15.0
         with:
           context: ./${{ steps.release.outputs.context_dir }}
           file: ./${{ steps.release.outputs.context_dir }}/${{ steps.release.outputs.file }}
