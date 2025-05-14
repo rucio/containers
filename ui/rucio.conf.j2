@@ -126,6 +126,11 @@ CacheRoot /tmp
 {% endif %}
  SSLVerifyClient optional
  SSLVerifyDepth 10
+{% if RUCIO_HTTPD_ENCODED_SLASHES_NO_DECODE|default('False') == 'True' %}
+ AllowEncodedSlashes NoDecode
+{% elif RUCIO_HTTPD_ENCODED_SLASHES|default('False') == 'True' %}
+ AllowEncodedSlashes on
+{% endif %}
 {% if RUCIO_HTTPD_LEGACY_DN|default('False') == 'True' %}
  SSLOptions +StdEnvVars +LegacyDNStringFormat
 {% else %}
@@ -135,4 +140,3 @@ CacheRoot /tmp
 {% endif %}
 </VirtualHost>
 {% endif %}
-
