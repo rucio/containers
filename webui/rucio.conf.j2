@@ -3,6 +3,7 @@
  ServerName {{ RUCIO_WEBUI_HOSTNAME }}:{{ port }}
 {% endif %}
  ServerAdmin {{ RUCIO_SERVER_ADMIN | default('rucio-admin@cern.ch')}}
+ AllowEncodedSlashes NoDecode
 {% if enable_ssl == 'True' %}
  SSLEngine on
  SSLCertificateFile /etc/grid-security/hostcert.pem
