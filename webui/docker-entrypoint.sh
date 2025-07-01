@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
 log() {
-    echo -e "\e[32m$(date -u) [rucio-webui] - $@\e[0m"
+    echo -e "\e[32m$(date -u) [rucio-webui] - $*\e[0m"
 }
 
 generate_env_file() {
