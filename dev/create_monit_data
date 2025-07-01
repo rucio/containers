@@ -11,7 +11,7 @@ count=1
 while :
 do
     i=1
-    for srcrse in ${rses[@]}; do
+    for srcrse in "${rses[@]}"; do
         filename=file${i}_$(uuidgen)
         ((i++))
         bs=$((1 + RANDOM % 10000))
@@ -19,7 +19,7 @@ do
         rucio upload --rse $srcrse --scope test $filename
         sleep 10
         rm $filename
-        for dstrse in ${rses[@]}; do
+        for dstrse in "${rses[@]}"; do
             if [ $srcrse = $dstrse ]; then continue; fi
             if [ $((1 + RANDOM % 10)) = 1 ]; then
                 path=$(rucio list-file-replicas test:$filename --pfns)
