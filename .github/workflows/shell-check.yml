@@ -1,18 +1,17 @@
 name: shell-check
 
-run-name: Shell Check
+run-name: ShellCheck
 
 on:
-  push:
-  workflow_dispatch:
+  pull_request:
 
 jobs:
   shellcheck:
-    name: Shellcheck
+    name: ShellCheck
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 #v4.2.2
-      - name: Run shell-check
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Run ShellCheck
         uses: ludeeus/action-shellcheck@00cae500b08a931fb5698e11e79bfbd38e612a38 # v2.0.0
         with:
           severity: error
