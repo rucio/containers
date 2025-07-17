@@ -15,7 +15,7 @@ RUN dnf update -y && \
     dnf clean all && \
     rm -rf /var/cache/dnf
 
-    RUN dnf -y install -y httpd python-pip python-mod_wsgi gcc python-devel mod_ssl openssl-devel python3-m2crypto patch xrootd-client && \
+    RUN dnf -y install -y httpd python3-pip python3-mod_wsgi gcc python3-devel mod_ssl openssl-devel python3-m2crypto patch xrootd-client && \
     dnf clean all && \
     rm -rf /var/cache/dnf
 

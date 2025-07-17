@@ -6,7 +6,7 @@ RUN dnf install -y epel-release.noarch && \
         gcc \
         openssh-server \
         openssh-clients \
-        python-pip \
+        python3-pip \
         rsync \
         sudo \
         unzip && \

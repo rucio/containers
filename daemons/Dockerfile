@@ -22,8 +22,8 @@ RUN dnf install -y epel-release.noarch && \
         patch \
         python-gfal2 \
         procps-ng \
-        python-pip \
-        python-mod_wsgi \
+        python3-pip \
+        python3-mod_wsgi \
         sendmail \
         sendmail-cf \
         memcached \

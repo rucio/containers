@@ -11,9 +11,9 @@ RUN dnf install -y epel-release.noarch && \
         openssl-devel \
         mod_ssl \
         procps-ng \
-        python-devel \
+        python3-devel \
         python3-m2crypto \
-        python-pip && \
+        python3-pip && \
     dnf clean all && \
     rm -rf /var/cache/dnf
 

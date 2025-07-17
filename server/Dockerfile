@@ -16,8 +16,8 @@ RUN dnf install -y epel-release.noarch && \
         gridsite \
         patch \
         procps-ng \
-        python-pip \
-        python-mod_wsgi \
+        python3-pip \
+        python3-mod_wsgi \
         memcached \
         patchutils && \
     dnf clean all && \
