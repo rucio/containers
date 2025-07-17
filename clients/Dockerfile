@@ -1,3 +1,9 @@
+# Copyright European Organization for Nuclear Research (CERN) 2025
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# You may not use this file except in compliance with the License.
+# You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+
 FROM almalinux:9
 
 ARG TAG
@@ -41,7 +47,7 @@ WORKDIR /home/user
 # Add the default rucio configuration
 ADD --chown=user:user rucio.default.cfg /opt/user/rucio.default.cfg
 ADD init_rucio.sh /etc/profile.d/rucio_init.sh
-ADD --chown=user;user ./entrypoint.sh /opt/user/entrypoint.sh
+ADD --chown=user:user ./entrypoint.sh /opt/user/entrypoint.sh
 
 ENV PATH $PATH:/opt/rucio/bin
 
