@@ -16,7 +16,6 @@ RUN dnf install -y epel-release.noarch && \
     dnf upgrade -y && \
     dnf install -y \
         git \
-        gcc \
         openssl-devel \
         procps-ng \
         python3-devel \
