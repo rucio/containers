@@ -74,12 +74,7 @@ RUN mkdir -p \
 
 RUN python3 -m pip install --no-cache --upgrade pip && \
     python3 -m pip install --no-cache --upgrade setuptools wheel && \
-    if [ -r /tmp/rucio/requirements/requirements.dev.txt ]; then \
-        python3 -m pip install --no-cache --upgrade -r /tmp/rucio/requirements/requirements.dev.txt ; \
-    else \
-        python3 -m pip install --no-cache --upgrade -r /tmp/rucio/etc/pip-requires-client \
-                -r /tmp/rucio/etc/pip-requires -r /tmp/rucio/etc/pip-requires-test psycopg2-binary ; \
-    fi && \
+    python3 -m pip install --no-cache --upgrade -r /tmp/rucio/requirements/requirements.dev.txt ; \
     ln -s $RUCIOHOME/lib/rucio /usr/local/lib/python3.9/site-packages/rucio
 
 RUN python3 -m pip install --no-cache --upgrade fts3
