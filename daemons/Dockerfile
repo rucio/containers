@@ -19,8 +19,6 @@ RUN dnf install -y epel-release.noarch && \
         gfal2-plugin-http \
         gfal2-plugin-srm \
         gfal2-plugin-xrootd \
-        libnsl \
-        libaio \
         patch \
         python-gfal2 \
         procps-ng \

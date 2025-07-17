@@ -18,8 +18,6 @@ RUN dnf install -y epel-release.noarch && \
     dnf install -y \
         gcc \
         httpd \
-        libnsl \
-        libaio \
         openssl-devel \
         mod_ssl \
         procps-ng \

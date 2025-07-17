@@ -30,7 +30,6 @@ RUN dnf -y install yum-utils epel-release.noarch && \
         gridsite \
         httpd \
         krb5-devel \
-        libaio \
         libtool-ltdl-devel \
         libxml2-devel \
         mariadb-connector-c \

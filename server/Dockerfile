@@ -14,8 +14,6 @@ RUN dnf install -y epel-release.noarch && \
     dnf upgrade -y && \
     dnf install -y \
         gridsite \
-        libnsl \
-        libaio \
         patch \
         procps-ng \
         python-pip \
