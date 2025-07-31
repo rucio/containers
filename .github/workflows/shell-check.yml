@@ -4,6 +4,7 @@ run-name: ShellCheck
 
 on:
   pull_request:
+  push:
 
 jobs:
   shellcheck:
