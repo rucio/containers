@@ -35,7 +35,7 @@ RUN \
   && mkdir -p /etc/grid-security/certificates
 
 # FTS monitoring ActiveMQ configuration
-COPY fts-msg-monitoring.conf /etc/fts3/fts-msg-monitoring.conf
+COPY fts-activemq.conf /etc/fts3/fts-activemq.conf
 
 # Entrypoint waiting script for MySQL
 COPY wait-for-it.sh /usr/local/bin/wait-for-it.sh
