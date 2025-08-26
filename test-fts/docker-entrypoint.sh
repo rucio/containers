@@ -10,6 +10,6 @@ set -e -o pipefail
 
 # startup the FTS services
 /usr/sbin/fts_server               # main FTS server daemonizes
-/usr/sbin/fts_msg_bulk             # daemon to send messages to activemq
+/usr/sbin/fts_activemq             # daemon to send messages to activemq
 /usr/sbin/fts_qos                  # daemon to handle staging requests
 exec /usr/sbin/httpd -DFOREGROUND       # FTS REST frontend & FTSMON
