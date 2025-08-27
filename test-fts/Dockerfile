@@ -7,9 +7,11 @@ RUN dnf install -y yum-utils \
 
 
 # Install FTS
-RUN curl -sSfL -o /etc/yum.repos.d/fts3.repo https://fts-repo.web.cern.ch/fts-repo/fts3-el9.repo \
-  && curl -sSfL -o /etc/yum.repos.d/fts3-depend.repo https://fts-repo.web.cern.ch/fts-repo/fts3-depend.repo
 
+# Get repos (DMC is needed for GFAL2)
+RUN curl -sSfL -o /etc/yum.repos.d/fts3.repo https://fts-repo.web.cern.ch/fts-repo/fts3-el9.repo \
+  && curl -sSfL -o /etc/yum.repos.d/fts3-depend.repo https://fts-repo.web.cern.ch/fts-repo/fts3-depend.repo \
+  && curl -sSfL -o /etc/yum.repos.d/dmc.repo https://dmc-repo.web.cern.ch/dmc-repo/dmc-el9.repo
 
 RUN  dnf install -y \
   fts-server fts-mysql fts-rest-client fts-rest-server fts-monitoring \
