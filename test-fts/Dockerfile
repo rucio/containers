@@ -3,7 +3,9 @@ FROM almalinux:9
 # Enable EPEL
 RUN dnf install -y yum-utils \
   && dnf config-manager --set-enabled crb \
-  && dnf install -y epel-release
+  && dnf install -y epel-release \
+  && dnf clean all \
+  && rm -rf /var/cache/dnf
 
 
 # Install FTS
@@ -12,12 +14,14 @@ RUN curl -sSfL -o /etc/yum.repos.d/fts3.repo https://fts-repo.web.cern.ch/fts-re
 
 
 RUN  dnf install -y \
-  fts-server fts-mysql fts-rest-client fts-rest-server fts-monitoring \
-  fts-server-selinux fts-rest-server-selinux fts-monitoring-selinux \
-  fts-msg \
-  mysql \
-  multitail \
-  gfal2-plugin*
+    fts-server fts-mysql fts-rest-client fts-rest-server fts-monitoring \
+    fts-server-selinux fts-rest-server-selinux fts-monitoring-selinux \
+    fts-msg \
+    mysql \
+    multitail \
+    gfal2-plugin* \
+  && dnf clean all \
+  && rm -rf /var/cache/dnf
   
 
 COPY fts3config /etc/fts3/fts3config

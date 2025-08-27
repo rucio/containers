@@ -66,7 +66,8 @@ RUN if [ -n "$POLICY_PACKAGE_REQUIREMENTS" ]; then \
         done; \
         dnf remove -y git && \
         dnf autoremove && \
-        dnf clean all; \
+        dnf clean all && \
+        rm -rf /var/cache/dnf; \
     fi
 USER ${USER}
 

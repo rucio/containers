@@ -27,8 +27,8 @@ RUN chmod +x /usr/bin/kubectl
 RUN dnf -y install ca-certificates.noarch ca-policy-lcg fetch-crl voms-clients-cpp fts-rest-cli \
     wlcg-iam-lsc-atlas wlcg-iam-vomses-atlas wlcg-iam-lsc-cms wlcg-iam-vomses-cms \
     python-setuptools python-requests && \
-    yum clean all && \
-    rm -rf /var/cache/yum
+    dnf clean all && \
+    rm -rf /var/cache/dnf
 
 # Install wget
 RUN yum -y install wget && \
