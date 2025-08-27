@@ -39,8 +39,10 @@ ARG TARGETARCH
 RUN if [ $TARGETARCH = "arm64" ]; then \
         dnf install -y \
             gcc \
-            python3-devel \
-    ; fi
+            python3-devel && \
+        dnf clean all && \
+        rm -rf /var/cache/dnf; \
+    fi
 
 RUN rpm -i https://download.oracle.com/otn_software/linux/instantclient/1912000/oracle-instantclient19.12-basiclite-19.12.0.0.0-1.x86_64.rpm; \
     echo "/usr/lib/oracle/19/client64/lib" >/etc/ld.so.conf.d/oracle.conf; \
@@ -71,7 +73,8 @@ RUN if [ -n "$POLICY_PACKAGE_REQUIREMENTS" ]; then \
         done; \
         dnf remove -y git && \
         dnf autoremove && \
-        dnf clean all; \
+        dnf clean all && \
+        rm -rf /var/cache/dnf; \
     fi
 USER ${USER}
 
