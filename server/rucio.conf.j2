@@ -24,7 +24,8 @@ LoadModule cache_disk_module modules/mod_cache_disk.so
 
 WSGIRestrictEmbedded On
 WSGIDaemonProcess rucio processes={{ RUCIO_WSGI_DAEMON_PROCESSES | default('4') }} threads={{ RUCIO_WSGI_DAEMON_THREADS | default('4') }}
-WSGIApplicationGroup rucio
+WSGIProcessGroup rucio
+WSGIApplicationGroup %{GLOBAL}
 
 CacheEnable disk /
 CacheRoot /tmp
@@ -98,7 +99,7 @@ CacheRoot /tmp
 {% if RUCIO_DEFINE_ALIASES|default('False') == 'True' %}
  Include /opt/rucio/etc/aliases.conf
 {% else %}
- WSGIScriptAlias / {{ RUCIO_PYTHON_PATH }}/web/rest/flaskapi/v1/main.py process-group=rucio application-group=rucio
+ WSGIScriptAlias / {{ RUCIO_PYTHON_PATH }}/web/rest/flaskapi/v1/main.py
 {% endif %}
 
 {% if RUCIO_HTTPD_PROXY_PROTOCOL_ENABLED | default('False') == 'True' %}
@@ -122,7 +123,7 @@ Listen {{ RUCIO_METRICS_PORT }}
 <VirtualHost *:{{ RUCIO_METRICS_PORT }} >
 {{ common_virtual_host_config(port=RUCIO_METRICS_PORT, enable_ssl=false) }}
 
- WSGIScriptAlias /metrics {{ RUCIO_PYTHON_PATH }}/web/rest/metrics.py process-group=rucio application-group=rucio
+ WSGIScriptAlias /metrics {{ RUCIO_PYTHON_PATH }}/web/rest/metrics.py
 </VirtualHost>
 {% endif %}
 
@@ -131,6 +132,6 @@ Listen {{ RUCIO_HEALTH_CHECK_PORT }}
 <VirtualHost *:{{ RUCIO_HEALTH_CHECK_PORT }} >
 {{ common_virtual_host_config(port=RUCIO_HEALTH_CHECK_PORT, enable_ssl=RUCIO_ENABLE_SSL|default('False') == 'True', require_x509_auth=false) }}
 
- WSGIScriptAlias /ping {{ RUCIO_PYTHON_PATH }}/web/rest/ping.py process-group=rucio application-group=rucio
+ WSGIScriptAlias /ping {{ RUCIO_PYTHON_PATH }}/web/rest/ping.py
 </VirtualHost>
 {% endif %}
