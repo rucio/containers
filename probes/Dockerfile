@@ -16,19 +16,12 @@ RUN dnf install -y epel-release.noarch && \
     dnf upgrade -y && \
     dnf install -y \
         git \
-        gcc \
-        libnsl \
-        libaio \
         openssl-devel \
         procps-ng \
-        python-devel \
-        python-pip && \
+        python3-devel \
+        python3-pip && \
     dnf clean all && \
     rm -rf /var/cache/dnf
-
-RUN rpm -i https://download.oracle.com/otn_software/linux/instantclient/1912000/oracle-instantclient19.12-basiclite-19.12.0.0.0-1.x86_64.rpm; \
-    echo "/usr/lib/oracle/19/client64/lib" >/etc/ld.so.conf.d/oracle.conf; \
-    ldconfig
 
 RUN rpm -i https://github.com/dshearer/jobber/releases/download/v1.4.0/jobber-1.4.0-1.el7.x86_64.rpm
 
