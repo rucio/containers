@@ -36,16 +36,17 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Fetch all branches
+      - name: Fetch all branches and tags
         shell: bash
         run: |
           REPO_URL=$(echo 'https://github.com/${{ github.repository_owner }}/containers.git') 
           BRANCHES=$(git ls-remote --heads $REPO_URL | awk -F '\t' '{print $NF}' | cut -f3- -d'/')
           git fetch origin $BRANCHES
+          git fetch --tags origin
       
       - name: Get the release tag from GitHub
         id: release_tag
-        run: echo ::set-output name=version::${GITHUB_REF/refs\/tags\//}
+        run: echo "version=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_OUTPUT
       
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3.11.1
@@ -121,11 +122,9 @@ jobs:
                   echo "This is a Rucio WebUI release. Building of other containers is therefore skipped!"
                   exit 0
               fi
-          else 
-              if [[ $CONTEXT_DIR =~ .*"webui".* ]]; then
-                  echo "This is a standard Rucio release. Building of WebUI container is therefore skipped!"
-                  exit 0
-              fi
+          elif [[ $CONTEXT_DIR =~ .*"webui".* ]]; then
+              echo "This is a standard Rucio release. Building of WebUI container is therefore skipped!"
+              exit 0
           fi
 
           if [[ -d $CONTEXT_DIR ]]; then
@@ -240,10 +239,10 @@ jobs:
           fi
   
 
-          echo ::set-output name=git_tag::$GIT_TAG
-          echo ::set-output name=tags::$TAGS_TO_PUSH
-          echo ::set-output name=context_dir::$CONTEXT_DIR
-          echo ::set-output name=file::$FILE
+          echo "git_tag=$GIT_TAG" >> $GITHUB_OUTPUT
+          echo "tags=$TAGS_TO_PUSH" >> $GITHUB_OUTPUT
+          echo "context_dir=$CONTEXT_DIR" >> $GITHUB_OUTPUT
+          echo "file=$FILE" >> $GITHUB_OUTPUT
 
           echo "For tag: $GIT_TAG, the following images will be pushed: $TAGS_TO_PUSH"
 
