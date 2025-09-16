@@ -1,3 +1,9 @@
+# Copyright European Organization for Nuclear Research (CERN) 2025
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# You may not use this file except in compliance with the License.
+# You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+
 FROM almalinux:9
 
 ARG TAG
@@ -7,21 +13,15 @@ WORKDIR /tmp
 RUN dnf install -y epel-release.noarch && \
     dnf upgrade -y && \
     dnf install -y \
-        gcc \
-        libnsl \
-        libaio \
         openssl-devel \
         mod_ssl \
         procps-ng \
-        python-devel \
+        python3-devel \
         python3-m2crypto \
-        python-pip && \
+        python3-pip && \
     dnf clean all && \
     rm -rf /var/cache/dnf
 
-RUN rpm -i https://download.oracle.com/otn_software/linux/instantclient/1912000/oracle-instantclient19.12-basiclite-19.12.0.0.0-1.x86_64.rpm; \
-    echo "/usr/lib/oracle/19/client64/lib" >/etc/ld.so.conf.d/oracle.conf; \
-    ldconfig
 RUN python3 -m pip install --no-cache-dir --upgrade pip
 RUN python3 -m pip install --no-cache-dir --upgrade setuptools
 RUN python3 -m pip install --pre rucio[oracle,mysql,postgresql]==$TAG

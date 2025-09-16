@@ -14,7 +14,7 @@ RUN dnf update -y && \
     dnf clean all && \
     rm -rf /var/cache/dnf
 
-RUN dnf -y install httpd python-pip python-mod_wsgi libaio gcc python-devel mod_ssl openssl-devel python3-m2crypto libnsl patch xrootd-client && \
+RUN dnf -y install httpd python3-pip python3-mod_wsgi python3-devel mod_ssl openssl-devel python3-m2crypto patch xrootd-client && \
     dnf clean all && \
     rm -rf /var/cache/dnf
 
@@ -25,7 +25,7 @@ RUN chmod +x /usr/bin/kubectl
 # Install VOMS and FTS clients for delegating proxies
 RUN dnf -y install ca-certificates.noarch ca-policy-lcg fetch-crl voms-clients-java fts-rest-cli \
     wlcg-iam-lsc-atlas wlcg-iam-vomses-atlas wlcg-iam-lsc-cms wlcg-iam-vomses-cms \
-    python-pip python-setuptools python-requests && \
+    python3-pip python-setuptools python-requests && \
     dnf clean all && \
     rm -rf /var/cache/dnf
 

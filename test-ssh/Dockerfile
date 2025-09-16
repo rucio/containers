@@ -3,10 +3,9 @@ FROM almalinux:9
 RUN dnf install -y epel-release.noarch && \
     dnf upgrade -y && \
     dnf install -y \
-        gcc \
         openssh-server \
         openssh-clients \
-        python-pip \
+        python3-pip \
         rsync \
         sudo \
         unzip && \
