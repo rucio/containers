@@ -18,14 +18,20 @@ if [ ! -z "$RUCIO_PRINT_CFG" ]; then
     echo ""
 fi
 
-cp /etc/jobber-config/dot-jobber.yaml /root/.jobber
+if [ ! -z "$RUCIO_USING_CRON" ]; then
+  echo "Setting up and starting cron"
+  cp /etc/cron.rucio/probes-crontab /etc/cron.d/
+  crond -n -s
+else
+  cp /etc/jobber-config/dot-jobber.yaml /root/.jobber
 
-echo "Starting Jobber"
-/usr/local/libexec/jobbermaster &
+  echo "Not using cron. Starting Jobber"
+  /usr/local/libexec/jobbermaster &
 
-sleep 5
+  sleep 5
 
-echo
-echo "============= Jobber log file ============="
+  echo
+  echo "============= Jobber log file ============="
 
-tail -f /var/log/jobber-runs
+  tail -f /var/log/jobber-runs
+fi

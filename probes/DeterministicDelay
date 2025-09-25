@@ -1,0 +1,56 @@
+#! /usr/bin/env python3
+
+"""
+Delays running a command by a consistent amount of time based on the hash of the command string.
+This may be useful in spreading the load out from frequently running cronjobs.
+"""
+
+import argparse
+import hashlib
+import subprocess
+import time
+
+parser = argparse.ArgumentParser(
+    prog='DeterministicDelay',
+    description=('Delays running a command by a consistent amount of time. '
+                 'This may be useful in spreading the load out from frequently running cronjobs.'),
+    epilog=None)
+
+parser.add_argument('-d', required=False, dest='delay',
+                    help=("The maximum amount of time to delay. "
+                          "60 seconds is the default, suffix "
+                          "with s (the default), m, h, or d for seconds, minutes, hours, or days.")
+                    )
+parser.add_argument('commands', nargs='*', help="The commands to run")
+args = parser.parse_args()
+
+command_hash = hashlib.sha256(bytes(str(args.commands), 'utf-8'))
+checksum = int(command_hash.hexdigest(), 16)
+
+if not args.delay:
+    max_delay = 60
+else:
+    if args.delay[-1] in ['s', 'm', 'h', 'd']:
+        delay_value, delay_unit = args.delay[:-1], args.delay[-1]
+        if delay_unit == 'm':
+            max_delay = int(delay_value) * 60
+        elif delay_unit == 'h':
+            max_delay = int(delay_value) * 60 * 60
+        elif delay_unit == 'd':
+            max_delay = int(delay_value) * 24 * 60 * 60
+        else:
+            max_delay = int(delay_value)
+    else:
+        max_delay = int(args.delay)
+
+delay = checksum % max_delay
+
+print(f"Sleeping {delay}s")
+time.sleep(delay)
+
+executed = subprocess.run(args.commands, capture_output=True)
+
+print("STDOUT")
+print(executed.stdout)
+print("STDERR")
+print(executed.stderr)
