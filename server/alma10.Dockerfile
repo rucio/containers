@@ -1,0 +1,82 @@
+# Copyright European Organization for Nuclear Research (CERN) 2017
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# You may not use this file except in compliance with the License.
+# You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+
+FROM docker.io/almalinux:10
+
+ARG TAG
+
+WORKDIR /tmp
+
+RUN dnf install -y epel-release.noarch && \
+    dnf upgrade -y && \
+    dnf install -y \
+        libnsl \
+        libaio \
+        patch \
+        procps-ng \
+        python-pip \
+        python-mod_wsgi \
+        memcached \
+        patchutils && \
+    dnf clean all && \
+    rm -rf /var/cache/dnf
+
+# cx_oracle requires `gcc` and Python headers, not present by default on arm64
+ARG TARGETARCH
+RUN if [ $TARGETARCH = "arm64" ]; then \
+        dnf install -y \
+            gcc \
+            python3-devel && \
+        dnf clean all && \
+        rm -rf /var/cache/dnf; \
+    fi
+
+
+RUN rpm -i https://download.oracle.com/otn_software/linux/instantclient/1912000/oracle-instantclient19.12-basiclite-19.12.0.0.0-1.x86_64.rpm; \
+    echo "/usr/lib/oracle/19/client64/lib" >/etc/ld.so.conf.d/oracle.conf; \
+    ldconfig
+
+RUN python3 -m pip install --no-cache-dir --upgrade pip && \
+    python3 -m pip install --no-cache-dir --upgrade setuptools
+RUN python3 -m pip install --no-cache-dir --pre rucio[oracle,mysql,postgresql]==$TAG
+
+COPY gacl /etc/httpd/
+COPY rucio.config.default.cfg \
+    rucio.conf.j2 \
+    httpd.conf.j2 \
+    00-mpm.conf.j2 \
+    /tmp/
+COPY docker-entrypoint.sh /
+COPY robots.txt /var/www/html
+COPY j2.py /usr/local/bin
+RUN python3 -m pip install --no-cache-dir jinja2 \
+    && ln -s j2.py /usr/local/bin/j2 \
+    && rm /etc/httpd/conf.d/welcome.conf /etc/httpd/conf.d/userdir.conf \
+    && mkdir -p /var/log/rucio/trace && chown apache:apache /var/log/rucio/trace \
+    && mkdir -p /var/log/rucio/nongrid_trace && chown apache:apache /var/log/rucio/nongrid_trace
+
+VOLUME /var/log/httpd
+VOLUME /opt/rucio/etc
+
+EXPOSE 80
+EXPOSE 443
+
+ARG POLICY_PACKAGE_REQUIREMENTS
+ARG USER=root
+USER root
+RUN if [ -n "$POLICY_PACKAGE_REQUIREMENTS" ]; then \
+        dnf install -y git && \
+        for package in $(echo $POLICY_PACKAGE_REQUIREMENTS | tr "," "\n"); do \
+            python3 -m pip install --no-cache-dir $package; \
+        done; \
+        dnf remove -y git && \
+        dnf autoremove && \
+        dnf clean all && \
+        rm -rf /var/cache/dnf; \
+    fi
+USER ${USER}
+
+ENTRYPOINT ["/docker-entrypoint.sh"]
