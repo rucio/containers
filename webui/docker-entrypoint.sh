@@ -5,15 +5,30 @@ log() {
 }
 
 generate_env_file() {
-    cd tools/env-generator && \
+    cd tools/env-generator
+    npm install
 
-    npm install liquidjs && \
-    npm run build && \
-    chmod +x ./dist/generate-env.js && \
-    ./dist/generate-env.js make prod ../../.env --write
+    log "Building env-generator (skipping lib checks to avoid parent node_modules conflicts)..."
+    npx tsc --skipLibCheck && cp -rf src/templates dist/
+    local build_exit=$?
 
-    echo "Return code: $?"
+    if [ $build_exit -ne 0 ]; then
+        log "WARNING: Build had errors but checking if output exists..."
+    fi
+
+    if [ ! -f ./dist/generate-env.js ]; then
+        log "ERROR: ./dist/generate-env.js was not created by build"
+        cd ../..
+        return 1
+    fi
+
+    chmod +x ./dist/generate-env.js
+    log "Running env-generator..."
+    node ./dist/generate-env.js make prod ../../.env --write
+    local exit_code=$?
+    echo "Return code: $exit_code"
     cd ../..
+    return $exit_code
 }
 
 echo "=================== /opt/rucio/webui/.env ==================="
