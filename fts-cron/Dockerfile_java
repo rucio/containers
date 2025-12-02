@@ -29,6 +29,9 @@ RUN dnf -y install ca-certificates.noarch ca-policy-lcg fetch-crl voms-clients-j
     dnf clean all && \
     rm -rf /var/cache/dnf
 
+# Uninstall rpm-installed setuptools to reinstall via pip
+RUN dnf remove --assumeyes python3-setuptools
+
 RUN python3 -m pip install --no-cache-dir --upgrade pip
 RUN python3 -m pip install --no-cache-dir --upgrade setuptools
 RUN python3 -m pip install --no-cache-dir j2cli
