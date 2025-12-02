@@ -20,6 +20,9 @@ RUN dnf -y install yum-utils epel-release.noarch && \
     dnf clean all && \
     rm -rf /var/cache/dnf
 
+# Uninstall rpm-installed setuptools to reinstall via pip
+RUN dnf remove --assumeyes python3-setuptools
+    
 # Upgrade pip & setuptools and install Rucio
 RUN python3 -m pip install --no-cache-dir --upgrade pip && \
     python3 -m pip install --no-cache-dir --upgrade setuptools && \
