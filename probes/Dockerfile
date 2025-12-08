@@ -32,8 +32,9 @@ RUN rpm -i https://download.oracle.com/otn_software/linux/instantclient/1912000/
 
 RUN rpm -i https://github.com/dshearer/jobber/releases/download/v1.4.0/jobber-1.4.0-1.el7.x86_64.rpm
 
-# Uninstall rpm-installed setuptools to reinstall via pip
-RUN dnf remove --assumeyes python3-setuptools
+# Downgrade setuptools to avoid compatibility issues
+# TODO: remove once https://github.com/rucio/containers/issues/458 is resolved
+RUN dnf -y install https://vault.almalinux.org/9.6/BaseOS/x86_64/os/Packages/python3-setuptools-53.0.0-13.el9_6.1.noarch.rpm
 
 RUN python3 -m pip install --no-cache-dir --upgrade pip
 RUN python3 -m pip install --no-cache-dir --upgrade setuptools
