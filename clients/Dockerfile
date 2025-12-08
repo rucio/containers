@@ -19,6 +19,10 @@ RUN dnf -y install yum-utils epel-release.noarch && \
         xrootd-client && \
     dnf clean all && \
     rm -rf /var/cache/dnf
+    
+# Downgrade setuptools to avoid compatibility issues
+# TODO: remove once https://github.com/rucio/containers/issues/458 is resolved
+RUN dnf -y install https://vault.almalinux.org/9.6/BaseOS/x86_64/os/Packages/python3-setuptools-53.0.0-13.el9_6.1.noarch.rpm
 
 # Upgrade pip & setuptools and install Rucio
 RUN python3 -m pip install --no-cache-dir --upgrade pip && \
