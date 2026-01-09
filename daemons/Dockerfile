@@ -24,7 +24,6 @@ RUN dnf install -y epel-release.noarch && \
         patch \
         python-gfal2 \
         procps-ng \
-        python-pip \
         python-mod_wsgi \
         sendmail \
         sendmail-cf \
@@ -48,23 +47,23 @@ RUN rpm -i https://download.oracle.com/otn_software/linux/instantclient/1912000/
     echo "/usr/lib/oracle/19/client64/lib" >/etc/ld.so.conf.d/oracle.conf; \
     ldconfig
 
-# Downgrade setuptools to avoid compatibility issues
-# TODO: remove once https://github.com/rucio/containers/issues/458 is resolved
-RUN dnf -y install https://vault.almalinux.org/9.6/BaseOS/x86_64/os/Packages/python3-setuptools-53.0.0-13.el9_6.1.noarch.rpm
-
-RUN python3 -m pip install --no-cache-dir --upgrade pip && \
-    python3 -m pip install --no-cache-dir --upgrade setuptools
-RUN python3 -m pip install --no-cache-dir --pre rucio[oracle,mysql,postgresql,globus]==$TAG
-
-COPY j2.py /usr/local/bin/
-RUN python3 -m pip install --no-cache-dir jinja2 && \
-    ln -s j2.py /usr/local/bin/j2
-ADD rucio.config.default.cfg /tmp/
-ADD start-daemon.sh /
+RUN python3 -m venv --system-site-packages /opt/rucio && \
+    /opt/rucio/bin/pip install --no-cache-dir --upgrade pip && \
+    /opt/rucio/bin/pip install --no-cache-dir --upgrade setuptools && \
+    /opt/rucio/bin/pip install --no-cache-dir --pre rucio[oracle,mysql,postgresql,globus]==$TAG
 
 RUN update-crypto-policies --set DEFAULT:SHA1
 
 RUN mkdir /var/log/rucio
+
+COPY j2.py /usr/local/bin/
+RUN /opt/rucio/bin/pip install --no-cache-dir jinja2 && \
+    ln -s j2.py /usr/local/bin/j2
+COPY rucio.config.default.cfg /tmp/
+COPY start-daemon.sh /
+
+# prepends venv with python to PATH, because there might be scripts depending on python being the correct executable
+ENV PATH /opt/rucio/bin:$PATH
 
 VOLUME /var/log/rucio
 VOLUME /opt/rucio/etc
@@ -75,7 +74,7 @@ USER root
 RUN if [ -n "$POLICY_PACKAGE_REQUIREMENTS" ]; then \
         dnf install -y git && \
         for package in $(echo $POLICY_PACKAGE_REQUIREMENTS | tr "," "\n"); do \
-            python3 -m pip install --no-cache-dir $package; \
+            /opt/rucio/bin/pip install --no-cache-dir $package; \
         done; \
         dnf remove -y git && \
         dnf autoremove && \
