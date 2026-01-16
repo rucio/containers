@@ -1,4 +1,4 @@
-FROM almalinux:9
+FROM docker.io/almalinux:9
 
 RUN dnf install -y epel-release.noarch && \
     dnf update -y && \

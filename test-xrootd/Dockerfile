@@ -1,4 +1,4 @@
-FROM almalinux:9
+FROM docker.io/almalinux:9
 
 # Install CERN CA
 ADD ca.repo /etc/yum.repos.d/ca.repo

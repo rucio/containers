@@ -8,7 +8,7 @@
 # - Mayank Sharma, <mayank.sharma@cern.ch>, 2022
 # - Eraldo Junior <ejunior@cbpf.br>, 2023
 
-FROM almalinux:9
+FROM docker.io/almalinux:9
 
 ARG TAG
 
