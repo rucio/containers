@@ -16,7 +16,7 @@ if [ -f /opt/rucio/etc/rucio.cfg ]; then
     echo "rucio.cfg already mounted."
 else
     echo "rucio.cfg not found. will generate one."
-    python3 /usr/local/rucio/tools/merge_rucio_configs.py \
+    python3 /opt/rucio/rucio/tools/merge_rucio_configs.py \
         -s /tmp/rucio.config.default.cfg $RUCIO_OVERRIDE_CONFIGS \
         --use-env \
         -d /opt/rucio/etc/rucio.cfg
@@ -53,7 +53,7 @@ then
 
         if [ -s ${tmp_bin_file} ]
         then
-            if patch -p2 -d "/usr/local/bin/" < ${tmp_bin_file}
+            if patch -p2 -d "/opt/rucio/bin/" < ${tmp_bin_file}
             then
                 echo "Patch ${patchfile}/bin applied."
             else
