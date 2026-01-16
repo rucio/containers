@@ -18,7 +18,6 @@ RUN dnf install -y epel-release.noarch && \
         libaio \
         patch \
         procps-ng \
-        python-pip \
         python-mod_wsgi \
         memcached \
         patchutils && \
@@ -40,15 +39,15 @@ RUN rpm -i https://download.oracle.com/otn_software/linux/instantclient/1912000/
     echo "/usr/lib/oracle/19/client64/lib" >/etc/ld.so.conf.d/oracle.conf; \
     ldconfig
 
-# Downgrade setuptools to avoid compatibility issues
-# TODO: remove once https://github.com/rucio/containers/issues/458 is resolved
-RUN dnf -y install https://vault.almalinux.org/9.6/BaseOS/x86_64/os/Packages/python3-setuptools-53.0.0-13.el9_6.1.noarch.rpm
+RUN python3 -m venv --system-site-packages /opt/rucio && \
+    /opt/rucio/bin/pip install --no-cache-dir --upgrade pip && \
+    /opt/rucio/bin/pip install --no-cache-dir --upgrade setuptools && \
+    /opt/rucio/bin/pip install --no-cache-dir --pre rucio[oracle,mysql,postgresql]==$TAG && \
+    /opt/rucio/bin/pip install --no-cache-dir j2cli
 
-RUN python3 -m pip install --no-cache-dir --upgrade pip && \
-    python3 -m pip install --no-cache-dir --upgrade setuptools
-RUN python3 -m pip install --no-cache-dir --pre rucio[oracle,mysql,postgresql]==$TAG
+# prepends venv with python to PATH, because there might be scripts depending on python being the correct executable
+ENV PATH /opt/rucio/bin:$PATH
 
-RUN python3 -m pip install --no-cache-dir j2cli
 ADD gacl /etc/httpd/
 ADD rucio.config.default.cfg /tmp/
 ADD rucio.conf.j2 /tmp/
@@ -77,7 +76,7 @@ USER root
 RUN if [ -n "$POLICY_PACKAGE_REQUIREMENTS" ]; then \
         dnf install -y git && \
         for package in $(echo $POLICY_PACKAGE_REQUIREMENTS | tr "," "\n"); do \
-            python3 -m pip install --no-cache-dir $package; \
+            /opt/rucio/bin/pip install --no-cache-dir $package; \
         done; \
         dnf remove -y git && \
         dnf autoremove && \
