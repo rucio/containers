@@ -62,12 +62,12 @@ CacheRoot /tmp
  ErrorLog /dev/stderr
 {% endif %}
 
- Alias /media                 /usr/local/lib/python3.9/site-packages/rucio/web/ui/media
- Alias /static                /usr/local/lib/python3.9/site-packages/rucio/web/ui/static
+ Alias /media                 /opt/rucio/lib/python3.9/site-packages/rucio/web/ui/media
+ Alias /static                /opt/rucio/lib/python3.9/site-packages/rucio/web/ui/static
 {% if RUCIO_SERVER_TYPE|default('api') == 'flask' %}
- WSGIScriptAlias /            /usr/local/lib/python3.9/site-packages/rucio/web/ui/flask/main.py
+ WSGIScriptAlias /            /opt/rucio/lib/python3.9/site-packages/rucio/web/ui/flask/main.py
 {% else %}
- WSGIScriptAlias /            /usr/local/lib/python3.9/site-packages/rucio/web/ui/main.py
+ WSGIScriptAlias /            /opt/rucio/lib/python3.9/site-packages/rucio/web/ui/main.py
 {% endif %}
 
 {% if RUCIO_PROXY is defined %}

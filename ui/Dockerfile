@@ -27,8 +27,7 @@ RUN dnf install -y epel-release.noarch && \
         python3-m2crypto \
         python-devel \
         patch \
-        patchutils \
-        python-pip && \
+        patchutils && \
     dnf clean all && \
     rm -rf /var/cache/dnf
 
@@ -36,18 +35,18 @@ RUN rpm -i https://download.oracle.com/otn_software/linux/instantclient/1912000/
     echo "/usr/lib/oracle/19/client64/lib" >/etc/ld.so.conf.d/oracle.conf; \
     ldconfig
 
-# Downgrade setuptools to avoid compatibility issues
-# TODO: remove once https://github.com/rucio/containers/issues/458 is resolved
-RUN dnf -y install https://vault.almalinux.org/9.6/BaseOS/x86_64/os/Packages/python3-setuptools-53.0.0-13.el9_6.1.noarch.rpm
-
-RUN python3 -m pip install --no-cache-dir --upgrade pip
-RUN python3 -m pip install --no-cache-dir --upgrade setuptools
-RUN python3 -m pip install --no-cache-dir --pre rucio[oracle,mysql,postgresql]==$TAG
-RUN python3 -m pip install --no-cache-dir --pre rucio_webui==$TAG
+RUN python3 -m venv --system-site-packages /opt/rucio && \
+    /opt/rucio/bin/pip install --no-cache-dir --upgrade pip && \
+    /opt/rucio/bin/pip install --no-cache-dir --upgrade setuptools && \
+    /opt/rucio/bin/pip install --no-cache-dir --pre rucio[oracle,mysql,postgresql]==$TAG && \
+    /opt/rucio/bin/pip install --no-cache-dir --pre rucio_webui==$TAG
 
 COPY j2.py /usr/local/bin/
 RUN python3 -m pip install --no-cache-dir jinja2 && \
     ln -s j2.py /usr/local/bin/j2
+
+# prepends venv with python to PATH, because there might be scripts depending on python being the correct executable
+ENV PATH /opt/rucio/bin:$PATH
 
 ADD rucio.config.default.cfg /tmp/
 ADD rucio.conf.j2 /tmp/
