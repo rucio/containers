@@ -15,6 +15,7 @@ ADD oic.rpm /tmp
 RUN dnf install -y epel-release.noarch && \
     dnf upgrade -y && \
     dnf install -y \
+        cronie-noanacron \
         git \
         gcc \
         libnsl \
@@ -49,5 +50,6 @@ RUN git clone https://github.com/rucio/probes.git
 ADD rucio.config.default.cfg /tmp/
 
 ADD run-probes.sh /
+ADD DeterministicDelay /
 
 ENTRYPOINT ["/run-probes.sh"]
