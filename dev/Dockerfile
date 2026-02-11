@@ -73,7 +73,7 @@ RUN mkdir -p \
       tools
 
 RUN python3 -m pip install --no-cache --upgrade pip && \
-    python3 -m pip install --no-cache --upgrade setuptools wheel && \
+    python3 -m pip install --no-cache --upgrade --ignore-installed setuptools wheel && \
     python3 -m pip install --no-cache --upgrade -r /tmp/rucio/requirements/requirements.dev.txt ; \
     ln -s $RUCIOHOME/lib/rucio /usr/local/lib/python3.9/site-packages/rucio
 
