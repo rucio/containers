@@ -30,7 +30,10 @@ RUN dnf -y install https://vault.almalinux.org/9.6/BaseOS/x86_64/os/Packages/pyt
 RUN python3 -m pip install --no-cache-dir --upgrade pip
 RUN python3 -m pip install --no-cache-dir --upgrade setuptools
 RUN python3 -m pip install --pre rucio[oracle,mysql,postgresql]==$TAG
-RUN python3 -m pip install jinja2 j2cli pyyaml
+
+COPY j2.py /usr/local/bin/
+RUN python3 -m pip install --no-cache-dir jinja2 && \
+    ln -s j2.py /usr/local/bin/j2
 
 RUN mkdir -p /opt/rucio/etc
 
