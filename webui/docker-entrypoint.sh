@@ -42,12 +42,12 @@ cat /opt/rucio/webui/.env
 echo ""
 
 log "Building Apache configuration files."
-j2 /tmp/httpd.conf.j2 | sed '/^\s*$/d' > /etc/httpd/conf/httpd.conf
+env | jinja2 /tmp/httpd.conf.j2 -f env | sed '/^\s*$/d' > /etc/httpd/conf/httpd.conf
 echo "=================== /etc/httpd/conf/httpd.conf ========================"
 cat /etc/httpd/conf/httpd.conf
 echo ""
 
-j2 /tmp/rucio.conf.j2 | sed '/^\s*$/d' > /etc/httpd/conf.d/rucio.conf
+env | jinja2 /tmp/rucio.conf.j2 -f env | sed '/^\s*$/d' > /etc/httpd/conf.d/rucio.conf
 echo "=================== /etc/httpd/conf/conf.d/rucio.conf ========================"
 cat /etc/httpd/conf.d/rucio.conf
 echo ""
