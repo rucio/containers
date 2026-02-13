@@ -44,7 +44,10 @@ RUN python3 -m pip install --no-cache-dir --upgrade pip
 RUN python3 -m pip install --no-cache-dir --upgrade setuptools
 RUN python3 -m pip install --no-cache-dir --pre rucio[oracle,mysql,postgresql]==$TAG
 RUN python3 -m pip install --no-cache-dir --pre rucio_webui==$TAG
-RUN python3 -m pip install --no-cache-dir j2cli
+
+COPY j2.py /usr/local/bin/
+RUN python3 -m pip install --no-cache-dir jinja2 && \
+    ln -s j2.py /usr/local/bin/j2
 
 ADD rucio.config.default.cfg /tmp/
 ADD rucio.conf.j2 /tmp/
