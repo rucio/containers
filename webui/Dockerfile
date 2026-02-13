@@ -28,7 +28,10 @@ RUN dnf -y install https://vault.almalinux.org/9.6/BaseOS/x86_64/os/Packages/pyt
 
 RUN python3 -m pip install --no-cache-dir --upgrade pip && \
     python3 -m pip install --no-cache-dir --upgrade setuptools
-RUN python3 -m pip install --no-cache-dir j2cli
+
+COPY j2.py /usr/local/bin/
+RUN python3 -m pip install --no-cache-dir jinja2 && \
+    ln -s j2.py /usr/local/bin/j2
 
 WORKDIR /opt/rucio/webui
 
