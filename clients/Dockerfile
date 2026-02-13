@@ -19,6 +19,8 @@ RUN dnf -y install yum-utils epel-release.noarch && \
         xrootd-client && \
     dnf clean all && \
     rm -rf /var/cache/dnf
+
+COPY j2.py /usr/local/bin/
     
 # Downgrade setuptools to avoid compatibility issues
 # TODO: remove once https://github.com/rucio/containers/issues/458 is resolved
@@ -28,8 +30,8 @@ RUN dnf -y install https://vault.almalinux.org/9.6/BaseOS/x86_64/os/Packages/pyt
 RUN python3 -m pip install --no-cache-dir --upgrade pip && \
     python3 -m pip install --no-cache-dir --upgrade setuptools && \
     python3 -m pip install --no-cache-dir --pre rucio-clients[argcomplete]==$TAG && \
-    python3 -m pip install --no-cache-dir jinja2 j2cli pyyaml
-
+    python3 -m pip install --no-cache-dir jinja2 pyyaml && \
+    ln -s j2.py /usr/local/bin/j2
 
 # Add a separate user and change ownership of config dir to that user
 RUN groupadd -g 1000 user && \
