@@ -183,4 +183,4 @@ The available environment variables are:
 ## Getting Support
 
 If you are looking for support, please contact our mailing list rucio-users@googlegroups.com
-or join us on our [slack support](<https://rucio.slack.com/messages/#support>) channel.
+or reach out via our [support channels](<https://rucio.github.io/documentation/contact_us>).
