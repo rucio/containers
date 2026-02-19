@@ -1,5 +1,5 @@
 ARG TAG
-FROM rucio/rucio-clients:release-$TAG
+FROM docker.io/rucio/rucio-clients:release-$TAG
 
 USER root
 RUN dnf -y install \

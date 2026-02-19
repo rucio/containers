@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM almalinux:9
+FROM docker.io/almalinux:9
 
 ARG TAG="master"
 
