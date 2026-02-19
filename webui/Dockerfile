@@ -13,6 +13,8 @@ FROM almalinux:9
 ARG TAG
 
 LABEL stage=production
+ENV NODE_ENV=production
+
 RUN dnf -y update && \
     dnf -y module reset nodejs && \
     dnf -y module enable nodejs:20 && \
