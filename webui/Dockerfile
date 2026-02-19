@@ -41,7 +41,7 @@ RUN curl https://raw.githubusercontent.com/rucio/rucio/master/tools/merge_rucio_
 RUN git clone --depth 1 -b ${TAG} -- https://github.com/rucio/webui.git ${RUCIO_WEBUI_PATH}
 
 RUN npm i -g pm2
-RUN npm install
+RUN npm install --omit=dev
 
 COPY docker-entrypoint.sh /
 COPY httpd.conf.j2 /tmp/
