@@ -22,8 +22,7 @@ RUN dnf install -y epel-release.noarch && \
         libaio \
         openssl-devel \
         procps-ng \
-        python-devel \
-        python-pip && \
+        python-devel && \
     dnf clean all && \
     rm -rf /var/cache/dnf
 
@@ -33,16 +32,15 @@ RUN rpm -i https://download.oracle.com/otn_software/linux/instantclient/1912000/
 
 RUN rpm -i https://github.com/dshearer/jobber/releases/download/v1.4.0/jobber-1.4.0-1.el7.x86_64.rpm
 
-# Downgrade setuptools to avoid compatibility issues
-# TODO: remove once https://github.com/rucio/containers/issues/458 is resolved
-RUN dnf -y install https://vault.almalinux.org/9.6/BaseOS/x86_64/os/Packages/python3-setuptools-53.0.0-13.el9_6.1.noarch.rpm
+RUN python3 -m venv --system-site-packages /opt/rucio && \
+    /opt/rucio/bin/pip install --no-cache-dir --upgrade pip && \
+    /opt/rucio/bin/pip install --no-cache-dir --upgrade setuptools && \
+    /opt/rucio/bin/pip install --no-cache-dir --pre rucio[oracle,mysql,postgresql] && \
+    /opt/rucio/bin/pip install --no-cache-dir j2cli psycopg2-binary && \
+    /opt/rucio/bin/pip install --no-cache-dir cx-oracle PyMySQL
 
-RUN python3 -m pip install --no-cache-dir --upgrade pip
-RUN python3 -m pip install --no-cache-dir --upgrade setuptools
-RUN rm -rf /usr/lib/python3.6/site-packages/ipaddress*
-RUN python3 -m pip install --no-cache-dir --pre rucio[oracle,mysql,postgresql]
-RUN python3 -m pip install --no-cache-dir psycopg2-binary
-RUN python3 -m pip install --no-cache-dir cx-oracle PyMySQL
+# prepends venv with python to PATH, because there might be scripts depending on python being the correct executable
+ENV PATH /opt/rucio/bin:$PATH
 
 WORKDIR /
 RUN git clone https://github.com/rucio/probes.git

@@ -19,21 +19,21 @@ RUN dnf -y update && \
     dnf -y module reset nodejs && \
     dnf -y module enable nodejs:20 && \
     dnf -y module install nodejs:20/common && \
-    dnf -y install httpd mod_ssl python39 python-pip git procps patch patchutils && \
+    dnf -y install httpd mod_ssl python39 git procps patch patchutils && \
     dnf -y install wget && \
     dnf clean all && \
     rm -rf /var/cache/dnf
 
-    # Downgrade setuptools to avoid compatibility issues
-# TODO: remove once https://github.com/rucio/containers/issues/458 is resolved
-RUN dnf -y install https://vault.almalinux.org/9.6/BaseOS/x86_64/os/Packages/python3-setuptools-53.0.0-13.el9_6.1.noarch.rpm
-
-RUN python3 -m pip install --no-cache-dir --upgrade pip && \
-    python3 -m pip install --no-cache-dir --upgrade setuptools
+RUN python3 -m venv --system-site-packages /opt/rucio && \
+    /opt/rucio/bin/pip install --no-cache-dir --upgrade pip && \
+    /opt/rucio/bin/pip install --no-cache-dir --upgrade setuptools
 
 COPY j2.py /usr/local/bin/
-RUN python3 -m pip install --no-cache-dir jinja2 && \
+RUN /opt/rucio/bin/pip install --no-cache-dir jinja2 && \
     ln -s j2.py /usr/local/bin/j2
+
+# prepends venv with python to PATH, because there might be scripts depending on python being the correct executable
+ENV PATH /opt/rucio/bin:$PATH
 
 WORKDIR /opt/rucio/webui
 

@@ -41,8 +41,6 @@ RUN dnf -y install yum-utils epel-release.noarch && \
         nmap-ncat \
         openssh-clients \
         openssl-devel \
-        python3-setuptools \
-        python3-pip \
         python3-devel \
         python3-mod_wsgi \
         python3-m2crypto \
@@ -62,22 +60,19 @@ RUN curl https://rclone.org/install.sh | bash
 RUN git clone --depth 1 --branch "$TAG" https://github.com/rucio/rucio.git /tmp/rucio && rm -rf /tmp/rucio/.git
 
 ENV RUCIOHOME=/opt/rucio
-RUN mkdir -p $RUCIOHOME && \
-    mkdir -p $RUCIOHOME/etc/multi_vo/tst/etc && \
-    mkdir -p $RUCIOHOME/etc/multi_vo/ts2/etc
+RUN python3 -m venv --system-site-packages "$RUCIOHOME" && \
+    mkdir -p "$RUCIOHOME/etc/multi_vo/tst/etc" \
+             "$RUCIOHOME/etc/multi_vo/ts2/etc" \
+             "$RUCIOHOME/lib/rucio" \
+             "$RUCIOHOME/tools"
 WORKDIR $RUCIOHOME
-RUN mkdir -p \
-      bin \
-      etc \
-      lib/rucio \
-      tools
+ENV PATH=$RUCIOHOME/bin:$PATH
 
-RUN python3 -m pip install --no-cache --upgrade pip && \
-    python3 -m pip install --no-cache --upgrade --ignore-installed setuptools wheel && \
-    python3 -m pip install --no-cache --upgrade -r /tmp/rucio/requirements/requirements.dev.txt ; \
-    ln -s $RUCIOHOME/lib/rucio /usr/local/lib/python3.9/site-packages/rucio
-
-RUN python3 -m pip install --no-cache --upgrade fts3
+RUN "$RUCIOHOME/bin/pip" install --no-cache --upgrade pip && \
+    "$RUCIOHOME/bin/pip" install --no-cache --upgrade --ignore-installed setuptools wheel && \
+    "$RUCIOHOME/bin/pip" install --no-cache --upgrade -r /tmp/rucio/requirements/requirements.dev.txt && \
+    "$RUCIOHOME/bin/pip" install --no-cache --upgrade fts3 && \
+    ln -s ../../rucio "$RUCIOHOME/lib/python3.9/site-packages/rucio"
 
 COPY .pep8 .pep8
 COPY .flake8 .flake8
@@ -109,25 +104,23 @@ RUN chmod 777 /var/log/rucio/trace && \
     echo "" > /etc/httpd/conf.d/welcome.conf && \
     echo "" > /etc/httpd/conf.d/zgridsite.conf
 
-COPY logshow restartweb run_daemons create_monit_data /usr/local/bin/
+COPY logshow restartweb run_daemons create_monit_data $RUCIOHOME/bin/
 COPY monit-entrypoint.sh /monit-entrypoint.sh
 
 COPY dashboards/* $RUCIOHOME/etc/dashboards/
 COPY rse_repository.json $RUCIOHOME/etc/rse_repository.json
 
 RUN rm -r /tmp/rucio && \
-    chmod +x /usr/local/bin/logshow && \
-    chmod +x /usr/local/bin/restartweb && \
-    chmod +x /usr/local/bin/run_daemons && \
-    chmod +x /usr/local/bin/create_monit_data && \
-    chmod +x $RUCIOHOME/etc/dashboards/import_dashboards.sh && \
-    chmod +x /monit-entrypoint.sh && \
-    ln -fs /usr/bin/python3 /usr/bin/python
+    chmod +x "$RUCIOHOME/bin/logshow" \
+             "$RUCIOHOME/bin/restartweb" \
+             "$RUCIOHOME/bin/run_daemons" \
+             "$RUCIOHOME/bin/create_monit_data" \
+             "$RUCIOHOME/etc/dashboards/import_dashboards.sh" \
+             /monit-entrypoint.sh
 
 RUN update-crypto-policies --set DEFAULT:SHA1
 
 EXPOSE 443
-ENV PATH $PATH:$RUCIOHOME/bin
 RUN mkdir /tmp/prometheus && chown apache:apache /tmp/prometheus/
 ENV PROMETHEUS_MULTIPROC_DIR /tmp/prometheus
 CMD ["httpd","-D","FOREGROUND"]

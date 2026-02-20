@@ -9,7 +9,6 @@ RUN dnf -y install yum-utils epel-release.noarch && \
         gfal2-all \
         python3-gfal2-util \
         python3-gfal2 \
-        python3-pip \
         nordugrid-arc-client \
         nordugrid-arc-plugins-gfal \
         nordugrid-arc-plugins-globus \
@@ -21,16 +20,13 @@ RUN dnf -y install yum-utils epel-release.noarch && \
     rm -rf /var/cache/dnf
 
 COPY j2.py /usr/local/bin/
-    
-# Downgrade setuptools to avoid compatibility issues
-# TODO: remove once https://github.com/rucio/containers/issues/458 is resolved
-RUN dnf -y install https://vault.almalinux.org/9.6/BaseOS/x86_64/os/Packages/python3-setuptools-53.0.0-13.el9_6.1.noarch.rpm
 
-# Upgrade pip & setuptools and install Rucio
-RUN python3 -m pip install --no-cache-dir --upgrade pip && \
-    python3 -m pip install --no-cache-dir --upgrade setuptools && \
-    python3 -m pip install --no-cache-dir --pre rucio-clients[argcomplete]==$TAG && \
-    python3 -m pip install --no-cache-dir jinja2 pyyaml && \
+# Create venv, upgrade pip & setuptools and install Rucio
+RUN python3 -m venv --system-site-packages /opt/rucio && \
+    /opt/rucio/bin/pip install --no-cache-dir --upgrade pip && \
+    /opt/rucio/bin/pip install --no-cache-dir --upgrade setuptools && \
+    /opt/rucio/bin/pip install --no-cache-dir --pre rucio-clients[argcomplete]==$TAG && \
+    /opt/rucio/bin/pip install --no-cache-dir jinja2 pyyaml && \
     ln -s j2.py /usr/local/bin/j2
 
 # Add a separate user and change ownership of config dir to that user
@@ -49,7 +45,8 @@ ADD --chown=user:user rucio.default.cfg /opt/user/rucio.default.cfg
 ADD init_rucio.sh /etc/profile.d/rucio_init.sh
 ADD --chown=user;user ./entrypoint.sh /opt/user/entrypoint.sh
 
-ENV PATH $PATH:/opt/rucio/bin
+# prepends venv with python to PATH, because there might be scripts depending on python being the correct executable
+ENV PATH /opt/rucio/bin:$PATH
 
 ARG POLICY_PACKAGE_REQUIREMENTS
 ARG USER=root
@@ -57,7 +54,7 @@ USER root
 RUN if [ -n "$POLICY_PACKAGE_REQUIREMENTS" ]; then \
         dnf install -y git && \
         for package in $(echo $POLICY_PACKAGE_REQUIREMENTS | tr "," "\n"); do \
-            python3 -m pip install --no-cache-dir $package; \
+            /opt/rucio/bin/pip install --no-cache-dir $package; \
         done; \
         dnf remove -y git && \
         dnf autoremove && \

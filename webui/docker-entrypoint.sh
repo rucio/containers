@@ -83,7 +83,7 @@ then
 
         if [ -s ${tmp_bin_file} ]
         then
-            if patch -p2 -d "/usr/local/bin/" < ${tmp_bin_file}
+            if patch -p2 -d "/opt/rucio/bin/" < ${tmp_bin_file}
             then
                 echo "Patch ${patchfile}/bin applied."
             else
