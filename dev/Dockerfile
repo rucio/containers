@@ -41,8 +41,6 @@ RUN dnf -y install yum-utils epel-release.noarch && \
         nmap-ncat \
         openssh-clients \
         openssl-devel \
-        python3-setuptools \
-        python3-pip \
         python3-devel \
         python3-mod_wsgi \
         python3-m2crypto \
@@ -62,22 +60,20 @@ RUN curl https://rclone.org/install.sh | bash
 RUN git clone --depth 1 --branch "$TAG" https://github.com/rucio/rucio.git /tmp/rucio && rm -rf /tmp/rucio/.git
 
 ENV RUCIOHOME=/opt/rucio
-RUN mkdir -p $RUCIOHOME && \
-    mkdir -p $RUCIOHOME/etc/multi_vo/tst/etc && \
-    mkdir -p $RUCIOHOME/etc/multi_vo/ts2/etc
+ENV RUCIO_VENV=/opt/rucio-venv
+RUN python3 -m venv --system-site-packages "$RUCIO_VENV" && \
+    mkdir -p "$RUCIOHOME/etc/multi_vo/tst/etc" \
+             "$RUCIOHOME/etc/multi_vo/ts2/etc" \
+             "$RUCIOHOME/bin" \
+             "$RUCIOHOME/etc" \
+             "$RUCIOHOME/lib/rucio" \
+             "$RUCIOHOME/tools"
 WORKDIR $RUCIOHOME
-RUN mkdir -p \
-      bin \
-      etc \
-      lib/rucio \
-      tools
 
-RUN python3 -m pip install --no-cache --upgrade pip && \
-    python3 -m pip install --no-cache --upgrade --ignore-installed setuptools wheel && \
-    python3 -m pip install --no-cache --upgrade -r /tmp/rucio/requirements/requirements.dev.txt ; \
-    ln -s $RUCIOHOME/lib/rucio /usr/local/lib/python3.9/site-packages/rucio
-
-RUN python3 -m pip install --no-cache --upgrade fts3
+RUN "$RUCIO_VENV/bin/pip" install --no-cache --upgrade pip setuptools wheel && \
+    "$RUCIO_VENV/bin/pip" install --no-cache --upgrade -r /tmp/rucio/requirements/requirements.dev.txt && \
+    "$RUCIO_VENV/bin/pip" install --no-cache --upgrade fts3 && \
+    ln -s "$RUCIOHOME/lib/rucio" "$RUCIO_VENV/lib/python3.9/site-packages/rucio"
 
 COPY .pep8 .pep8
 COPY .flake8 .flake8
@@ -127,7 +123,7 @@ RUN rm -r /tmp/rucio && \
 RUN update-crypto-policies --set DEFAULT:SHA1
 
 EXPOSE 443
-ENV PATH $PATH:$RUCIOHOME/bin
+ENV PATH=$RUCIO_VENV/bin:$RUCIOHOME/bin:$PATH
 RUN mkdir /tmp/prometheus && chown apache:apache /tmp/prometheus/
-ENV PROMETHEUS_MULTIPROC_DIR /tmp/prometheus
+ENV PROMETHEUS_MULTIPROC_DIR=/tmp/prometheus
 CMD ["httpd","-D","FOREGROUND"]
