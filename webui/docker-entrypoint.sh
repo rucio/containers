@@ -6,20 +6,17 @@ log() {
 
 generate_env_file() {
     cd tools/env-generator
-    npm install
-
-    log "Building env-generator (skipping lib checks to avoid parent node_modules conflicts)..."
-    npx tsc --skipLibCheck && cp -rf src/templates dist/
-    local build_exit=$?
-
-    if [ $build_exit -ne 0 ]; then
-        log "WARNING: Build had errors but checking if output exists..."
-    fi
 
     if [ ! -f ./dist/generate-env.js ]; then
-        log "ERROR: ./dist/generate-env.js was not created by build"
-        cd ../..
-        return 1
+        log "Pre-built env-generator not found, building now..."
+        npm install
+        npx tsc --skipLibCheck && cp -rf src/templates dist/
+
+        if [ ! -f ./dist/generate-env.js ]; then
+            log "ERROR: ./dist/generate-env.js was not created by build"
+            cd ../..
+            return 1
+        fi
     fi
 
     chmod +x ./dist/generate-env.js
@@ -59,7 +56,7 @@ if [ -z "${RUCIO_WEBUI_COMMUNITY_LOGO_URL}" ]; then
     log "Environment variable RUCIO_WEBUI_COMMUNITY_LOGO_URL is not set. The default experiment-icon will be used."
 else
     log "Downloading community logo from ${RUCIO_WEBUI_COMMUNITY_LOGO_URL}"
-    wget -O /opt/rucio/webui/public/experiment-logo.png ${RUCIO_WEBUI_COMMUNITY_LOGO_URL}
+    curl -fsSL -o /opt/rucio/webui/public/experiment-logo.png ${RUCIO_WEBUI_COMMUNITY_LOGO_URL}
 fi
 
 if [ -d "/patch" ]
