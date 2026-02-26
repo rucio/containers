@@ -8,32 +8,20 @@
 # - Mayank Sharma, <mayank.sharma@cern.ch>, 2022
 # - Eraldo Junior <ejunior@cbpf.br>, 2023
 
-FROM almalinux:9
+# ---------- Stage 1: builder (clone repo & install node deps) ----------
+FROM almalinux:10 AS builder
 
 ARG TAG
 
-LABEL stage=production
 ENV NODE_ENV=production
 
 RUN dnf -y update && \
-    dnf -y module reset nodejs && \
-    dnf -y module enable nodejs:20 && \
-    dnf -y module install nodejs:20/common && \
-    dnf -y install httpd mod_ssl python39 python-pip git procps patch patchutils && \
-    dnf -y install wget && \
+    dnf -y install git nodejs24 nodejs24-npm && \
     dnf clean all && \
-    rm -rf /var/cache/dnf
-
-    # Downgrade setuptools to avoid compatibility issues
-# TODO: remove once https://github.com/rucio/containers/issues/458 is resolved
-RUN dnf -y install https://vault.almalinux.org/9.6/BaseOS/x86_64/os/Packages/python3-setuptools-53.0.0-13.el9_6.1.noarch.rpm
-
-RUN python3 -m pip install --no-cache-dir --upgrade pip && \
-    python3 -m pip install --no-cache-dir --upgrade setuptools
-
-COPY j2.py /usr/local/bin/
-RUN python3 -m pip install --no-cache-dir jinja2 && \
-    ln -s j2.py /usr/local/bin/j2
+    rm -rf /var/cache/dnf && \
+    ln -s /usr/bin/node-24 /usr/local/bin/node && \
+    ln -s /usr/bin/npm-24 /usr/local/bin/npm && \
+    ln -s /usr/bin/npx-24 /usr/local/bin/npx
 
 WORKDIR /opt/rucio/webui
 
@@ -44,6 +32,37 @@ RUN git clone --depth 1 -b ${TAG} -- https://github.com/rucio/webui.git ${RUCIO_
 
 RUN npm i -g pm2
 RUN npm install --omit=dev
+
+# Pre-build env-generator so it's ready at runtime (needs dev deps for tsc)
+WORKDIR /opt/rucio/webui/tools/env-generator
+RUN npm install --include=dev && npx tsc --skipLibCheck && cp -rf src/templates dist/
+WORKDIR /opt/rucio/webui
+
+# ---------- Stage 2: runtime ----------
+FROM almalinux:10
+
+LABEL stage=production
+ENV NODE_ENV=production
+
+RUN dnf -y update && \
+    dnf -y install nodejs24 nodejs24-npm httpd mod_ssl python3 python3-jinja2 procps patch patchutils && \
+    dnf clean all && \
+    rm -rf /var/cache/dnf && \
+    ln -s /usr/bin/node-24 /usr/local/bin/node && \
+    ln -s /usr/bin/npm-24 /usr/local/bin/npm && \
+    ln -s /usr/bin/npx-24 /usr/local/bin/npx
+
+COPY j2.py /usr/local/bin/
+RUN ln -s j2.py /usr/local/bin/j2
+
+RUN npm i -g pm2
+
+WORKDIR /opt/rucio/webui
+
+ENV RUCIO_WEBUI_PATH=/opt/rucio/webui
+
+COPY --from=builder /opt/rucio/webui/ /opt/rucio/webui/
+COPY --from=builder /opt/rucio/merge_rucio_configs.py /opt/rucio/merge_rucio_configs.py
 
 COPY docker-entrypoint.sh /
 COPY httpd.conf.j2 /tmp/
