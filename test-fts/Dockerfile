@@ -15,9 +15,31 @@ RUN curl -sSfL -o /etc/yum.repos.d/fts3.repo https://fts-repo.web.cern.ch/fts-re
   && curl -sSfL -o /etc/yum.repos.d/fts3-depend.repo https://fts-repo.web.cern.ch/fts-repo/fts3-depend.repo \
   && curl -sSfL -o /etc/yum.repos.d/dmc.repo https://dmc-repo.web.cern.ch/dmc-repo/dmc-el9.repo
 
-RUN  dnf install -y \
-    fts-server fts-mysql fts-rest-client fts-rest-server fts-monitoring \
-    fts-server-selinux fts-rest-server-selinux fts-monitoring-selinux \
+# Version arguments for the production FTS bundle on el9.
+# Defaults are taken from the latest production builds in
+# https://fts-repo.web.cern.ch/fts-repo/el9/x86_64/
+# and can be overridden at build time by the service-versioned workflow.
+ARG FTS_SERVER_VERSION=3.14.4-2.el9
+ARG FTS_REST_VERSION=3.14.2-1.el9
+ARG FTS_MONITORING_VERSION=3.14.2-1.el9
+
+# python3-django3 was removed from EPEL 9 after Django 3.2 EOL (April 2024),
+# but fts-monitoring still requires it. Install directly from Fedora Koji where
+# the build is archived.
+RUN dnf install -y \
+    https://kojipkgs.fedoraproject.org/packages/python-django3/3.2.25/1.el9/noarch/python3-django3-3.2.25-1.el9.noarch.rpm \
+  && dnf clean all \
+  && rm -rf /var/cache/dnf
+
+RUN dnf install -y \
+    "fts-server-${FTS_SERVER_VERSION}" \
+    "fts-mysql-${FTS_SERVER_VERSION}" \
+    "fts-rest-client-${FTS_REST_VERSION}" \
+    "fts-rest-server-${FTS_REST_VERSION}" \
+    "fts-monitoring-${FTS_MONITORING_VERSION}" \
+    "fts-server-selinux-${FTS_SERVER_VERSION}" \
+    "fts-rest-server-selinux-${FTS_REST_VERSION}" \
+    "fts-monitoring-selinux-${FTS_MONITORING_VERSION}" \
     fts-msg \
     mysql \
     multitail \

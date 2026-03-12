@@ -1,0 +1,71 @@
+name: build-test-fts-by-service-version
+
+on:
+  workflow_dispatch:
+    inputs:
+      fts_server_version:
+        description: "fts-server version-release for el9 (see https://fts-repo.web.cern.ch/fts-repo/el9/x86_64/; e.g. 3.14.4-2.el9)"
+        required: true
+        default: "3.14.4-2.el9"
+      fts_rest_version:
+        description: "fts-rest-server version-release for el9 (e.g. 3.14.2-1.el9)"
+        required: true
+        default: "3.14.2-1.el9"
+      fts_monitoring_version:
+        description: "fts-monitoring version-release for el9 (e.g. 3.14.2-1.el9)"
+        required: true
+        default: "3.14.2-1.el9"
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout containers repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Derive image tag
+        id: derive_tag
+        run: |
+          FTS_SERVER_VERSION="${{ github.event.inputs.fts_server_version }}"
+          # Drop the release/dist suffix for the tag (e.g. 3.14.4-2.el9 -> 3.14.4)
+          SERVER_VERSION_MAJOR="$(echo "${FTS_SERVER_VERSION}" | cut -d- -f1)"
+          IMAGE_TAG="rucio/test-fts:fts3-prod-${SERVER_VERSION_MAJOR}-el9"
+          echo "image_tag=${IMAGE_TAG}" >> "$GITHUB_OUTPUT"
+
+      - name: Check if image already exists on Docker Hub
+        id: check_exists
+        run: |
+          IMAGE="${{ steps.derive_tag.outputs.image_tag }}"
+          if docker manifest inspect "${IMAGE}" > /dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+            echo "Image ${IMAGE} already exists, skipping build."
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+            echo "Image ${IMAGE} does not exist, will build."
+          fi
+
+      - name: Set up Docker Buildx
+        if: steps.check_exists.outputs.exists == 'false'
+        uses: docker/setup-buildx-action@4d04d5d9486b7bd6fa91e7baf45bbb4f8b9deedd # v4.0
+
+      - name: Login to Docker Hub
+        if: steps.check_exists.outputs.exists == 'false'
+        uses: docker/login-action@b45d80f862d83dbcd57f89517bcf500b2ab88fb2 # v4.0
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+      - name: Build and push test-fts for given FTS production bundle
+        if: steps.check_exists.outputs.exists == 'false'
+        uses: docker/build-push-action@d08e5c354a6adb9ed34480a06d141179aa583294 # v7.0
+        with:
+          context: ./test-fts
+          file: ./test-fts/Dockerfile
+          push: true
+          tags: ${{ steps.derive_tag.outputs.image_tag }}
+          build-args: |
+            FTS_SERVER_VERSION=${{ github.event.inputs.fts_server_version }}
+            FTS_REST_VERSION=${{ github.event.inputs.fts_rest_version }}
+            FTS_MONITORING_VERSION=${{ github.event.inputs.fts_monitoring_version }}
+
