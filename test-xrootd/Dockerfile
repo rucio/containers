@@ -1,5 +1,12 @@
 FROM almalinux:9
 
+# Optional version pinning for reproducible images.
+# When `XROOTD_VERSION` is provided (e.g. `5.7.0-1.el9`), we install
+# `xrootd*` packages with explicit RPM versions to make the image
+# deterministic. If not provided, we fall back to unpinned installs,
+# matching the historical behavior.
+ARG XROOTD_VERSION=
+
 # Install CERN CA
 ADD ca.repo /etc/yum.repos.d/ca.repo
 
@@ -8,7 +15,15 @@ RUN dnf install -y epel-release.noarch https://linuxsoft.cern.ch/wlcg/el9/x86_64
     dnf update -y && \
     dnf upgrade -y && \
     dnf --disablerepo="*" --enablerepo="carepo" -y install 'ca*' && \
-    dnf install -y xrootd xrootd-client xrootd-scitokens qbittorrent-nox && \
+    if [ -n "${XROOTD_VERSION}" ]; then \
+      dnf install -y \
+        "xrootd-${XROOTD_VERSION}" \
+        "xrootd-client-${XROOTD_VERSION}" \
+        "xrootd-scitokens-${XROOTD_VERSION}" \
+        qbittorrent-nox ; \
+    else \
+      dnf install -y xrootd xrootd-client xrootd-scitokens qbittorrent-nox ; \
+    fi && \
     dnf clean all && \
     rm -rf /var/cache/dnf
 
