@@ -15,13 +15,16 @@ RUN curl -sSfL -o /etc/yum.repos.d/fts3.repo https://fts-repo.web.cern.ch/fts-re
   && curl -sSfL -o /etc/yum.repos.d/fts3-depend.repo https://fts-repo.web.cern.ch/fts-repo/fts3-depend.repo \
   && curl -sSfL -o /etc/yum.repos.d/dmc.repo https://dmc-repo.web.cern.ch/dmc-repo/dmc-el9.repo
 
-# Version arguments for the production FTS bundle on el9.
-# Defaults are taken from the latest production builds in
+# Optional version pinning for reproducible images.
+# When all FTS version args are provided, we install pinned RPM versions to
+# make the image deterministic. If not provided, we fall back to unpinned
+# latest installs, matching the historical behavior of docker-auto-build.yml workflow.
+# These arguments can be overridden at the build time by the service-versioned workflow.
+# Version arguments can be taken from production builds in
 # https://fts-repo.web.cern.ch/fts-repo/el9/x86_64/
-# and can be overridden at build time by the service-versioned workflow.
-ARG FTS_SERVER_VERSION=3.14.4-2.el9
-ARG FTS_REST_VERSION=3.14.2-1.el9
-ARG FTS_MONITORING_VERSION=3.14.2-1.el9
+ARG FTS_SERVER_VERSION=
+ARG FTS_REST_VERSION=
+ARG FTS_MONITORING_VERSION=
 
 # python3-django3 was removed from EPEL 9 after Django 3.2 EOL (April 2024),
 # but fts-monitoring still requires it. Install directly from Fedora Koji where
@@ -31,19 +34,35 @@ RUN dnf install -y \
   && dnf clean all \
   && rm -rf /var/cache/dnf
 
-RUN dnf install -y \
-    "fts-server-${FTS_SERVER_VERSION}" \
-    "fts-mysql-${FTS_SERVER_VERSION}" \
-    "fts-rest-client-${FTS_REST_VERSION}" \
-    "fts-rest-server-${FTS_REST_VERSION}" \
-    "fts-monitoring-${FTS_MONITORING_VERSION}" \
-    "fts-server-selinux-${FTS_SERVER_VERSION}" \
-    "fts-rest-server-selinux-${FTS_REST_VERSION}" \
-    "fts-monitoring-selinux-${FTS_MONITORING_VERSION}" \
-    fts-msg \
-    mysql \
-    multitail \
-    gfal2-plugin* \
+RUN if [ -n "${FTS_SERVER_VERSION}" ] && [ -n "${FTS_REST_VERSION}" ] && [ -n "${FTS_MONITORING_VERSION}" ]; then \
+      dnf install -y \
+        "fts-server-${FTS_SERVER_VERSION}" \
+        "fts-mysql-${FTS_SERVER_VERSION}" \
+        "fts-rest-client-${FTS_REST_VERSION}" \
+        "fts-rest-server-${FTS_REST_VERSION}" \
+        "fts-monitoring-${FTS_MONITORING_VERSION}" \
+        "fts-server-selinux-${FTS_SERVER_VERSION}" \
+        "fts-rest-server-selinux-${FTS_REST_VERSION}" \
+        "fts-monitoring-selinux-${FTS_MONITORING_VERSION}" \
+        fts-msg \
+        mysql \
+        multitail \
+        gfal2-plugin* ; \
+    else \
+      dnf install -y \
+        fts-server \
+        fts-mysql \
+        fts-rest-client \
+        fts-rest-server \
+        fts-monitoring \
+        fts-server-selinux \
+        fts-rest-server-selinux \
+        fts-monitoring-selinux \
+        fts-msg \
+        mysql \
+        multitail \
+        gfal2-plugin* ; \
+    fi \
   && dnf clean all \
   && rm -rf /var/cache/dnf
   
