@@ -1,0 +1,80 @@
+name: build-test-webdav-by-service-version
+
+on:
+  workflow_dispatch:
+    inputs:
+      apache2_version:
+        description: "apache2 version-release for Ubuntu Noble (from https://packages.ubuntu.com/ ; e.g. 2.4.58-1ubuntu8.11)"
+        required: true
+        default: "2.4.58-1ubuntu8.11"
+      apache2_dev_version:
+        description: "apache2-dev version-release for Ubuntu Noble (from https://packages.ubuntu.com/)"
+        required: true
+        default: "2.4.58-1ubuntu8.11"
+      mod_auth_openidc_version:
+        description: "libapache2-mod-auth-openidc version-release for Ubuntu Noble (from https://packages.ubuntu.com/)"
+        required: true
+        default: "2.4.15.1-1ubuntu0.1"
+      mod_oauth2_version:
+        description: "libapache2-mod-oauth2 version-release for Ubuntu Noble (from https://packages.ubuntu.com/)"
+        required: true
+        default: "3.3.1-1build2"
+      gridsite_version:
+        description: "gridsite version-release for Ubuntu Noble (from https://packages.ubuntu.com/)"
+        required: true
+        default: "3.0.0~20230214gitee81151-1.1build3"
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout containers repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Derive image tag
+        id: derive_tag
+        run: |
+          APACHE2_VERSION="${{ github.event.inputs.apache2_version }}"
+          # Drop the Ubuntu release suffix for the tag (e.g. 2.4.58-1ubuntu8.11 -> 2.4.58)
+          APACHE_BASE="$(echo "${APACHE2_VERSION}" | cut -d- -f1)"
+          IMAGE_TAG="rucio/test-webdav:webdav-apache-${APACHE_BASE}-ubuntu24.04"
+          echo "image_tag=${IMAGE_TAG}" >> "$GITHUB_OUTPUT"
+
+      - name: Check if image already exists on Docker Hub
+        id: check_exists
+        run: |
+          IMAGE="${{ steps.derive_tag.outputs.image_tag }}"
+          if docker manifest inspect "${IMAGE}" > /dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+            echo "Image ${IMAGE} already exists, skipping build."
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+            echo "Image ${IMAGE} does not exist, will build."
+          fi
+
+      - name: Set up Docker Buildx
+        if: steps.check_exists.outputs.exists == 'false'
+        uses: docker/setup-buildx-action@4d04d5d9486b7bd6fa91e7baf45bbb4f8b9deedd # v4.0
+
+      - name: Login to Docker Hub
+        if: steps.check_exists.outputs.exists == 'false'
+        uses: docker/login-action@b45d80f862d83dbcd57f89517bcf500b2ab88fb2 # v4.0
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+      - name: Build and push test-webdav for given Apache/WebDAV bundle
+        if: steps.check_exists.outputs.exists == 'false'
+        uses: docker/build-push-action@d08e5c354a6adb9ed34480a06d141179aa583294 # v7.0
+        with:
+          context: ./test-webdav
+          file: ./test-webdav/Dockerfile
+          push: true
+          tags: ${{ steps.derive_tag.outputs.image_tag }}
+          build-args: |
+            APACHE2_VERSION=${{ github.event.inputs.apache2_version }}
+            APACHE2_DEV_VERSION=${{ github.event.inputs.apache2_dev_version }}
+            MOD_AUTH_OPENIDC_VERSION=${{ github.event.inputs.mod_auth_openidc_version }}
+            MOD_OAUTH2_VERSION=${{ github.event.inputs.mod_oauth2_version }}
+            GRIDSITE_VERSION=${{ github.event.inputs.gridsite_version }}
