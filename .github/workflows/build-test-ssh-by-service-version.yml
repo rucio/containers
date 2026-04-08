@@ -1,0 +1,72 @@
+name: build-test-ssh-by-service-version
+
+on:
+  workflow_dispatch:
+    inputs:
+      openssh_server_version:
+        description: "OpenSSH server RPM version (find EL9/AlmaLinux builds via rpmfind: https://rpmfind.net/linux/rpm2html/search.php?query=openssh-server, e.g. 8.7p1-48.el9_7.alma.1)"
+        required: false
+        default: "8.7p1-48.el9_7.alma.1"
+        type: string
+      openssh_clients_version:
+        description: "OpenSSH clients RPM version (find EL9/AlmaLinux builds via rpmfind: https://rpmfind.net/linux/rpm2html/search.php?query=openssh-clients, e.g. 8.7p1-48.el9_7.alma.1)"
+        required: false
+        default: "8.7p1-48.el9_7.alma.1"
+        type: string
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6.0.2
+
+      - name: Derive image tag
+        id: derive_tag
+        shell: bash
+        run: |
+          OPENSSH_SERVER_VERSION="${{ github.event.inputs.openssh_server_version }}"
+          OPENSSH_CLIENTS_VERSION="${{ github.event.inputs.openssh_clients_version }}"
+          SSH_BASE="$(echo "${OPENSSH_SERVER_VERSION}" | cut -d- -f1)"
+          IMAGE_TAG="${{ github.repository_owner }}/test-ssh:ssh-${SSH_BASE}-el9"
+
+          echo "openssh_server_version=${OPENSSH_SERVER_VERSION}" >> "$GITHUB_OUTPUT"
+          echo "openssh_clients_version=${OPENSSH_CLIENTS_VERSION}" >> "$GITHUB_OUTPUT"
+          echo "image_tag=${IMAGE_TAG}" >> "$GITHUB_OUTPUT"
+          echo "Derived tag: ${IMAGE_TAG}"
+
+      - name: Check if image already exists
+        id: tag_exists
+        shell: bash
+        run: |
+          if docker manifest inspect "${{ steps.derive_tag.outputs.image_tag }}" > /dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+            echo "Image already exists; skipping build and push."
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+            echo "Image does not exist; build and push will proceed."
+          fi
+
+      - name: Set up Docker Buildx
+        if: steps.tag_exists.outputs.exists == 'false'
+        uses: docker/setup-buildx-action@v3.12.0
+
+      - name: Login to DockerHub
+        if: steps.tag_exists.outputs.exists == 'false'
+        uses: docker/login-action@v3.7.0
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+      - name: Build and push image
+        if: steps.tag_exists.outputs.exists == 'false'
+        uses: docker/build-push-action@v6.18.0
+        with:
+          context: ./test-ssh
+          file: ./test-ssh/Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.derive_tag.outputs.image_tag }}
+          build-args: |
+            OPENSSH_SERVER_VERSION=${{ steps.derive_tag.outputs.openssh_server_version }}
+            OPENSSH_CLIENTS_VERSION=${{ steps.derive_tag.outputs.openssh_clients_version }}
