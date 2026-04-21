@@ -42,6 +42,10 @@ SSL is necessary for the WebUI so you need to include the host certificate, key 
 
 As shown in the examples above the rucio-server image can be configured using environment variables that are passed with `docker run`. Below is a list of all available variables and their behaviour:
 
+### `UPDATE_SYSTEM_TRUST`
+
+Defaults to `1`, adding CA certificates from `/etc/grid-security/certificates/*.pem` to the system trust store at startup. Set to `0` when mounting an external trust store volume.
+
 ### `RUCIO_PROXY`
 
 Set this value to the address where you Rucio server can be reached. The WebUI uses a local httpd proxy to communicated with the Rucio server. This is necessary to circumvent possible cross-origin request problems.

@@ -50,6 +50,10 @@ By default the daemon logs are written to stdout and stderr if you want to write
 
 As shown in the examples above the rucio-daemon image can be configured using environment variables that are passed with `docker run`. Below is a list of all available variables and their behaviour:
 
+### `UPDATE_SYSTEM_TRUST`
+
+Defaults to `1`, adding CA certificates from `/etc/grid-security/certificates/*.pem` to the system trust store at startup. Set to `0` when mounting an external trust store volume.
+
 ### `RUCIO_DAEMON`
 
 This variable is mandatory and it specifies the name of the daemon, e.g., `hermes`, `kronos`, `judge-evaluator`, etc.
