@@ -73,6 +73,10 @@ By default the output of the Apache web server is written directly to stdout and
 
 As shown in the examples above the rucio-server image can be configured using environment variables that are passed with `docker run`. Below is a list of all available variables and their behaviour:
 
+### `UPDATE_SYSTEM_TRUST`
+
+Defaults to `1`, adding CA certificates from `/etc/grid-security/certificates/*.pem` to the system trust store at startup. Set to `0` when mounting an external trust store volume.
+
 ### `RUCIO_SERVER_TYPE`
 
 It is used to configure the available endpoints and there are four values: `api`, `auth`, `trace` and `all`. The default value is `api`.
