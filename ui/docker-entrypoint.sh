@@ -82,10 +82,14 @@ then
     done
 fi
 
-if [ -d /etc/grid-security/certificates ]; then
+# allow operators to disable updating the system trust store
+UPDATE_SYSTEM_TRUST="${UPDATE_SYSTEM_TRUST:-1}"
+if [[ "$UPDATE_SYSTEM_TRUST" == "1" && -d /etc/grid-security/certificates ]]; then
     echo 'Adding Grid CAs to the system trust.'
     cp -v /etc/grid-security/certificates/*.pem /etc/pki/ca-trust/source/anchors/
     update-ca-trust extract
+else
+    echo "Skipping system trust update."
 fi
 
 
