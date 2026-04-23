@@ -1,4 +1,4 @@
-FROM almalinux:9
+FROM docker.io/almalinux:9
 
 # Optional version pinning for reproducible images.
 # When `XROOTD_VERSION` is provided (e.g. `5.7.0-1.el9`), we install
