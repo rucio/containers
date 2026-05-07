@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       xrootd_version:
-        description: "xrootd version-release for el9 (e.g. 5.9.1-1.el9)"
+        description: "xrootd version-release for el9 (e.g. 5.9.2-1.el9.x86_64)"
         required: true
-        default: "5.9.1-1.el9"
+        default: "5.9.2-1.el9.x86_64"
         # This value is passed through to the Docker build as `XROOTD_VERSION`.
         # If you leave the input as-is when triggering the workflow, the Dockerfile
         # will pin `xrootd*` packages to this exact RPM version-release.
@@ -23,7 +23,7 @@ jobs:
         id: derive_tag
         run: |
           XROOTD_VERSION="${{ github.event.inputs.xrootd_version }}"
-          # Drop the release/dist suffix for the tag (e.g. 5.9.1-1.el9 -> 5.9.1)
+          # Drop the release/dist suffix for the tag (e.g. 5.9.2-1.el9.x86_64 -> 5.9.2)
           VERSION_MAJOR="$(echo "${XROOTD_VERSION}" | cut -d- -f1)"
           IMAGE_TAG="rucio/test-xrootd-noauth:xrootd-noauth-${VERSION_MAJOR}-el9"
           echo "image_tag=${IMAGE_TAG}" >> "$GITHUB_OUTPUT"
