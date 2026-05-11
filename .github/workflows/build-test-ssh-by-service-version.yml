@@ -60,7 +60,7 @@ jobs:
 
       - name: Build and push image
         if: steps.tag_exists.outputs.exists == 'false'
-        uses: docker/build-push-action@v6.18.0
+        uses: docker/build-push-action@v7.1.0
         with:
           context: ./test-ssh
           file: ./test-ssh/Dockerfile
