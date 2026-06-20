@@ -1,4 +1,4 @@
-FROM almalinux:9
+FROM docker.io/almalinux:9
 
 # Enable EPEL
 RUN dnf install -y yum-utils \

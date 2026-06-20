@@ -7,7 +7,7 @@
 # Authors:
 # - Thomas Beermann, <thomas.beermann@cern.ch>, 2019
 
-FROM almalinux:9
+FROM docker.io/almalinux:9
 
 ARG TAG
 

@@ -1,5 +1,5 @@
 
-FROM ubuntu:noble as deb_builder
+FROM docker.io/ubuntu:noble as deb_builder
 RUN set -ex; \
     apt-get update; \
     apt-get install -y \
@@ -19,7 +19,7 @@ COPY libapache2-mod-gsiproxy mod-gsiproxy
 RUN cd mod-gsiproxy; dpkg-buildpackage
 
 
-FROM ubuntu:noble
+FROM docker.io/ubuntu:noble
 
 # Optional package version pinning for reproducible images.
 # When APACHE2_VERSION is set, all related package versions must be provided.

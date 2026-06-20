@@ -1,4 +1,4 @@
-FROM almalinux:9
+FROM docker.io/almalinux:9
 
 ARG OPENSSH_SERVER_VERSION=
 ARG OPENSSH_CLIENTS_VERSION=

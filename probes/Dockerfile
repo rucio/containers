@@ -7,7 +7,7 @@
 # Authors:
 # - Eric Vaandering, <ewv@fnal.gov>, 2020
 
-FROM almalinux:9
+FROM docker.io/almalinux:9
 
 WORKDIR /tmp
 ADD oic.rpm /tmp

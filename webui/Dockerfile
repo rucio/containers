@@ -9,7 +9,7 @@
 # - Eraldo Junior <ejunior@cbpf.br>, 2023
 
 # ---------- Stage 1: builder (clone repo & install node deps) ----------
-FROM almalinux:10 AS builder
+FROM docker.io/almalinux:10 AS builder
 
 ARG TAG
 
@@ -39,7 +39,7 @@ RUN npm install --include=dev && npx tsc --skipLibCheck && cp -rf src/templates 
 WORKDIR /opt/rucio/webui
 
 # ---------- Stage 2: runtime ----------
-FROM almalinux:10
+FROM docker.io/almalinux:10
 
 LABEL stage=production
 ENV NODE_ENV=production
