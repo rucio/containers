@@ -8,9 +8,10 @@
 # - Eric Vaandering, <ewv@fnal.gov>, 2020
 
 FROM almalinux:9
+ARG ORACLE_INSTANTCLIENT_VERSION=23.26.2.0.0
 
 WORKDIR /tmp
-ADD oic.rpm /tmp
+COPY oracle-instantclient.repo /etc/yum.repos.d/
 
 RUN dnf install -y epel-release.noarch && \
     dnf upgrade -y && \
@@ -20,6 +21,7 @@ RUN dnf install -y epel-release.noarch && \
         gcc \
         libnsl \
         libaio \
+        oracle-instantclient-basiclite-${ORACLE_INSTANTCLIENT_VERSION} \
         openssl-devel \
         procps-ng \
         python-devel \
