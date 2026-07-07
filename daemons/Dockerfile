@@ -7,8 +7,10 @@
 FROM almalinux:9
 
 ARG TAG
+ARG ORACLE_INSTANTCLIENT_VERSION=23.26.2.0.0
 
 WORKDIR /tmp
+COPY oracle-instantclient.repo /etc/yum.repos.d/
 
 RUN dnf install -y epel-release.noarch && \
     dnf upgrade -y && \
@@ -21,6 +23,7 @@ RUN dnf install -y epel-release.noarch && \
         gfal2-plugin-xrootd \
         libnsl \
         libaio \
+        oracle-instantclient-basiclite-${ORACLE_INSTANTCLIENT_VERSION} \
         patch \
         python-gfal2 \
         procps-ng \
