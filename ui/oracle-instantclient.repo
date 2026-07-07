@@ -1,0 +1,6 @@
+[oracle-instantclient]
+name=Oracle Instant Client 23 for Oracle Linux 9
+baseurl=https://yum.oracle.com/repo/OracleLinux/OL9/oracle/instantclient23/$basearch/
+enabled=1
+gpgcheck=1
+gpgkey=https://yum.oracle.com/RPM-GPG-KEY-oracle-ol9

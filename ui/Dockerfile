@@ -10,8 +10,10 @@
 FROM almalinux:9
 
 ARG TAG
+ARG ORACLE_INSTANTCLIENT_VERSION=23.26.2.0.0
 
 WORKDIR /tmp
+COPY oracle-instantclient.repo /etc/yum.repos.d/
 
 RUN dnf install -y epel-release.noarch && \
     dnf upgrade -y && \
@@ -22,6 +24,7 @@ RUN dnf install -y epel-release.noarch && \
         libaio \
         openssl-devel \
         mod_ssl \
+        oracle-instantclient-basiclite-${ORACLE_INSTANTCLIENT_VERSION} \
         procps-ng \
         python3-mod_wsgi \
         python3-m2crypto \
