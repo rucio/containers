@@ -34,7 +34,13 @@ RUN dnf -y install https://vault.almalinux.org/9.6/BaseOS/x86_64/os/Packages/pyt
 
 RUN python3 -m pip install --no-cache-dir --upgrade pip && \
     python3 -m pip install --no-cache-dir --upgrade setuptools
-RUN python3 -m pip install --no-cache-dir --pre rucio[oracle,mysql,postgresql]==$TAG
+# Constrain setuptools inside pip's isolated build environments: cx_Oracle
+# (oracle extra of rucio<36) has no arm64 wheels and its setup.py imports
+# pkg_resources, which was removed in setuptools 81
+RUN echo "setuptools<81" > /tmp/pip-build-constraints.txt && \
+    PIP_CONSTRAINT=/tmp/pip-build-constraints.txt \
+    python3 -m pip install --no-cache-dir --pre rucio[oracle,mysql,postgresql]==$TAG && \
+    rm -f /tmp/pip-build-constraints.txt
 
 COPY j2.py /usr/local/bin/
 RUN python3 -m pip install --no-cache-dir jinja2 && \
