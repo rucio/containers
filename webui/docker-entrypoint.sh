@@ -28,6 +28,48 @@ generate_env_file() {
     return $exit_code
 }
 
+download_oidc_icons() {
+    # OIDC provider icons are served locally so the WebUI can render them with
+    # next/image, which rejects remote hosts that are not allow-listed in
+    # next.config's images.remotePatterns. For every provider that declares an
+    # icon we fetch it into public/ and repoint its *_ICON_URL at the local path,
+    # so the generated .env (and therefore the app) sees the local file.
+    #
+    # Unlike the community logo below, this must run BEFORE generate_env_file:
+    # the community logo's local path is hard-coded in the WebUI, whereas a
+    # provider icon's path is carried in the *_ICON_URL value the env generator
+    # writes, so the value has to be rewritten before that file is produced.
+    if [ -z "${RUCIO_WEBUI_OIDC_PROVIDERS}" ]; then
+        return 0
+    fi
+
+    local icon_dir="/opt/rucio/webui/public/oidc-icons"
+    mkdir -p "${icon_dir}"
+
+    local name upper lower url_var url dest
+    for name in $(echo "${RUCIO_WEBUI_OIDC_PROVIDERS}" | tr ',' ' '); do
+        upper="$(echo "${name}" | tr '[:lower:]' '[:upper:]')"
+        lower="$(echo "${name}" | tr '[:upper:]' '[:lower:]')"
+        url_var="RUCIO_WEBUI_OIDC_PROVIDER_${upper}_ICON_URL"
+        url="${!url_var}"
+        if [ -z "${url}" ]; then
+            continue
+        fi
+
+        dest="${icon_dir}/${lower}.png"
+        log "Downloading OIDC icon for '${name}' from ${url}"
+        if curl -fsSL -o "${dest}" "${url}"; then
+            export "${url_var}=/oidc-icons/${lower}.png"
+        else
+            log "WARNING: could not download OIDC icon for '${name}'; the WebUI will use the default icon"
+            unset "${url_var}"
+        fi
+    done
+}
+
+# Must precede env generation so the rewritten icon paths land in the .env file.
+download_oidc_icons
+
 echo "=================== /opt/rucio/webui/.env ==================="
 if [ -f /opt/rucio/webui/.env ]; then
     log "/opt/rucio/webui/.env already mounted."
