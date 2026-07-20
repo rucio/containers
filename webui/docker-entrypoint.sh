@@ -35,7 +35,6 @@ else
     log "/opt/rucio/webui/.env not found. Will generate one now."
     generate_env_file
 fi
-cat /opt/rucio/webui/.env
 echo ""
 
 log "Building Apache configuration files."
