@@ -16,5 +16,11 @@ MaxUrlCopyProcesses = 4
 StagingBulkSize = 1
 StagingWaitingFactor = 1
 
+# The Rucio tests fake tape RSEs on plain disk xrootd servers, so the first fts_qos archive
+# poll instantly fails any job in the ARCHIVING state, racing against the assertions of
+# test_receiver_archiving. Raising the interval keeps fts_qos from polling during a test run,
+# see https://github.com/rucio/rucio/issues/8390#issuecomment-5046434948 for the full analysis.
+ArchivePollSchedulingInterval = 3600
+
 [roles]
 Public = all:transfer;all:config;all:datamanagement
