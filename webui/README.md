@@ -123,6 +123,7 @@ For each `OIDC Provider` specified in the `OIDC_PROVIDERS` variable, the additio
 | OIDC_PROVIDER_CERN_REFRESH_TOKEN_URL | RUCIO_WEBUI_OIDC_PROVIDER_CERN_REFRESH_TOKEN_URL | The refresh token endpoint                                            |         |         |
 | OIDC_PROVIDER_CERN_USERINFO_URL      | RUCIO_WEBUI_OIDC_PROVIDER_CERN_USERINFO_URL      | The URL to obtain user info from the OIDC Provider                    |         |         |
 | OIDC_PROVIDER_CERN_REDIRECT_URL      | RUCIO_WEBUI_OIDC_PROVIDER_CERN_REDIRECT_URL      | The redirection URL configured on the OIDC Provider                   |         |         |
+| OIDC_PROVIDER_CERN_ICON_URL          | RUCIO_WEBUI_OIDC_PROVIDER_CERN_ICON_URL          | URL to a raster icon (png/jpg) shown on the provider's login button. Downloaded at container start into `public/oidc-icons/CERN.png` and served via next/image; if unset or unreachable, a default icon is used. |         |         |
 
 ## Web Server Configuration
 
