@@ -31,6 +31,36 @@ generate_env_file() {
     return $exit_code
 }
 
+download_oidc_icons() {
+    # OIDC provider icons are served locally so the WebUI can render them with
+    # next/image. The WebUI derives the served path from the provider name
+    # (public/oidc-icons/<NAME>.png, upper-cased) and only shows the icon when the
+    # file exists, so here we just place the file. A failed download is non-fatal:
+    # the WebUI falls back to its default icon.
+    if [ -z "${RUCIO_WEBUI_OIDC_PROVIDERS}" ]; then
+        return 0
+    fi
+
+    local icon_dir="/opt/rucio/webui/public/oidc-icons"
+    mkdir -p "${icon_dir}"
+
+    local name upper url_var url dest
+    for name in $(echo "${RUCIO_WEBUI_OIDC_PROVIDERS}" | tr ',' ' '); do
+        upper="$(echo "${name}" | tr -d '[:space:]' | tr '[:lower:]' '[:upper:]')"
+        [ -z "${upper}" ] && continue
+        url_var="RUCIO_WEBUI_OIDC_PROVIDER_${upper}_ICON_URL"
+        url="${!url_var}"
+        [ -z "${url}" ] && continue
+
+        dest="${icon_dir}/${upper}.png"
+        log "Downloading OIDC icon for '${name}' from ${url}"
+        if ! wget -q -O "${dest}" "${url}"; then
+            log "WARNING: could not download OIDC icon for '${name}'; the WebUI will use the default icon"
+            rm -f "${dest}"
+        fi
+    done
+}
+
 echo "=================== /opt/rucio/webui/.env ==================="
 if [ -f /opt/rucio/webui/.env ]; then
     log "/opt/rucio/webui/.env already mounted."
@@ -54,6 +84,8 @@ echo ""
 
 log "removing httpd example ssl config"
 rm -rf /etc/httpd/conf.d/ssl.conf
+
+download_oidc_icons
 
 if [ -z "${RUCIO_WEBUI_COMMUNITY_LOGO_URL}" ]; then
     log "Environment variable RUCIO_WEBUI_COMMUNITY_LOGO_URL is not set. The default experiment-icon will be used."
