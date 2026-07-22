@@ -51,7 +51,10 @@ download_oidc_icons() {
 
         dest="${icon_dir}/${upper}.png"
         log "Downloading OIDC icon for '${name}' from ${url}"
-        if ! wget -q -O "${dest}" "${url}"; then
+        # This is a low-priority, best-effort download, so cap every phase with
+        # short timeouts and a single retry rather than relying on wget's
+        # 900s default that would stall container startup on a bad URL.
+        if ! wget -q --tries=2 --dns-timeout=5 --connect-timeout=5 --read-timeout=15 -O "${dest}" "${url}"; then
             log "WARNING: could not download OIDC icon for '${name}'; the WebUI will use the default icon"
             rm -f "${dest}"
         fi
