@@ -35,31 +35,16 @@ jobs:
           echo "image_tag=${IMAGE_TAG}" >> "$GITHUB_OUTPUT"
           echo "Derived tag: ${IMAGE_TAG}"
 
-      - name: Check if image already exists
-        id: tag_exists
-        shell: bash
-        run: |
-          if docker manifest inspect "${{ steps.derive_tag.outputs.image_tag }}" > /dev/null 2>&1; then
-            echo "exists=true" >> "$GITHUB_OUTPUT"
-            echo "Image already exists; skipping build and push."
-          else
-            echo "exists=false" >> "$GITHUB_OUTPUT"
-            echo "Image does not exist; build and push will proceed."
-          fi
-
       - name: Set up Docker Buildx
-        if: steps.tag_exists.outputs.exists == 'false'
         uses: docker/setup-buildx-action@v4.1.0
 
       - name: Login to DockerHub
-        if: steps.tag_exists.outputs.exists == 'false'
         uses: docker/login-action@v4.2.0
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
       - name: Build and push image
-        if: steps.tag_exists.outputs.exists == 'false'
         uses: docker/build-push-action@v7.2.0
         with:
           context: ./test-ssh
