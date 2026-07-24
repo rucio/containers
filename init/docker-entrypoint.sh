@@ -1,5 +1,7 @@
 #!/bin/bash -e
 
+export RUCIO_DIR=$(python3 -c "import rucio, os; print(os.path.dirname(rucio.__file__))")
+
 if [ -f /opt/rucio/etc/rucio.cfg ]; then
     echo "rucio.cfg already mounted."
 else
@@ -16,9 +18,5 @@ if [ ! -z "$RUCIO_PRINT_CFG" ]; then
 fi
 
 j2 /tmp/alembic.ini.j2 | sed '/^\s*$/d' > /opt/rucio/etc/alembic.ini
-
-alembic init /opt/rucio/lib/rucio/db/sqla/migrate_repo/
-
-alembic -c /opt/rucio/etc/alembic.ini upgrade head
 
 python3 /tmp/bootstrap.py
