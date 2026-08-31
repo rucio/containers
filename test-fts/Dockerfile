@@ -26,14 +26,6 @@ ARG FTS_SERVER_VERSION=
 ARG FTS_REST_VERSION=
 ARG FTS_MONITORING_VERSION=
 
-# python3-django3 was removed from EPEL 9 after Django 3.2 EOL (April 2024),
-# but fts-monitoring still requires it. Install directly from Fedora Koji where
-# the build is archived.
-RUN dnf install -y \
-    https://kojipkgs.fedoraproject.org/packages/python-django3/3.2.25/1.el9/noarch/python3-django3-3.2.25-1.el9.noarch.rpm \
-  && dnf clean all \
-  && rm -rf /var/cache/dnf
-
 RUN if [ -n "${FTS_SERVER_VERSION}" ] && [ -n "${FTS_REST_VERSION}" ] && [ -n "${FTS_MONITORING_VERSION}" ]; then \
       dnf install -y \
         "fts-server-${FTS_SERVER_VERSION}" \
