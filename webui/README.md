@@ -125,6 +125,19 @@ For each `OIDC Provider` specified in the `OIDC_PROVIDERS` variable, the additio
 | OIDC_PROVIDER_CERN_REDIRECT_URL      | RUCIO_WEBUI_OIDC_PROVIDER_CERN_REDIRECT_URL      | The redirection URL configured on the OIDC Provider                   |         |         |
 | OIDC_PROVIDER_CERN_ICON_URL          | RUCIO_WEBUI_OIDC_PROVIDER_CERN_ICON_URL          | URL to a raster icon (png/jpg) shown on the provider's login button. Downloaded at container start into `public/oidc-icons/CERN.png` and served via next/image; if unset or unreachable, a default icon is used. |         |         |
 
+### ATLAS-specific features
+
+The following features are only meaningful for ATLAS deployments and are disabled by default. They require a WebUI release that includes [rucio/webui#845](https://github.com/rucio/webui/pull/845).
+
+| Variable Name           | Full Name                           | Description                                                                                                                                                                  | Example                   | Default                   |
+| ----------------------- | ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- | ------------------------- |
+| FEATURE_DIDS_AMI_TAGS   | RUCIO_WEBUI_FEATURE_DIDS_AMI_TAGS   | Show the AMI tags found in ATLAS DID names on the DID details page and the DID list side panel, linked to AMI, with the tag details from AMI on hover (true or false)          | true                      | false                     |
+| AMI_BASE_URL            | RUCIO_WEBUI_AMI_BASE_URL            | AMI instance used for the tag links and tag lookups                                                                                                                          | https://atlas-ami.cern.ch | https://atlas-ami.cern.ch |
+| FEATURE_DIDS_PANDA_TASK | RUCIO_WEBUI_FEATURE_DIDS_PANDA_TASK | Show the PanDA task ID found in ATLAS DID names (the `tid` suffix of dataset names, or the task field of file names) on the same pages, linked to BigPanDA (true or false) | true                      | false                     |
+| PANDA_BASE_URL          | RUCIO_WEBUI_PANDA_BASE_URL          | BigPanDA instance used for the task links                                                                                                                                    | https://bigpanda.cern.ch  | https://bigpanda.cern.ch  |
+
+**NOTE** The AMI tag details are fetched by the WebUI server from AMI, whose certificate is issued by the CERN Grid Certification Authority. The CA bundle set in `RUCIO_WEBUI_SERVER_CA_BUNDLE` (applied when `RUCIO_WEBUI_ENABLE_SSL` is `true`) must include the CERN Grid Certification Authority and the CERN Root Certification Authority 2. Without them, the AMI tags still link to AMI but their details do not load.
+
 ## Web Server Configuration
 
 The following environment variables are used to configure the rucio specific aspects of the Apache Web Server.
