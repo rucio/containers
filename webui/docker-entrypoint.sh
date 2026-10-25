@@ -4,28 +4,63 @@ log() {
     echo -e "\e[32m$(date -u) [rucio-webui] - $*\e[0m"
 }
 
-generate_env_file() {
-    cd tools/env-generator
+export_webui_env() {
+    # The WebUI reads plain variable names (RUCIO_HOST, OIDC_PROVIDERS, ...). Deployments
+    # (docker run -e, the helm chart) pass them prefixed with RUCIO_WEBUI_, so strip the
+    # prefix. Names of the container itself are skipped: RUCIO_WEBUI_PATH is the install
+    # directory and RUCIO_WEBUI_HOSTNAME is only used below to derive the public URL.
+    local name key
+    for name in $(compgen -e | grep '^RUCIO_WEBUI_'); do
+        key="${name#RUCIO_WEBUI_}"
+        key="${key^^}"
+        case "${key}" in
+            PATH | HOSTNAME | HOME | PWD | SHELL | USER) continue ;;
+        esac
+        export "${key}=${!name}"
+    done
+}
 
-    if [ ! -f ./dist/generate-env.js ]; then
-        log "Pre-built env-generator not found, building now..."
-        npm install
-        npx tsc --skipLibCheck && cp -rf src/templates dist/
-
-        if [ ! -f ./dist/generate-env.js ]; then
-            log "ERROR: ./dist/generate-env.js was not created by build"
-            cd ../..
-            return 1
+derive_webui_env() {
+    # Values the WebUI needs that are derived from the container configuration.
+    if [ -z "${NEXT_PUBLIC_WEBUI_HOST}" ] && [ -n "${RUCIO_WEBUI_HOSTNAME}" ]; then
+        if [ "${RUCIO_WEBUI_ENABLE_SSL,,}" = "true" ]; then
+            export NEXT_PUBLIC_WEBUI_HOST="https://${RUCIO_WEBUI_HOSTNAME}"
+        else
+            export NEXT_PUBLIC_WEBUI_HOST="http://${RUCIO_WEBUI_HOSTNAME}"
         fi
     fi
+    if [ -z "${NEXTAUTH_URL}" ] && [ -n "${NEXT_PUBLIC_WEBUI_HOST}" ]; then
+        export NEXTAUTH_URL="${NEXT_PUBLIC_WEBUI_HOST}"
+    fi
+    export AUTH_TRUST_HOST="${AUTH_TRUST_HOST:-true}"
+    export NODE_TLS_REJECT_UNAUTHORIZED="${NODE_TLS_REJECT_UNAUTHORIZED:-1}"
+    # node only reads NODE_EXTRA_CA_CERTS when the process starts, so it has to be in the environment
+    if [ -z "${NODE_EXTRA_CA_CERTS}" ] && [ -n "${SERVER_CA_BUNDLE}" ]; then
+        export NODE_EXTRA_CA_CERTS="${SERVER_CA_BUNDLE}"
+    fi
+    if [ -z "${NEXTAUTH_SECRET}" ] && [ -z "${AUTH_SECRET}" ]; then
+        log "WARNING: RUCIO_WEBUI_NEXTAUTH_SECRET is not set. Generating a random secret: sessions will not survive a restart and cannot be shared between replicas."
+        export NEXTAUTH_SECRET="$(head -c 32 /dev/urandom | base64)"
+    fi
+}
 
-    chmod +x ./dist/generate-env.js
-    log "Running env-generator..."
-    node ./dist/generate-env.js make prod ../../.env --write
-    local exit_code=$?
-    echo "Return code: $exit_code"
-    cd ../..
-    return $exit_code
+wait_for_webui() {
+    # The WebUI validates its configuration when it starts and exits when it is invalid.
+    # pm2 would keep restarting it behind a running httpd, so stop the container instead.
+    local i
+    for i in $(seq 1 120); do
+        if curl -s -o /dev/null http://localhost:3000/api/ping; then
+            log "Rucio WebUI is up"
+            return 0
+        fi
+        if pm2 jlist | grep -q '"status":"errored"'; then
+            break
+        fi
+        sleep 1
+    done
+    log "ERROR: Rucio WebUI did not start. Its last log lines:"
+    pm2 logs rucio-webui --nostream --lines 20 --err
+    return 1
 }
 
 download_oidc_icons() {
@@ -61,13 +96,15 @@ download_oidc_icons() {
     done
 }
 
-echo "=================== /opt/rucio/webui/.env ==================="
+echo "=================== WebUI configuration ==================="
+export_webui_env
 if [ -f /opt/rucio/webui/.env ]; then
-    log "/opt/rucio/webui/.env already mounted."
+    # Exported variables take precedence over the .env file, so derive nothing on top of it
+    log "/opt/rucio/webui/.env is mounted, it is read by the WebUI when it starts."
 else
-    log "/opt/rucio/webui/.env not found. Will generate one now."
-    generate_env_file
+    derive_webui_env
 fi
+log "The configuration is validated when the WebUI starts; it refuses to start if it is invalid."
 echo ""
 
 log "Building Apache configuration files."
@@ -134,6 +171,7 @@ then
         then
             if patch -p3 -d "$RUCIO_WEBUI_PATH" < ${tmp_lib_file}
             then
+                WEBUI_PATCHED=true
                 echo "Patch ${patchfile}/lib applied."
             else
                 echo "Patch ${patchfile}/lib could not be applied successfully (exit code $?). Exiting setup."
@@ -143,11 +181,16 @@ then
     done
 fi
 
-log "Building Rucio WebUI"
-npm run build
+# The image ships a production build that reads its configuration at startup.
+# Only patches to the WebUI source require building it again.
+if [ "${WEBUI_PATCHED}" = "true" ]; then
+    log "WebUI source was patched, rebuilding Rucio WebUI"
+    npm install --include=dev
+    npm run build
+fi
 
 log "Starting Rucio WebUI"
 pm2 start
-sleep 2
+wait_for_webui
 exec httpd -D FOREGROUND
 echo "=================== RUCIO WEBUI started ==================="
