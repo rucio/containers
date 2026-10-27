@@ -31,12 +31,14 @@ RUN curl https://raw.githubusercontent.com/rucio/rucio/master/tools/merge_rucio_
 RUN git clone --depth 1 -b ${TAG} -- https://github.com/rucio/webui.git ${RUCIO_WEBUI_PATH}
 
 RUN npm i -g pm2
-RUN npm install --omit=dev
 
-# Pre-build env-generator so it's ready at runtime (needs dev deps for tsc)
-WORKDIR /opt/rucio/webui/tools/env-generator
-RUN npm install --include=dev && npx tsc --skipLibCheck && cp -rf src/templates dist/
-WORKDIR /opt/rucio/webui
+# Build the WebUI once, here. It reads its configuration from the environment when the
+# container starts, so the image does not need to be rebuilt per deployment or per start.
+# The build needs the dev dependencies (type checking); they are pruned afterwards.
+RUN npm ci --include=dev && \
+    npm run build && \
+    npm prune --omit=dev && \
+    npm cache clean --force
 
 # ---------- Stage 2: runtime ----------
 FROM almalinux:10
