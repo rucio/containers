@@ -33,6 +33,7 @@ RUN dnf install -y epel-release.noarch && \
         patchutils \
         python-pip && \
     dnf clean all && \
+    systemd-tmpfiles --create && \
     rm -rf /var/cache/dnf
 
 # Downgrade setuptools to avoid compatibility issues
