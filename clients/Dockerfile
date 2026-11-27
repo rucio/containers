@@ -18,6 +18,7 @@ RUN dnf -y install yum-utils epel-release.noarch && \
         voms-clients-java \
         xrootd-client && \
     dnf clean all && \
+    systemd-tmpfiles --create && \
     rm -rf /var/cache/dnf
 
 COPY j2.py /usr/local/bin/

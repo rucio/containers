@@ -26,6 +26,7 @@ RUN dnf install -y epel-release.noarch && \
         memcached \
         patchutils && \
     dnf clean all && \
+    systemd-tmpfiles --create && \
     rm -rf /var/cache/dnf
 
 # Downgrade setuptools to avoid compatibility issues
