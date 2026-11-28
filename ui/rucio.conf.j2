@@ -64,10 +64,16 @@ CacheRoot /tmp
 
  Alias /media                 /usr/local/lib/python3.9/site-packages/rucio/web/ui/media
  Alias /static                /usr/local/lib/python3.9/site-packages/rucio/web/ui/static
+# Run the UI in the main interpreter and import it when each child starts. Otherwise the first thread to import
+# threading is a request thread, and with mod_wsgi < 4.8 and Python 3.9 an exiting child then hangs in
+# threading._shutdown() and keeps its scoreboard slot ("AH03490: scoreboard is full").
+ WSGIApplicationGroup %{GLOBAL}
 {% if RUCIO_SERVER_TYPE|default('api') == 'flask' %}
  WSGIScriptAlias /            /usr/local/lib/python3.9/site-packages/rucio/web/ui/flask/main.py
+ WSGIImportScript             /usr/local/lib/python3.9/site-packages/rucio/web/ui/flask/main.py process-group=%{GLOBAL} application-group=%{GLOBAL}
 {% else %}
  WSGIScriptAlias /            /usr/local/lib/python3.9/site-packages/rucio/web/ui/main.py
+ WSGIImportScript             /usr/local/lib/python3.9/site-packages/rucio/web/ui/main.py process-group=%{GLOBAL} application-group=%{GLOBAL}
 {% endif %}
 
 {% if RUCIO_PROXY is defined %}
